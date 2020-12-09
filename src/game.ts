@@ -1,67 +1,17 @@
-import { CanvasElement } from "./canvas"
+import {CanvasElement} from "./canvas"
+import {Box} from "./box";
 
 export class Game {
-  private canvas: CanvasElement;
-  private canvasHtmlTag: HTMLCanvasElement;
-  private boxX = 30;
-  private boxY = 30;
-  xSpeed = 0;
-  ySpeed = 0;
-  accel = 1;
-  topSpeed = 5;
+  private readonly canvas: CanvasElement;
+  private readonly canvasHtmlTag: HTMLCanvasElement;
+
+  private box: Box;
 
   constructor() {
     this.canvas = new CanvasElement(innerWidth, innerHeight);
     this.canvasHtmlTag = this.canvas.canvasElement;
+    this.box = new Box(this.canvas.ctx);
     console.log('Game is running');
-  }
-
-  handleMouseMove(evt: MouseEvent): void {
-    // this.boxX = evt.clientX;
-    // this.boxY = evt.clientY;
-  }
-
-  handleKeyDown(evt: KeyboardEvent): void {
-    switch (evt.key) {
-      case 'ArrowUp':
-        if (-this.ySpeed < this.topSpeed) {
-          this.ySpeed -= this.accel
-        } else {
-          this.ySpeed++;
-        }
-        break;
-        
-      case 'ArrowRight':
-        if (this.xSpeed < this.topSpeed) {
-          this.xSpeed += this.accel 
-        } else {
-          this.xSpeed--;
-        }
-        break;
-        
-      case 'ArrowDown':
-        if (this.ySpeed < this.topSpeed) { 
-          this.ySpeed += this.accel 
-        } else {
-          this.ySpeed--;
-        }
-        break;
-        
-      case 'ArrowLeft':
-        if (-this.xSpeed < this.topSpeed) { 
-          this.xSpeed -= this.accel
-        } else {
-          this.xSpeed++;
-        }
-        break;
-      
-      default:
-        break;
-    }
-  }
-
-  handleKeyUp(evt: KeyboardEvent) {
-    
   }
 
   refreshCanvas(): void {
@@ -70,23 +20,50 @@ export class Game {
 
   draw(): void {
     this.refreshCanvas();
-    this.boxX += this.xSpeed;
-    this.boxY += this.ySpeed;
     this.canvas.ctx.fillStyle = 'blue';
-    this.canvas.ctx.fillRect(this.boxX, this.boxY, 50, 50);
+    this.canvas.ctx.fillRect(0, 0, innerWidth, innerHeight);
 
-    requestAnimationFrame(() => {
+    this.box.draw();
+
+    setTimeout(() => {
       this.draw();
-    })
+    }, 1000 / 60);
+  }
+
+  updatePositions(): void {
+    this.box.updatePosition();
+
+    setTimeout(() => {
+      this.updatePositions();
+    }, 1000 / 60);
+  }
+
+  handleMouseMove(mouseEvent: MouseEvent): void {
+    // console.log({mouseEvent});
+    // this.boxX = mouseEvent.clientX;
+    // this.boxY = mouseEvent.clientY;
+  }
+
+  handleMouseKeyDown(keyboardEvent: KeyboardEvent): void {
+    this.box.handleMouseKeyDown(keyboardEvent);
+  }
+
+  handleMouseKeyUp(keyboardEvent: KeyboardEvent): void {
+    this.box.handleMouseKeyUp(keyboardEvent);
   }
 
   // EntryPoint
   run(): HTMLCanvasElement {
-    document.addEventListener("mousemove", (evt: MouseEvent) => this.handleMouseMove(evt))
-    document.addEventListener("keydown", (evt: KeyboardEvent) => this.handleKeyDown(evt))
-    document.addEventListener("keyup", (evt: KeyboardEvent) => this.handleKeyUp(evt))
-    
-    this.draw();
+    document.addEventListener("mousemove", (event: MouseEvent) => this.handleMouseMove(event));
+    document.addEventListener("keydown", (event: KeyboardEvent) => this.handleMouseKeyDown(event));
+    document.addEventListener("keyup", (event: KeyboardEvent) => this.handleMouseKeyUp(event));
+
+    // start position update loop
+    this.updatePositions();
+
+    // set render loop
+    this.draw(); // initial draw
+
     return this.canvasHtmlTag;
   }
 }
