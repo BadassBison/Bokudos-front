@@ -40,10 +40,7 @@ export class Box {
 
     updateSpeed({ up, right, down, left }: Keys): void {
         if (up) {
-            if (-this.ySpeed < this.speedLimit) {
-                this.ySpeed -= this.acceleration;
-                if (Math.abs(this.xSpeed) < this.deceleration) this.xSpeed = 0;
-            }
+            if (-this.ySpeed < this.speedLimit) this.ySpeed -= this.acceleration;
         } else {
             if (this.ySpeed < 0) {
                 this.ySpeed += this.deceleration;
@@ -72,7 +69,10 @@ export class Box {
         if (left) {
             if (-this.xSpeed < this.speedLimit) this.xSpeed -= this.acceleration;
         } else {
-            if (this.xSpeed < 0) this.xSpeed += this.deceleration;
+            if (this.xSpeed < 0) {
+                this.xSpeed += this.deceleration;
+                if (Math.abs(this.xSpeed) < this.deceleration) this.xSpeed = 0;
+            }
         }
     }
 
