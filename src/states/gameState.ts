@@ -2,10 +2,12 @@ import { CanvasElement } from '../objects/canvas';
 import { Point } from '../interfaces/point';
 import { Keys } from '../interfaces/keys';
 import { Box } from '../objects/box';
+import { Character } from '../objects/character';
 
 export class GameState {
     box: Box;
     canvas: CanvasElement;
+    character: Character;
     gamePaused: boolean;
     gameRunning: boolean;
     keys: Keys;
