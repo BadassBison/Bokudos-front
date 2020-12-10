@@ -36,18 +36,14 @@ export class Game {
     });
   }
 
-  private registerKeyPress(key: string, pressed: boolean) {
-    this.state.parseKey(key, pressed);
-  }
-
   private refreshCanvas(): void {
     this.state.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
   }
 
   // EntryPoint
   run(): HTMLCanvasElement {
-    document.addEventListener("keydown", (evt: KeyboardEvent) => this.registerKeyPress(evt.key, true))
-    document.addEventListener("keyup", (evt: KeyboardEvent) => this.registerKeyPress(evt.key, false))
+    document.addEventListener("keydown", (evt: KeyboardEvent) => this.state.parseKey(evt.key, true))
+    document.addEventListener("keyup", (evt: KeyboardEvent) => this.state.parseKey(evt.key, false))
 
     this.draw();
     return this.state.canvas.canvasElement;

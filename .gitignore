@@ -3,3 +3,7 @@ node_modules
 /.sass_cache
 .DS_Store
 .vscode
+
+#Ignore IntelliJ IDEA files
+.idea
+*.iml
