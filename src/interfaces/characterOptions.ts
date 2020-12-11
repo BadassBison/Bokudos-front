@@ -1,7 +1,7 @@
 import { Point } from "./point";
 
 export class CharacterOptions {
-    img: HTMLImageElement
+    img: HTMLImageElement;
     position: Point;
     size: number;
     speed: number;
@@ -15,7 +15,7 @@ export class CharacterOptions {
 }
 
 export class DefaultCharacterOptions {
-    img: HTMLImageElement
+    img: HTMLImageElement;
     position: Point;
     size: number;
 }

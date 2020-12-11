@@ -229,67 +229,36 @@ import throw8 from '../../assets/sprites/ninja_sprites/Throw__008.png';
 // @ts-ignore
 import throw9 from '../../assets/sprites/ninja_sprites/Throw__009.png';
 
-import { CustomAnimation } from '../objects/animation';
+import {CustomAnimation} from '../objects/customAnimation';
+import {AnimationTypes} from '../constants/animationTypes';
 
 export class NinjaAnimations {
-    idle: CustomAnimation;
-    attack: CustomAnimation;
-    run: CustomAnimation;
-    climb: CustomAnimation;
-    dead: CustomAnimation;
-    glide: CustomAnimation;
-    jump: CustomAnimation;
-    jumpAttack: CustomAnimation;
-    jumpThrow: CustomAnimation;
-    slide: CustomAnimation;
-    throw: CustomAnimation;
-    states: string[];
+    animations: { [index: string]: CustomAnimation } = {};
 
     constructor() {
-        this.idle = new CustomAnimation([idle0, idle1, idle2, idle3, idle4, idle5, idle6, idle7, idle8, idle9]);
-        this.attack = new CustomAnimation([attack0, attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9]);
-        this.run = new CustomAnimation([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
-        this.climb = new CustomAnimation([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
-        this.dead = new CustomAnimation([dead0, dead1, dead2, dead3, dead4, dead5, dead6, dead7, dead8, dead9]);
-        this.glide = new CustomAnimation([glide0, glide1, glide2, glide3, glide4, glide5, glide6, glide7, glide8, glide9]);
-        this.jump = new CustomAnimation([jump0, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8, jump9]);
-        this.jumpAttack = new CustomAnimation([jumpAttack0, jumpAttack1, jumpAttack2, jumpAttack3, jumpAttack4, jumpAttack5, jumpAttack6, jumpAttack7, jumpAttack8, jumpAttack9]);
-        this.jumpThrow = new CustomAnimation([jumpThrow0, jumpThrow1, jumpThrow2, jumpThrow3, jumpThrow4, jumpThrow5, jumpThrow6, jumpThrow7, jumpThrow8, jumpThrow9]);
-        this.slide = new CustomAnimation([slide0, slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8, slide9]);
-        this.throw = new CustomAnimation([throw0, throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9]);
-        this.states = ['idle', 'attack', 'run', 'climb', 'dead', 'glide', 'jump', 'jumpAttack', 'jumpThrow', 'slide', 'throw'];
+        this.animations[AnimationTypes.IDLE] = new CustomAnimation([idle0, idle1, idle2, idle3, idle4, idle5, idle6, idle7, idle8, idle9]);
+        this.animations[AnimationTypes.ATTACK] = new CustomAnimation([attack0, attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9]);
+        this.animations[AnimationTypes.RUN] = new CustomAnimation([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
+        this.animations[AnimationTypes.CLIMB] = new CustomAnimation([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
+        this.animations[AnimationTypes.DEAD] = new CustomAnimation([dead0, dead1, dead2, dead3, dead4, dead5, dead6, dead7, dead8, dead9]);
+        this.animations[AnimationTypes.GLIDE] = new CustomAnimation([glide0, glide1, glide2, glide3, glide4, glide5, glide6, glide7, glide8, glide9]);
+        this.animations[AnimationTypes.JUMP] = new CustomAnimation([jump0, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8, jump9]);
+        this.animations[AnimationTypes.JUMP_ATTACK] = new CustomAnimation([jumpAttack0, jumpAttack1, jumpAttack2, jumpAttack3, jumpAttack4, jumpAttack5, jumpAttack6, jumpAttack7, jumpAttack8, jumpAttack9]);
+        this.animations[AnimationTypes.JUMP_THROW] = new CustomAnimation([jumpThrow0, jumpThrow1, jumpThrow2, jumpThrow3, jumpThrow4, jumpThrow5, jumpThrow6, jumpThrow7, jumpThrow8, jumpThrow9]);
+        this.animations[AnimationTypes.SLIDE] = new CustomAnimation([slide0, slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8, slide9]);
+        this.animations[AnimationTypes.THROW] = new CustomAnimation([throw0, throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9]);
     }
 
     getAnimation(animationState: string): CustomAnimation {
-        switch (animationState) {
-            case this.states[0]:
-                return this.idle;
-            case this.states[1]:
-                return this.attack;
-            case this.states[2]:
-                return this.run;
-            case this.states[3]:
-                return this.climb;
-            case this.states[4]:
-                return this.dead;
-            case this.states[5]:
-                return this.glide;
-            case this.states[6]:
-                return this.jump;
-            case this.states[7]:
-                return this.jumpAttack;
-            case this.states[8]:
-                return this.jumpThrow;
-            case this.states[9]:
-                return this.slide;
-            case this.states[10]:
-                return this.throw;
-            default:
-                return this.idle;
+        if (this.animations[animationState]) {
+            return this.animations[animationState];
         }
+        return this.animations[AnimationTypes.IDLE];
     }
 
-    getStates(): string[] {
-        return this.states;
+    getAnimationTypes(): string[] {
+        return Object.keys(this.animations).map(key => {
+            return key;
+        });
     }
 }

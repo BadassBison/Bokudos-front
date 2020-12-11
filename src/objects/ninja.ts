@@ -1,15 +1,13 @@
 import { Keys } from '../interfaces/keys';
 
-import { NinjaAnimations } from '../states/imagesState';
-import { CustomAnimation } from './animation';
+import { NinjaAnimations } from '../states/ninjaAnimations';
+import {AnimationTypes} from "../constants/animationTypes";
 
 export class Ninja {
     ctx: CanvasRenderingContext2D;
-    states: string[];
     currentState: string;
 
     animations: NinjaAnimations;
-    images: NinjaAnimations;
 
     currentImage: any;
     // currentImage: HTMLImageElement;
@@ -23,8 +21,7 @@ export class Ninja {
         this.frameDelay = 6;
         this.frameCount = 0;
         this.animations = new NinjaAnimations();
-        this.states = this.animations.getStates();
-        this.currentState = this.states[10];
+        this.currentState = AnimationTypes.RUN;
 
         this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
 
