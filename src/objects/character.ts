@@ -19,6 +19,7 @@ export class Character {
     frameCount: number;
     frameDelay: number;
     speed: number;
+    diagSpeed: number;
     options: CharacterOptions;
 
     static defaultCharacterFactory(ctx: CanvasRenderingContext2D, options: DefaultCharacterOptions): Character {
@@ -50,6 +51,7 @@ export class Character {
         this.position = options.position;
         this.size = options.size;
         this.speed = options.speed;
+        this.diagSpeed = Math.sin(0.25 * Math.PI) * options.speed;
         this.columns = options.columns;
         this.rows = options.rows;
         this.width = options.spriteWidth;
@@ -68,25 +70,27 @@ export class Character {
 
     updatePosition({ up, right, down, left }: Keys): void {
         this.isMoving = up || right || down || left;
+        let isDiag = up !== down && left !== right;
+        let speed = isDiag ? this.diagSpeed : this.speed;
 
         if (up) {
             this.srcY = 0;
-            this.position.y -= this.speed;
+            this.position.y -= speed;
         }
 
         if (right) {
             this.srcY = 3 * this.height;
-            this.position.x += this.speed;
+            this.position.x += speed;
         }
 
         if (down) {
             this.srcY = 2 * this.height;
-            this.position.y += this.speed;
+            this.position.y += speed;
         }
 
         if (left) {
             this.srcY = 1 * this.height;
-            this.position.x -= this.speed;
+            this.position.x -= speed;
         }
 
         if (!this.isMoving) {
