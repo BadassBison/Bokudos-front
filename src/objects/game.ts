@@ -1,10 +1,13 @@
 import { GameState } from "../states/gameState";
 import { CanvasElement } from "./canvas"
 
-import { Box } from "./box";
-import { BoxOptions } from "../interfaces/boxOptions";
+// import { Box } from "./box";
+// import { BoxOptions } from "../interfaces/boxOptions";
 
 import { Character } from "./character";
+import { DefaultCharacterOptions } from "../interfaces/characterOptions";
+// @ts-ignore
+import spriteImage from "../../assets/sprites/skeleton.png";
 
 export class Game {
   private state: GameState;
@@ -13,15 +16,22 @@ export class Game {
     this.state = new GameState(innerWidth, innerHeight);
     this.state.canvas = new CanvasElement(innerWidth, innerHeight);
 
-    const boxOptions: BoxOptions = {
-      color: 'blue',
-      height: 30,
-      width: 30,
-      position: { x: 100, y: 100 }
-    }
-    this.state.box = new Box(this.state.canvas.ctx, boxOptions);
+    // const boxOptions: BoxOptions = {
+    //   color: 'blue',
+    //   height: 30,
+    //   width: 30,
+    //   position: { x: 100, y: 100 }
+    // }
+    // this.state.box = new Box(this.state.canvas.ctx, boxOptions);
 
-    this.state.character = new Character(this.state.canvas.ctx);
+    const image = new Image();
+    image.src = spriteImage;
+    const characterOptions: DefaultCharacterOptions = {
+      img: image,
+      position: { x: 300, y: 300 },
+      size: 1.5,
+    }
+    this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
   }
 
   // Updating the data, nothing with drawing/rendering

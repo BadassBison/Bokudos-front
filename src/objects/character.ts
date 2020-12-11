@@ -1,8 +1,6 @@
 import { Keys } from "../interfaces/keys";
 import { Point } from "../interfaces/point";
-
-// @ts-ignore
-import image from "../../assets/sprites/skeleton.png";
+import { DefaultCharacterOptions, CharacterOptions } from "../interfaces/characterOptions";
 
 export class Character {
     ctx: CanvasRenderingContext2D;
@@ -12,8 +10,6 @@ export class Character {
     rows: number;
     width: number;
     height: number;
-    sheetWidth: number;
-    sheetHeight: number;
     srcX: number;
     srcY: number;
     imagesLoaded: boolean;
@@ -23,27 +19,46 @@ export class Character {
     frameCount: number;
     frameDelay: number;
     speed: number;
+    options: CharacterOptions;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    static defaultCharacterFactory(ctx: CanvasRenderingContext2D, options: DefaultCharacterOptions): Character {
+        const columns = 9;
+        const rows = 4;
+        const spriteWidth = options.img.width / columns;
+        const spriteHeight = options.img.height / rows;
+
+        const characterOptions: CharacterOptions = {
+            img: options.img,
+            position: options.position,
+            columns,
+            rows,
+            spriteWidth,
+            spriteHeight,
+            srcX: 0,
+            srcY: 2 * spriteHeight,
+            size: 1.5,
+            speed: 4,
+            frameDelay: 6,
+        }
+
+        return new Character(ctx, characterOptions);
+    }
+
+    constructor(ctx: CanvasRenderingContext2D, options: CharacterOptions) {
         this.ctx = ctx;
-        this.img = new Image();
-        this.img.src = image;
-        this.position = { x: 300, y: 300 };
-        this.sheetWidth = 576;
-        this.sheetHeight = 256;
-        this.columns = 9;
-        this.rows = 4;
-        this.width = this.sheetWidth / this.columns;
-        this.height = this.sheetHeight / this.rows;
-        this.srcX = 0;
-        this.srcY = 2 * this.height;
-        this.imagesLoaded = false;
-        this.size = 1.5;
-        this.isMoving = false;
+        this.img = options.img;
+        this.position = options.position;
+        this.size = options.size;
+        this.speed = options.speed;
+        this.columns = options.columns;
+        this.rows = options.rows;
+        this.width = options.spriteWidth;
+        this.height = options.spriteHeight;
+        this.srcX = options.srcX;
+        this.srcY = options.srcY;
+        this.frameDelay = options.frameDelay;
         this.currentFrame = 0;
         this.frameCount = 0;
-        this.frameDelay = 6;
-        this.speed = 4;
     }
 
     update(keys: Keys): void {
