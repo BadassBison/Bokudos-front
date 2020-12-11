@@ -1,13 +1,16 @@
-import { GameState } from "../states/gameState";
-import { CanvasElement } from "./canvas"
+import { GameState } from '../states/gameState';
+import { CanvasElement } from './canvas';
 
-// import { Box } from "./box";
-// import { BoxOptions } from "../interfaces/boxOptions";
+// import { Box } from './box';
+// import { BoxOptions } from '../interfaces/boxOptions';
 
-import { Character } from "./character";
-import { DefaultCharacterOptions } from "../interfaces/characterOptions";
+import { Character } from './character';
+import { DefaultCharacterOptions } from '../interfaces/characterOptions';
+
 // @ts-ignore
-import spriteImage from "../../assets/sprites/skeleton.png";
+import spriteImage from '~../../assets/sprites/skeleton.png';
+// @ts-ignore
+import crate from '../../assets/sprites/tileset_1/Object/Crate.png';
 
 export class Game {
   private state: GameState;
@@ -30,7 +33,7 @@ export class Game {
       img: image,
       position: { x: 300, y: 300 },
       size: 1.5,
-    }
+    };
     this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
   }
 
@@ -59,8 +62,8 @@ export class Game {
 
   // EntryPoint
   run(): HTMLCanvasElement {
-    document.addEventListener("keydown", (evt: KeyboardEvent) => this.state.parseKey(evt.key, true))
-    document.addEventListener("keyup", (evt: KeyboardEvent) => this.state.parseKey(evt.key, false))
+    document.addEventListener('keydown', (evt: KeyboardEvent) => this.state.parseKey(evt.key, true));
+    document.addEventListener('keyup', (evt: KeyboardEvent) => this.state.parseKey(evt.key, false));
 
     this.draw();
     return this.state.canvas.canvasElement;
