@@ -3,6 +3,7 @@ import { Point } from '../interfaces/point';
 import { Keys } from '../interfaces/keys';
 import { Box } from '../objects/box';
 import { Character } from '../objects/character';
+import { Ninja } from '../objects/ninja';
 
 export class GameState {
     box: Box;
@@ -14,6 +15,7 @@ export class GameState {
     playerPosition: Point;
     screenHeight: number;
     screenWidth: number;
+    ninja: Ninja;
 
     constructor(width: number, height: number) {
         this.keys = {
@@ -30,7 +32,6 @@ export class GameState {
             x: width / 2,
             y: height / 2
         };
-        console.log('gameState');
     }
 
     parseKey(key: string, pressed: boolean) {

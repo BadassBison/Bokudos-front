@@ -1,6 +1,6 @@
-import { Keys } from "../interfaces/keys";
-import { Point } from "../interfaces/point";
-import { DefaultCharacterOptions, CharacterOptions } from "../interfaces/characterOptions";
+import { Keys } from '../interfaces/keys';
+import { Point } from '../interfaces/point';
+import { DefaultCharacterOptions, CharacterOptions } from '../interfaces/characterOptions';
 
 export class Character {
     ctx: CanvasRenderingContext2D;
@@ -39,7 +39,7 @@ export class Character {
             size: 1.5,
             speed: 4,
             frameDelay: 6,
-        }
+        };
 
         return new Character(ctx, characterOptions);
     }

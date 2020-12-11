@@ -11,6 +11,7 @@ import { DefaultCharacterOptions } from '../interfaces/characterOptions';
 import spriteImage from '~../../assets/sprites/skeleton.png';
 // @ts-ignore
 import crate from '../../assets/sprites/tileset_1/Object/Crate.png';
+import { Ninja } from './ninja';
 
 export class Game {
   private state: GameState;
@@ -27,21 +28,24 @@ export class Game {
     // }
     // this.state.box = new Box(this.state.canvas.ctx, boxOptions);
 
-    const image = new Image();
-    image.src = spriteImage;
-    const characterOptions: DefaultCharacterOptions = {
-      img: image,
-      position: { x: 300, y: 300 },
-      size: 1.5,
-    };
-    this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
+    // const image = new Image();
+    // image.src = spriteImage;
+    // const characterOptions: DefaultCharacterOptions = {
+    //   img: image,
+    //   position: { x: 300, y: 300 },
+    //   size: 1.5,
+    // };
+    // this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
+
+    this.state.ninja = new Ninja(this.state.canvas.ctx);
   }
 
   // Updating the data, nothing with drawing/rendering
   update(): void {
     // this.state.box.update(this.state.keys);
+    // this.state.character.update(this.state.keys);
 
-    this.state.character.update(this.state.keys);
+    this.state.ninja.update(this.state.keys);
   }
 
   draw(): void {
@@ -50,7 +54,8 @@ export class Game {
       this.update();
       // this.state.box.draw();
 
-      this.state.character.draw();
+      // this.state.character.draw();
+      this.state.ninja.draw();
 
       this.draw();
     });
