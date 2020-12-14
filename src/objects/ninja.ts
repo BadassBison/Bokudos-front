@@ -12,7 +12,9 @@ export class Ninja {
     currentState: string;
     frameCount: number;
     frameDelay: number;
+    framesPerAnimation: number;
     position: Point;
+    size: number;
 
     constructor(ctx: CanvasRenderingContext2D) {
         this.animations = new NinjaAnimations();
@@ -22,7 +24,9 @@ export class Ninja {
         this.currentState = AnimationTypes.IDLE;
         this.frameCount = 0;
         this.frameDelay = 6;
-        this.position = { x: 200, y: innerHeight - 200 };
+        this.framesPerAnimation = 10;
+        this.position = { x: 200, y: innerHeight - 400 };
+        this.size = 0.3;
     }
 
     update(keys: Keys): void {
@@ -45,7 +49,7 @@ export class Ninja {
         this.frameCount %= this.frameDelay;
 
         if (this.frameCount === 0) {
-            this.currentFrame = (this.currentFrame + 1) % 10;
+            this.currentFrame = (this.currentFrame + 1) % this.framesPerAnimation;
             this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
         }
     }
@@ -55,8 +59,8 @@ export class Ninja {
             this.currentImage,
             this.position.x,
             this.position.y,
-            this.currentImage.width * 0.20,
-            this.currentImage.height * 0.20
+            this.currentImage.width * this.size,
+            this.currentImage.height * this.size
         );
     }
 }
