@@ -1,4 +1,6 @@
 import { Game } from './objects/game';
 
 const game = new Game();
-document.body.prepend(game.run());
+const { canvas, bgCanvas } = game.getCanvas();
+document.body.prepend(bgCanvas, canvas);
+game.run();

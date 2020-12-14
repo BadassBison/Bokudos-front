@@ -1,6 +1,8 @@
 import { GameState } from '../states/gameState';
 import { CanvasElement } from './canvas';
+import { Background } from './background';
 
+import '../styles.css';
 // import { Box } from './box';
 // import { BoxOptions } from '../interfaces/boxOptions';
 
@@ -19,6 +21,7 @@ export class Game {
   constructor() {
     this.state = new GameState(innerWidth, innerHeight);
     this.state.canvas = new CanvasElement(innerWidth, innerHeight);
+    this.state.background = new Background(innerWidth, innerHeight);
 
     // const boxOptions: BoxOptions = {
     //   color: 'blue',
@@ -49,28 +52,42 @@ export class Game {
   }
 
   draw(): void {
+    // TODO: Draw static images like the background to avoid rerendering
+    // FIXME: When you add draw methods here, they do not render initially,
+    // I think it is due to the images not having loaded yet
+    this.drawEverything();
+  }
+
+  drawEverything(): void {
     requestAnimationFrame(() => {
-      this.refreshCanvas();
-      this.update();
-      // this.state.box.draw();
-
-      // this.state.character.draw();
-      this.state.ninja.draw();
-
-      this.draw();
+      this.drawEverything();
     });
+
+    this.refreshCanvas();
+    this.update();
+
+    // this.state.box.draw();
+    // this.state.character.draw();
+    this.state.background.draw();
+    this.state.ninja.draw();
   }
 
   private refreshCanvas(): void {
     this.state.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    // TODO: this will need to move slower than the foreground
+    // this.state.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+  }
+
+  getCanvas(): { [key: string]: HTMLCanvasElement } {
+    return { canvas: this.state.canvas.canvasElement, bgCanvas: this.state.background.bgCanvas.canvasElement };
   }
 
   // EntryPoint
-  run(): HTMLCanvasElement {
+  run(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.state.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.state.parseKey(evt.key, false));
 
     this.draw();
-    return this.state.canvas.canvasElement;
   }
 }
