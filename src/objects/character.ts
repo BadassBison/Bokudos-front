@@ -70,8 +70,8 @@ export class Character {
 
     updatePosition({ up, right, down, left }: Keys): void {
         this.isMoving = up || right || down || left;
-        let isDiag = up !== down && left !== right;
-        let speed = isDiag ? this.diagSpeed : this.speed;
+        const isDiag = up !== down && left !== right;
+        const speed = isDiag ? this.diagSpeed : this.speed;
 
         if (up) {
             this.srcY = 0;
