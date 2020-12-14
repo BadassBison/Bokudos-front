@@ -1,7 +1,7 @@
 import { Keys } from '../interfaces/keys';
 
-import { NinjaAnimations } from '../states/ninjaAnimations';
-import {AnimationTypes} from "../constants/animationTypes";
+import { NinjaAnimations } from '../animations/ninjaAnimations';
+import { AnimationTypes } from '../constants/animationTypes';
 
 export class Ninja {
     ctx: CanvasRenderingContext2D;
@@ -9,8 +9,7 @@ export class Ninja {
 
     animations: NinjaAnimations;
 
-    currentImage: any;
-    // currentImage: HTMLImageElement;
+    currentImage: HTMLImageElement;
     currentFrame: number;
     frameDelay: number;
     frameCount: number;

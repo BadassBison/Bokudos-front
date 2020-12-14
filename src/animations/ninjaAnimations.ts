@@ -229,8 +229,8 @@ import throw8 from '../../assets/sprites/ninja_sprites/Throw__008.png';
 // @ts-ignore
 import throw9 from '../../assets/sprites/ninja_sprites/Throw__009.png';
 
-import {CustomAnimation} from '../objects/customAnimation';
-import {AnimationTypes} from '../constants/animationTypes';
+import { CustomAnimation } from './customAnimation';
+import { AnimationTypes } from '../constants/animationTypes';
 
 export class NinjaAnimations {
     animations: { [index: string]: CustomAnimation } = {};
