@@ -1,6 +1,8 @@
 import { GameState } from '../states/gameState';
 import { CanvasElement } from './canvas';
+import { Background } from './background';
 
+import '../styles.css';
 // import { Box } from './box';
 // import { BoxOptions } from '../interfaces/boxOptions';
 
@@ -12,6 +14,9 @@ import spriteImage from '~../../assets/sprites/skeleton.png';
 // @ts-ignore
 import crate from '../../assets/sprites/tileset_1/Object/Crate.png';
 import { Ninja } from './ninja';
+import { Platforms } from './platforms';
+import { Stage } from './stage';
+import { one } from '../stages/stage_1';
 
 export class Game {
   private state: GameState;
@@ -19,6 +24,7 @@ export class Game {
   constructor() {
     this.state = new GameState(innerWidth, innerHeight);
     this.state.canvas = new CanvasElement(innerWidth, innerHeight);
+    this.state.background = new Background(innerWidth, innerHeight);
 
     // const boxOptions: BoxOptions = {
     //   color: 'blue',
@@ -38,6 +44,7 @@ export class Game {
     // this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
 
     this.state.ninja = new Ninja(this.state.canvas.ctx);
+    this.state.stage = new Stage(this.state.canvas.ctx, one);
   }
 
   // Updating the data, nothing with drawing/rendering
@@ -49,28 +56,48 @@ export class Game {
   }
 
   draw(): void {
-    requestAnimationFrame(() => {
-      this.refreshCanvas();
-      this.update();
-      // this.state.box.draw();
-
-      // this.state.character.draw();
-      this.state.ninja.draw();
-
-      this.draw();
-    });
+    // TODO: Draw static images like the background to avoid rerendering
+    // FIXME: When you add draw methods here, they do not render initially,
+    // I think it is due to the images not having loaded yet
+    this.drawEverything();
   }
 
-  private refreshCanvas(): void {
+  drawEverything(): void {
+    requestAnimationFrame(() => {
+      this.drawEverything();
+    });
+
+    this.refreshCanvas();
+    this.update();
+
+    this.state.stage.render();
+    // this.state.box.draw();
+    // this.state.character.draw();
+    this.state.background.draw();
+    this.state.ninja.draw();
+  }
+
+  refreshCanvas(): void {
     this.state.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    // TODO: this will need to move slower than the foreground
+    // this.state.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+  }
+
+  detectCollision(): void {
+    const { x, y } = this.state.ninja.position;
+
+  }
+
+  getCanvas(): { [key: string]: HTMLCanvasElement } {
+    return { canvas: this.state.canvas.canvasElement, bgCanvas: this.state.background.bgCanvas.canvasElement };
   }
 
   // EntryPoint
-  run(): HTMLCanvasElement {
+  run(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.state.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.state.parseKey(evt.key, false));
 
     this.draw();
-    return this.state.canvas.canvasElement;
   }
 }

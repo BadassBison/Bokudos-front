@@ -4,18 +4,23 @@ import { Keys } from '../interfaces/keys';
 import { Box } from '../objects/box';
 import { Character } from '../objects/character';
 import { Ninja } from '../objects/ninja';
+import { Background } from '../objects/background';
+import { Platforms } from '../objects/platforms';
+import { Stage } from '../objects/stage';
 
 export class GameState {
+    background: Background;
     box: Box;
     canvas: CanvasElement;
     character: Character;
     gamePaused: boolean;
     gameRunning: boolean;
     keys: Keys;
+    ninja: Ninja;
     playerPosition: Point;
     screenHeight: number;
     screenWidth: number;
-    ninja: Ninja;
+    stage: Stage;
 
     constructor(width: number, height: number) {
         this.keys = {

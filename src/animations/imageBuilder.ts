@@ -1,4 +1,4 @@
-export class CustomAnimation {
+export class ImageBuilder {
     images: HTMLImageElement[];
 
     constructor(imagesSources: string[]) {
