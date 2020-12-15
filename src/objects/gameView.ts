@@ -15,7 +15,7 @@ export class GameView {
     }
 
     setPosition(position: Point) {
-        this.p = {...position};
+        this.p = position;
     }
 
     getPosition() {
@@ -37,6 +37,10 @@ export class GameView {
             w: this.d.w * this.aspectRatio,
             h: this.d.h * this.aspectRatio
         }
+    }
+
+    getView() {
+        return {...this.view};
     }
 
     convertToScreenCoords(gameCoords: Point): Point {
