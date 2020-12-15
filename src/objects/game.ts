@@ -32,7 +32,7 @@ export class Game {
     this.state.canvas = new CanvasElement(innerWidth, innerHeight);
     this.state.background = new Background(innerWidth, innerHeight);
     this.settingsState = new SettingsState();
-    this.gameView = new GameView();
+    this.gameView = new GameView(this.state.canvas.ctx);
 
     // const boxOptions: BoxOptions = {
     //   color: 'blue',
@@ -54,7 +54,7 @@ export class Game {
     this.state.ninja = new Ninja(this.state.canvas.ctx, this.gameView);
     this.settingsState.cursorCoords = new DisplayText(this.state.canvas.ctx);
     this.settingsState.grid = new Grid(this.state.canvas.ctx, this.gameView);
-    this.state.stage = new Stage(this.state.canvas.ctx, one);
+    this.state.stage = new Stage(this.state.canvas.ctx, this.gameView, one);
   }
 
   // Updating the data, nothing with drawing/rendering

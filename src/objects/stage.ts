@@ -1,16 +1,19 @@
 import { GridTile } from './gridTile';
 import { Platforms } from './platforms';
+import {GameView} from "./gameView";
 
 export class Stage {
 
     ctx: CanvasRenderingContext2D;
+    gameView: GameView;
     platforms: Platforms;
     tiles: GridTile[];
     tileWidth: number;
     tileHeight: number;
 
-    constructor(ctx: CanvasRenderingContext2D, tileList: string[][]) {
+    constructor(ctx: CanvasRenderingContext2D, gameView: GameView, tileList: string[][]) {
         this.ctx = ctx;
+        this.gameView = gameView;
         this.platforms = new Platforms();
 
         this.tiles = [];

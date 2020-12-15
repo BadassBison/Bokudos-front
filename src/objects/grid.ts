@@ -13,15 +13,17 @@ export class Grid {
     draw() {
         const p = this.view.getPosition();
         const d = this.view.getDimensions();
-        for(let x = p.x - d.w/2; x <= p.x + d.w/2; x+= d.w/18 ) {
-            const p1: Point = {x: x, y: p.y + d.h/2};
-            const p2: Point = {x: x, y: p.y - d.h/2};
+        // draw vertical lines
+        for (let x = p.x - d.w / 2; x <= p.x + d.w / 2; x++) {
+            const p1: Point = {x: x, y: p.y + d.h / 2};
+            const p2: Point = {x: x, y: p.y - d.h / 2};
             this.drawLine(p1, p2);
         }
 
-        for(let y = p.y - d.h/2; y <= p.y + d.h/2; y+= d.h/20 ) {
-            const p1: Point = {x: p.x - d.h/2, y: y};
-            const p2: Point = {x: p.y + d.h/2, y: y};
+        // draw horizontal lines
+        for (let y = p.y - d.h / 2; y <= p.y + d.h / 2; y++) {
+            const p1: Point = {x: p.x - d.w / 2, y: y};
+            const p2: Point = {x: p.y + d.w / 2, y: y};
             this.drawLine(p1, p2);
         }
     }
