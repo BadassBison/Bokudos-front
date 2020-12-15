@@ -2,6 +2,7 @@ export class AnimationTypes {
     public static IDLE = 'IDLE';
     public static ATTACK = 'ATTACK';
     public static RUN = 'RUN';
+    public static RUNL = 'RUNL';
     public static CLIMB = 'CLIMB';
     public static DEAD = 'DEAD';
     public static GLIDE = 'GLIDE';

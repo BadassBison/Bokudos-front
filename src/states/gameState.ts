@@ -5,6 +5,8 @@ import { Box } from '../objects/box';
 import { Character } from '../objects/character';
 import { Ninja } from '../objects/ninja';
 import { Background } from '../objects/background';
+import { Platforms } from '../objects/platforms';
+import { Stage } from '../objects/stage';
 
 export class GameState {
     background: Background;
@@ -18,6 +20,7 @@ export class GameState {
     playerPosition: Point;
     screenHeight: number;
     screenWidth: number;
+    stage: Stage;
 
     constructor(width: number, height: number) {
         this.keys = {

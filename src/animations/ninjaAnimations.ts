@@ -60,6 +60,26 @@ import run7 from '../../assets/sprites/ninja_sprites/Run__007.png';
 import run8 from '../../assets/sprites/ninja_sprites/Run__008.png';
 // @ts-ignore
 import run9 from '../../assets/sprites/ninja_sprites/Run__009.png';
+// @ts-ignore
+import runL0 from '../../assets/sprites/ninja_sprites/RunL__000.png';
+// @ts-ignore
+import runL1 from '../../assets/sprites/ninja_sprites/RunL__001.png';
+// @ts-ignore
+import runL2 from '../../assets/sprites/ninja_sprites/RunL__002.png';
+// @ts-ignore
+import runL3 from '../../assets/sprites/ninja_sprites/RunL__003.png';
+// @ts-ignore
+import runL4 from '../../assets/sprites/ninja_sprites/RunL__004.png';
+// @ts-ignore
+import runL5 from '../../assets/sprites/ninja_sprites/RunL__005.png';
+// @ts-ignore
+import runL6 from '../../assets/sprites/ninja_sprites/RunL__006.png';
+// @ts-ignore
+import runL7 from '../../assets/sprites/ninja_sprites/RunL__007.png';
+// @ts-ignore
+import runL8 from '../../assets/sprites/ninja_sprites/RunL__008.png';
+// @ts-ignore
+import runL9 from '../../assets/sprites/ninja_sprites/RunL__009.png';
 
 // @ts-ignore
 import climb0 from '../../assets/sprites/ninja_sprites/Climb_000.png';
@@ -229,27 +249,28 @@ import throw8 from '../../assets/sprites/ninja_sprites/Throw__008.png';
 // @ts-ignore
 import throw9 from '../../assets/sprites/ninja_sprites/Throw__009.png';
 
-import { CustomAnimation } from './customAnimation';
+import { ImageBuilder } from './imageBuilder';
 import { AnimationTypes } from '../constants/animationTypes';
 
 export class NinjaAnimations {
-    animations: { [index: string]: CustomAnimation } = {};
+    animations: { [index: string]: ImageBuilder } = {};
 
     constructor() {
-        this.animations[AnimationTypes.IDLE] = new CustomAnimation([idle0, idle1, idle2, idle3, idle4, idle5, idle6, idle7, idle8, idle9]);
-        this.animations[AnimationTypes.ATTACK] = new CustomAnimation([attack0, attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9]);
-        this.animations[AnimationTypes.RUN] = new CustomAnimation([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
-        this.animations[AnimationTypes.CLIMB] = new CustomAnimation([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
-        this.animations[AnimationTypes.DEAD] = new CustomAnimation([dead0, dead1, dead2, dead3, dead4, dead5, dead6, dead7, dead8, dead9]);
-        this.animations[AnimationTypes.GLIDE] = new CustomAnimation([glide0, glide1, glide2, glide3, glide4, glide5, glide6, glide7, glide8, glide9]);
-        this.animations[AnimationTypes.JUMP] = new CustomAnimation([jump0, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8, jump9]);
-        this.animations[AnimationTypes.JUMP_ATTACK] = new CustomAnimation([jumpAttack0, jumpAttack1, jumpAttack2, jumpAttack3, jumpAttack4, jumpAttack5, jumpAttack6, jumpAttack7, jumpAttack8, jumpAttack9]);
-        this.animations[AnimationTypes.JUMP_THROW] = new CustomAnimation([jumpThrow0, jumpThrow1, jumpThrow2, jumpThrow3, jumpThrow4, jumpThrow5, jumpThrow6, jumpThrow7, jumpThrow8, jumpThrow9]);
-        this.animations[AnimationTypes.SLIDE] = new CustomAnimation([slide0, slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8, slide9]);
-        this.animations[AnimationTypes.THROW] = new CustomAnimation([throw0, throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9]);
+        this.animations[AnimationTypes.IDLE] = new ImageBuilder([idle0, idle1, idle2, idle3, idle4, idle5, idle6, idle7, idle8, idle9]);
+        this.animations[AnimationTypes.ATTACK] = new ImageBuilder([attack0, attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9]);
+        this.animations[AnimationTypes.RUN] = new ImageBuilder([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
+        this.animations[AnimationTypes.RUNL] = new ImageBuilder([runL0, runL1, runL2, runL3, runL4, runL5, runL6, runL7, runL8, runL9]);
+        this.animations[AnimationTypes.CLIMB] = new ImageBuilder([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
+        this.animations[AnimationTypes.DEAD] = new ImageBuilder([dead0, dead1, dead2, dead3, dead4, dead5, dead6, dead7, dead8, dead9]);
+        this.animations[AnimationTypes.GLIDE] = new ImageBuilder([glide0, glide1, glide2, glide3, glide4, glide5, glide6, glide7, glide8, glide9]);
+        this.animations[AnimationTypes.JUMP] = new ImageBuilder([jump0, jump1, jump2, jump3, jump4, jump5, jump6, jump7, jump8, jump9]);
+        this.animations[AnimationTypes.JUMP_ATTACK] = new ImageBuilder([jumpAttack0, jumpAttack1, jumpAttack2, jumpAttack3, jumpAttack4, jumpAttack5, jumpAttack6, jumpAttack7, jumpAttack8, jumpAttack9]);
+        this.animations[AnimationTypes.JUMP_THROW] = new ImageBuilder([jumpThrow0, jumpThrow1, jumpThrow2, jumpThrow3, jumpThrow4, jumpThrow5, jumpThrow6, jumpThrow7, jumpThrow8, jumpThrow9]);
+        this.animations[AnimationTypes.SLIDE] = new ImageBuilder([slide0, slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8, slide9]);
+        this.animations[AnimationTypes.THROW] = new ImageBuilder([throw0, throw1, throw2, throw3, throw4, throw5, throw6, throw7, throw8, throw9]);
     }
 
-    getAnimation(animationState: string): CustomAnimation {
+    getAnimation(animationState: string): ImageBuilder {
         if (this.animations[animationState]) {
             return this.animations[animationState];
         }
