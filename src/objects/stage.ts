@@ -35,7 +35,7 @@ export class Stage {
                     this.tileHeight
                 );
             }
-            this.drawGrid(tile.row, tile.col);
+            // this.drawGrid(tile.row, tile.col);
         }
     }
 

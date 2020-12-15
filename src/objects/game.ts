@@ -17,14 +17,22 @@ import { Ninja } from './ninja';
 import { Platforms } from './platforms';
 import { Stage } from './stage';
 import { one } from '../stages/stage_1';
+import {SettingsState} from "../states/settingsState";
+import {DisplayText} from "./displayText";
+import {GameView} from "./gameView";
+import {Grid} from "./grid";
 
 export class Game {
   private state: GameState;
+  private settingsState: SettingsState;
+  private gameView: GameView;
 
   constructor() {
     this.state = new GameState(innerWidth, innerHeight);
     this.state.canvas = new CanvasElement(innerWidth, innerHeight);
     this.state.background = new Background(innerWidth, innerHeight);
+    this.settingsState = new SettingsState();
+    this.gameView = new GameView();
 
     // const boxOptions: BoxOptions = {
     //   color: 'blue',
@@ -43,7 +51,9 @@ export class Game {
     // };
     // this.state.character = Character.defaultCharacterFactory(this.state.canvas.ctx, characterOptions);
 
-    this.state.ninja = new Ninja(this.state.canvas.ctx);
+    this.state.ninja = new Ninja(this.state.canvas.ctx, this.gameView);
+    this.settingsState.cursorCoords = new DisplayText(this.state.canvas.ctx);
+    this.settingsState.grid = new Grid(this.state.canvas.ctx, this.gameView);
     this.state.stage = new Stage(this.state.canvas.ctx, one);
   }
 
@@ -75,6 +85,11 @@ export class Game {
     // this.state.character.draw();
     this.state.background.draw();
     this.state.ninja.draw();
+
+    if(this.settingsState.debugMode) {
+      this.settingsState.cursorCoords.draw();
+      this.settingsState.grid.draw();
+    }
   }
 
   refreshCanvas(): void {
@@ -98,6 +113,24 @@ export class Game {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.state.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.state.parseKey(evt.key, false));
 
+    document.addEventListener('keyup', (evt: KeyboardEvent) => this.settingsState.parseKey(evt.key));
+
+    document.addEventListener('mousemove', (evt: MouseEvent) => {
+          this.settingsState.cursorCoords.updatePosition({x: evt.clientX, y: evt.clientY});
+          const gameCoords = this.gameView.convertToGameCoordinates({x: evt.clientX, y: evt.clientY});
+          const screenCoords = this.gameView.convertToScreenCoords(gameCoords);
+
+          this.settingsState.cursorCoords.setText(
+              "(" + gameCoords.x.toFixed(2) +", " + gameCoords.y.toFixed(2) + ")," +
+              " (" + screenCoords.x.toFixed(0) +", " + screenCoords.y.toFixed(0) + ")");
+    });
+
+    window.addEventListener('resize', (ev => {
+       this.state.canvas.canvasElement.height = innerHeight;
+       this.state.canvas.canvasElement.width = innerWidth;
+    }));
     this.draw();
   }
+
+
 }
