@@ -16,6 +16,7 @@ export class Ninja {
     frameDelay: number;
     framesPerAnimation: number;
     jumping: boolean;
+    movingRight: boolean;
     position: Point;
     size: number;
     speed: number;
@@ -26,12 +27,13 @@ export class Ninja {
         this.ctx = ctx;
         this.currentFrame = 0;
         this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
-        this.currentState = AnimationTypes.IDLE;
+        this.currentState = AnimationTypes.IDLE_RIGHT;
         this.falling = false;
         this.frameCount = 0;
         this.frameDelay = 6;
         this.framesPerAnimation = 10;
         this.jumping = false;
+        this.movingRight = true;
         this.position = { x: 200, y: innerHeight - 400 };
         this.size = 0.15;
         this.speed = 3;
@@ -44,13 +46,13 @@ export class Ninja {
 
     updatePosition({ up, right, left }: Keys): void {
         if (!right && !left && !this.jumping) {
-            this.currentState = AnimationTypes.IDLE;
+            this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
         }
 
         if (up && !this.jumping) {
             this.jumping = true;
             this.currentFrame = -1;
-            this.currentState = AnimationTypes.JUMP;
+            this.currentState = this.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
         }
 
         if (this.jumping) {
@@ -66,16 +68,16 @@ export class Ninja {
         }
 
         if (right) {
-            if (!this.jumping) { this.currentState = AnimationTypes.RUN; }
+            this.movingRight = true;
+            if (!this.jumping) { this.currentState = AnimationTypes.RUN_RIGHT; }
             this.position.x += this.speed;
         }
 
         if (left) {
-            if (!this.jumping) { this.currentState = AnimationTypes.RUNL; }
+            this.movingRight = false;
+            if (!this.jumping) { this.currentState = AnimationTypes.RUN_LEFT; }
             this.position.x -= this.speed;
         }
-
-        // console.log('position', this.position);
     }
 
     updateSprite() {
