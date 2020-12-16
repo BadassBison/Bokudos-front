@@ -5,8 +5,7 @@ export class AnimationTypes {
     public static ATTACK_LEFT = 'ATTACK_LEFT';
     public static RUN_RIGHT = 'RUN_RIGHT';
     public static RUN_LEFT = 'RUN_LEFT';
-    public static CLIMB_RIGHT = 'CLIMB_RIGHT';
-    public static CLIMB_LEFT = 'CLIMB_LEFT';
+    public static CLIMB = 'CLIMB';
     public static DEAD_RIGHT = 'DEAD_RIGHT';
     public static DEAD_LEFT = 'DEAD_LEFT';
     public static GLIDE_RIGHT = 'GLIDE_RIGHT';

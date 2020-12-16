@@ -141,26 +141,6 @@ import climb7 from '../../assets/sprites/ninja_sprites/Climb_007.png';
 import climb8 from '../../assets/sprites/ninja_sprites/Climb_008.png';
 // @ts-ignore
 import climb9 from '../../assets/sprites/ninja_sprites/Climb_009.png';
-// @ts-ignore
-import climbL0 from '../../assets/sprites/ninja_sprites/ClimbL_000.png';
-// @ts-ignore
-import climbL1 from '../../assets/sprites/ninja_sprites/ClimbL_001.png';
-// @ts-ignore
-import climbL2 from '../../assets/sprites/ninja_sprites/ClimbL_002.png';
-// @ts-ignore
-import climbL3 from '../../assets/sprites/ninja_sprites/ClimbL_003.png';
-// @ts-ignore
-import climbL4 from '../../assets/sprites/ninja_sprites/ClimbL_004.png';
-// @ts-ignore
-import climbL5 from '../../assets/sprites/ninja_sprites/ClimbL_005.png';
-// @ts-ignore
-import climbL6 from '../../assets/sprites/ninja_sprites/ClimbL_006.png';
-// @ts-ignore
-import climbL7 from '../../assets/sprites/ninja_sprites/ClimbL_007.png';
-// @ts-ignore
-import climbL8 from '../../assets/sprites/ninja_sprites/ClimbL_008.png';
-// @ts-ignore
-import climbL9 from '../../assets/sprites/ninja_sprites/ClimbL_009.png';
 
 // @ts-ignore
 import dead0 from '../../assets/sprites/ninja_sprites/Dead__000.png';
@@ -462,8 +442,7 @@ export class NinjaAnimations {
         this.animations[AnimationTypes.ATTACK_LEFT] = new ImageBuilder([attackL0, attackL1, attackL2, attackL3, attackL4, attackL5, attackL6, attackL7, attackL8, attackL9]);
         this.animations[AnimationTypes.RUN_RIGHT] = new ImageBuilder([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
         this.animations[AnimationTypes.RUN_LEFT] = new ImageBuilder([runL0, runL1, runL2, runL3, runL4, runL5, runL6, runL7, runL8, runL9]);
-        this.animations[AnimationTypes.CLIMB_RIGHT] = new ImageBuilder([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
-        this.animations[AnimationTypes.CLIMB_LEFT] = new ImageBuilder([climbL0, climbL1, climbL2, climbL3, climbL4, climbL5, climbL6, climbL7, climbL8, climbL9]);
+        this.animations[AnimationTypes.CLIMB] = new ImageBuilder([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);
         this.animations[AnimationTypes.DEAD_RIGHT] = new ImageBuilder([dead0, dead1, dead2, dead3, dead4, dead5, dead6, dead7, dead8, dead9]);
         this.animations[AnimationTypes.DEAD_LEFT] = new ImageBuilder([deadL0, deadL1, deadL2, deadL3, deadL4, deadL5, deadL6, deadL7, deadL8, deadL9]);
         this.animations[AnimationTypes.GLIDE_RIGHT] = new ImageBuilder([glide0, glide1, glide2, glide3, glide4, glide5, glide6, glide7, glide8, glide9]);
