@@ -3,6 +3,7 @@ import { Keys } from '../interfaces/keys';
 import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
 import { Point } from '../interfaces/point';
+import {GameView} from "./gameView";
 
 export class Ninja {
     animations: NinjaAnimations;
@@ -15,13 +16,14 @@ export class Ninja {
     frameCount: number;
     frameDelay: number;
     framesPerAnimation: number;
+    gameView: GameView;
     jumping: boolean;
     movingRight: boolean;
     position: Point;
     size: number;
     speed: number;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    constructor(ctx: CanvasRenderingContext2D, gameView: GameView) {
         this.animations = new NinjaAnimations();
         this.attacking = false;
         this.ctx = ctx;
@@ -32,6 +34,7 @@ export class Ninja {
         this.frameCount = 0;
         this.frameDelay = 6;
         this.framesPerAnimation = 10;
+        this.gameView = gameView;
         this.jumping = false;
         this.movingRight = true;
         this.position = { x: 200, y: innerHeight - 400 };
