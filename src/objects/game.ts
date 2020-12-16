@@ -125,11 +125,6 @@ export class Game {
               " (" + screenCoords.x.toFixed(0) +", " + screenCoords.y.toFixed(0) + ")");
     });
 
-    document.addEventListener("mousedown", (evt: MouseEvent) => {
-      const newGameCenter = this.gameView.toGameCoordinates({x: evt.clientX, y: evt.clientY});
-      this.gameView.setPosition(newGameCenter);
-    });
-
     window.addEventListener('resize', (ev => {
        this.state.canvas.canvasElement.height = innerHeight;
        this.state.canvas.canvasElement.width = innerWidth;

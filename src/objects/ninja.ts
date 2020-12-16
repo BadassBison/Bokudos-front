@@ -4,6 +4,7 @@ import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
 import { Point } from '../interfaces/point';
 import {GameView} from "./gameView";
+import {Dimensions} from "../interfaces/dimensions";
 
 export class Ninja {
     animations: NinjaAnimations;
@@ -23,6 +24,9 @@ export class Ninja {
     size: number;
     speed: number;
 
+    readonly HEIGHT_IN_UNITS: number = 2;
+    readonly SPRITE_SIZER: number;
+
     constructor(ctx: CanvasRenderingContext2D, gameView: GameView) {
         this.animations = new NinjaAnimations();
         this.attacking = false;
@@ -40,6 +44,7 @@ export class Ninja {
         this.position = { x: 3, y: 6 };
         this.size = 0.15;
         this.speed = .25;
+        this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
     }
 
     update(keys: Keys): void {
@@ -105,23 +110,31 @@ export class Ninja {
         const dimensions = this.gameView.getDimensions();
         this.gameView.setPosition({x: this.position.x - dimensions.w/2, y: this.position.y - 4});
         const screenPosition = this.gameView.toScreenCoordinates(this.position);
+        const screenDimensions = this.gameView.toScreenDimensions(this.getSize());
         this.ctx.drawImage(
             this.currentImage,
             screenPosition.x,
             screenPosition.y,
-            this.currentImage.width * this.size,
-            this.currentImage.height * this.size
+            screenDimensions.w,
+            screenDimensions.h
         );
 
-        this.drawHitbox(screenPosition);
+        this.drawHitbox(screenPosition, screenDimensions);
     }
 
-    drawHitbox(position: Point) {
+    getSize(): Dimensions {
+        return {
+            w: this.currentImage.width / this.SPRITE_SIZER,
+            h: this.currentImage.height / this.SPRITE_SIZER
+        }
+    }
+
+    drawHitbox(position: Point, dimensions: Dimensions) {
         this.ctx.strokeRect(
             position.x,
             position.y,
-            this.currentImage.width * this.size,
-            this.currentImage.height * this.size
+            dimensions.w,
+            dimensions.h
         );
     }
 }

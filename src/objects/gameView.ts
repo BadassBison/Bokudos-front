@@ -10,7 +10,7 @@ export class GameView {
     private d: Dimensions; // d represents the dimensions of the view in game units
     private view: Dimensions;
 
-    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = {w: 40, h: 20}) {
+    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = {w: 22, h: 10}) {
         this.ctx = ctx;
         this.setDimensions(d);
     }
@@ -55,6 +55,20 @@ export class GameView {
         return {
             x: screenCoords.x / this.pixelsPerUnit + this.p.x,
             y: -screenCoords.y / this.pixelsPerUnit + this.p.y + this.d.h
+        }
+    }
+
+    toScreenDimensions(gameDimensions: Dimensions): Dimensions {
+        return {
+            w: this.toPixels(gameDimensions.w),
+            h: this.toPixels(gameDimensions.h)
+        }
+    }
+
+    toGameDimensions(screenDimensions: Dimensions): Dimensions {
+        return {
+            w: this.toUnits(screenDimensions.w),
+            h: this.toUnits(screenDimensions.h)
         }
     }
 
