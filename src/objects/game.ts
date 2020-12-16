@@ -117,8 +117,8 @@ export class Game {
 
     document.addEventListener('mousemove', (evt: MouseEvent) => {
           this.settingsState.cursorCoords.updatePosition({x: evt.clientX, y: evt.clientY});
-          const gameCoords = this.gameView.convertToGameCoordinates({x: evt.clientX, y: evt.clientY});
-          const screenCoords = this.gameView.convertToScreenCoords(gameCoords);
+          const gameCoords = this.gameView.toGameCoordinates({x: evt.clientX, y: evt.clientY});
+          const screenCoords = this.gameView.toScreenCoordinates(gameCoords);
 
           this.settingsState.cursorCoords.setText(
               "(" + gameCoords.x.toFixed(2) +", " + gameCoords.y.toFixed(2) + ")," +
@@ -126,10 +126,7 @@ export class Game {
     });
 
     document.addEventListener("mousedown", (evt: MouseEvent) => {
-      const newGameCenter = this.gameView.convertToGameCoordinates({x: evt.clientX, y: evt.clientY});
-      const currentPosition = this.gameView.getPosition();
-      console.log(currentPosition.x.toFixed(2) + ", " + currentPosition.y.toFixed(2) + " ---> " + newGameCenter.x.toFixed(2) + ", " + newGameCenter.y.toFixed(2));
-
+      const newGameCenter = this.gameView.toGameCoordinates({x: evt.clientX, y: evt.clientY});
       this.gameView.setPosition(newGameCenter);
     });
 

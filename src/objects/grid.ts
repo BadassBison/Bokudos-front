@@ -15,29 +15,21 @@ export class Grid {
         const d = this.gameView.getDimensions();
         const view = this.gameView.getView();
 
-        const halfWidth = view.w/2;
-        const halfHeight = view.h/2;
+        const halfWidth = d.w/2;
+        const halfHeight = d.h/2;
 
-        // draw vertical lines
-        // for (let x = p.x - halfWidth; x <= p.x + halfWidth; x++) {
-        //     const p1: Point = {x: Math.round(x), y: p.y + halfHeight};
-        //     const p2: Point = {x: Math.round(x), y: p.y - halfHeight};
-        //     this.drawLine(p1, p2);
-        // }
-        //
-        // // draw horizontal lines
-        // for (let y = p.y - halfHeight; y <= p.y + halfHeight; y++) {
-        //     const p1: Point = {x: p.x - halfWidth, y: Math.round(y)};
-        //     const p2: Point = {x: p.y + halfWidth, y: Math.round(y)};
-        //     this.drawLine(p1, p2);
-        // }
+        for(let row = p.y - halfHeight; row <= p.y + halfHeight + 1; row++) {
+            for(let col = p.x - halfWidth-1; col <= p.x + halfWidth; col++) {
+                this.drawGrid(Math.round(row), Math.round(col));
+            }
+        }
 
         this.drawLine({x: 0, y: 10}, {x: 0, y: -10});
         this.drawLine({x: -10, y: 0}, {x: 10, y: 0});
 
         this.ctx.strokeStyle = "red";
         this.ctx.beginPath();
-        const center = this.gameView.convertToScreenCoords(p);
+        const center = this.gameView.toScreenCoordinates(p);
         // console.log("p: " + p.x + ", " + p.y);
         // console.log("center: " + center.x + ", " + center.y);
         this.ctx.rect(center.x -50, center.y-50, 100, 100);
@@ -53,12 +45,22 @@ export class Grid {
     }
 
     drawLine(p1: Point, p2: Point) {
-        const s1 = this.gameView.convertToScreenCoords(p1);
-        const s2 = this.gameView.convertToScreenCoords(p2);
+        const s1 = this.gameView.toScreenCoordinates(p1);
+        const s2 = this.gameView.toScreenCoordinates(p2);
 
         this.ctx.beginPath();
         this.ctx.moveTo(s1.x, s1.y);
         this.ctx.lineTo(s2.x, s2.y);
         this.ctx.stroke();
+    }
+
+    drawGrid(row: number, col: number) {
+        const position = this.gameView.toScreenCoordinates({x: col, y: row});
+        this.ctx.strokeRect(
+            position.x,
+            position.y,
+            this.gameView.toPixels(1),
+            this.gameView.toPixels(1)
+        );
     }
 }

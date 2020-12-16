@@ -1,5 +1,5 @@
-import { GridTile } from './gridTile';
-import { Platforms } from './platforms';
+import {GridTile} from './gridTile';
+import {Platforms} from './platforms';
 import {GameView} from "./gameView";
 
 export class Stage {
@@ -8,8 +8,6 @@ export class Stage {
     gameView: GameView;
     platforms: Platforms;
     tiles: GridTile[];
-    tileWidth: number;
-    tileHeight: number;
 
     constructor(ctx: CanvasRenderingContext2D, gameView: GameView, tileList: string[][]) {
         this.ctx = ctx;
@@ -19,35 +17,23 @@ export class Stage {
         this.tiles = [];
         for (let row = 0; row < tileList.length; row++) {
             for (let col = 0; col < tileList[row].length; col++) {
-                this.tiles.push(new GridTile(row, col, tileList[row][col]));
+                this.tiles.push(new GridTile(tileList.length - row, col, tileList[row][col]));
             }
         }
-
-        this.tileWidth = (innerWidth / tileList[0].length);
-        this.tileHeight = (innerHeight / tileList.length);
     }
 
     render() {
         for (const tile of this.tiles) {
             if (tile.lookupValue !== '00') {
+                const position = this.gameView.toScreenCoordinates({x: tile.col, y: tile.row});
                 this.ctx.drawImage(
                     this.platforms.imageMap.get(Number(tile.lookupValue)),
-                    this.tileWidth * tile.col,
-                    this.tileHeight * tile.row,
-                    this.tileWidth,
-                    this.tileHeight
+                    position.x,
+                    position.y,
+                    this.gameView.toPixels(1),
+                    this.gameView.toPixels(1)
                 );
             }
-            // this.drawGrid(tile.row, tile.col);
         }
-    }
-
-    drawGrid(row: number, col: number) {
-        this.ctx.strokeRect(
-            col * this.tileWidth,
-            row * this.tileHeight,
-            this.tileWidth,
-            this.tileHeight
-        );
     }
 }
