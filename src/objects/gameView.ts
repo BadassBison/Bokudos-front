@@ -1,5 +1,6 @@
 import {Point} from "../interfaces/point";
 import {Dimensions} from "../interfaces/dimensions";
+import {Line} from "../interfaces/line";
 
 export class GameView {
     private ctx: CanvasRenderingContext2D;
@@ -9,12 +10,9 @@ export class GameView {
     private d: Dimensions; // d represents the dimensions of the view in game units
     private view: Dimensions;
 
-    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = {w: 40, h: 20}) {
+    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = {w: 22, h: 10}) {
         this.ctx = ctx;
         this.setDimensions(d);
-
-        // Set the screen starting position at the bottom left of the screen so that we can start building the level from (0,0)
-        this.setPosition({x:this.d.w/2, y:this.d.h/2});
     }
 
     setPosition(position: Point) {
@@ -48,24 +46,55 @@ export class GameView {
 
     toScreenCoordinates(gameCoords: Point): Point {
         return {
-            x: gameCoords.x * this.pixelsPerUnit + this.view.w / 2 - this.p.x * this.pixelsPerUnit,
-            y: -gameCoords.y * this.pixelsPerUnit + this.p.y * this.pixelsPerUnit + this.view.h / 2
+            x: gameCoords.x * this.pixelsPerUnit - this.p.x * this.pixelsPerUnit,
+            y: -gameCoords.y * this.pixelsPerUnit + this.p.y * this.pixelsPerUnit + this.view.h
         }
     }
 
     toGameCoordinates(screenCoords: Point): Point {
         return {
-            x: screenCoords.x / this.pixelsPerUnit + this.p.x - this.d.w / 2,
-            y: -screenCoords.y / this.pixelsPerUnit + this.p.y + this.d.h / 2
+            x: screenCoords.x / this.pixelsPerUnit + this.p.x,
+            y: -screenCoords.y / this.pixelsPerUnit + this.p.y + this.d.h
         }
     }
 
-    toPixels(gameLength: number) {
+    toScreenDimensions(gameDimensions: Dimensions): Dimensions {
+        return {
+            w: this.toPixels(gameDimensions.w),
+            h: this.toPixels(gameDimensions.h)
+        }
+    }
+
+    toGameDimensions(screenDimensions: Dimensions): Dimensions {
+        return {
+            w: this.toUnits(screenDimensions.w),
+            h: this.toUnits(screenDimensions.h)
+        }
+    }
+
+    toPixels(gameLength: number): number {
         return gameLength * this.pixelsPerUnit;
     }
 
-    toUnits(pixels: number) {
+    toUnits(pixels: number): number {
         return pixels / this.pixelsPerUnit;
+    }
+
+    isInView(point: Point, dimensions: Dimensions): boolean {
+        // if (point.x + dimensions.w > this.p.x - this.d.w / 2 && x
+        return false
+    }
+
+    /**
+     * Check to see where the point lies in regards to the line.
+     * @param p Point to be checked against the line
+     * @param l Line
+     * @return 0 if point is on the line
+     *         <0 if point is to the left of the line
+     *         >0 if point is to the right of the line
+     */
+    checkLine(p: Point, l: Line): number {
+        return (l.p2.x - l.p1.x) * (p.y - l.p1.y) - (p.x - l.p1.x) * (l.p2.y - l.p1.y)
     }
 
 }
