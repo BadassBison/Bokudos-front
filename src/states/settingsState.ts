@@ -2,7 +2,7 @@ import {DisplayText} from "../objects/displayText";
 import {Grid} from "../objects/grid";
 
 export class SettingsState {
-    debugMode: boolean = false;
+    debugMode: boolean = true;
     cursorCoords: DisplayText;
     grid: Grid;
 

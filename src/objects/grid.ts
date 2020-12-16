@@ -34,6 +34,22 @@ export class Grid {
 
         this.drawLine({x: 0, y: 10}, {x: 0, y: -10});
         this.drawLine({x: -10, y: 0}, {x: 10, y: 0});
+
+        this.ctx.strokeStyle = "red";
+        this.ctx.beginPath();
+        const center = this.gameView.convertToScreenCoords(p);
+        // console.log("p: " + p.x + ", " + p.y);
+        // console.log("center: " + center.x + ", " + center.y);
+        this.ctx.rect(center.x -50, center.y-50, 100, 100);
+        this.ctx.stroke();
+        this.ctx.strokeStyle = "black";
+
+        this.ctx.strokeStyle = "blue";
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.rect(0, 0, view.w, view.h);
+        this.ctx.stroke();
+        this.ctx.strokeStyle = "black";
     }
 
     drawLine(p1: Point, p2: Point) {
