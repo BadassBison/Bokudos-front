@@ -37,9 +37,9 @@ export class Ninja {
         this.gameView = gameView;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 200, y: innerHeight - 400 };
+        this.position = { x: 3, y: 6 };
         this.size = 0.15;
-        this.speed = 3;
+        this.speed = .25;
     }
 
     update(keys: Keys): void {
@@ -60,13 +60,13 @@ export class Ninja {
 
         if (this.jumping) {
             if (this.currentFrame < 2) {
-                this.position.y -= 3;
+                this.position.y += .25;
             } else if (this.currentFrame < 4) {
-                this.position.y -= 2;
+                this.position.y += .125;
             } else if (this.currentFrame >= 8) {
-                this.position.y += 3;
+                this.position.y -= .25;
             } else if (this.currentFrame >= 6) {
-                this.position.y += 2;
+                this.position.y -= .125;
             }
         }
 
@@ -102,21 +102,24 @@ export class Ninja {
     }
 
     draw() {
+        const dimensions = this.gameView.getDimensions();
+        this.gameView.setPosition({x: this.position.x - dimensions.w/2, y: this.position.y - 4});
+        const screenPosition = this.gameView.toScreenCoordinates(this.position);
         this.ctx.drawImage(
             this.currentImage,
-            this.position.x,
-            this.position.y,
+            screenPosition.x,
+            screenPosition.y,
             this.currentImage.width * this.size,
             this.currentImage.height * this.size
         );
 
-        this.drawHitbox();
+        this.drawHitbox(screenPosition);
     }
 
-    drawHitbox() {
+    drawHitbox(position: Point) {
         this.ctx.strokeRect(
-            this.position.x,
-            this.position.y,
+            position.x,
+            position.y,
             this.currentImage.width * this.size,
             this.currentImage.height * this.size
         );
