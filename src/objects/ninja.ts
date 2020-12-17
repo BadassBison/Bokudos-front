@@ -3,12 +3,16 @@ import { Keys } from '../interfaces/keys';
 import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
 import { Point } from '../interfaces/point';
-import {GameView} from "./gameView";
-import {Dimensions} from "../interfaces/dimensions";
+import { GameView } from './gameView';
+import { Dimensions } from '../interfaces/dimensions';
 
 export class Ninja {
     animations: NinjaAnimations;
     attacking: boolean;
+
+    // TODO: 
+    collisionDetectionBox: any;
+
     ctx: CanvasRenderingContext2D;
     currentFrame: number;
     currentImage: HTMLImageElement;
@@ -17,10 +21,16 @@ export class Ninja {
     frameCount: number;
     frameDelay: number;
     framesPerAnimation: number;
+
+    // TODO:
+    hitbox: any;
+
     gameView: GameView;
     jumping: boolean;
     movingRight: boolean;
     position: Point;
+    screenPosition: Point;
+    screenDimensions: Dimensions;
     size: number;
     speed: number;
 
@@ -45,6 +55,16 @@ export class Ninja {
         this.size = 0.15;
         this.speed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
+
+        this.hitbox = {
+            position: this.gameView.toScreenCoordinates(this.position),
+            dimensions: this.screenDimensions = this.gameView.toScreenDimensions(this.getSize())
+        };
+
+        this.collisionDetectionBox = {
+            position: this.gameView.toScreenCoordinates(this.position),
+            dimensions: this.screenDimensions = this.gameView.toScreenDimensions(this.getSize())
+        };
     }
 
     update(keys: Keys): void {
@@ -52,28 +72,36 @@ export class Ninja {
         this.updateSprite();
     }
 
-    updatePosition({ up, right, left }: Keys): void {
-        if (!right && !left && !this.jumping) {
+    updatePosition({ up, right, left, down }: Keys): void {
+        // FIXME: this is commented out to add up and down movement
+        // if (!right && !left && !this.jumping) {
+        //     this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+        // }
+
+        // FIXME: this is temp for up and down movement for collision testing
+        if (!right && !left && !up && !down) {
             this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
         }
 
-        if (up && !this.jumping) {
-            this.jumping = true;
-            this.currentFrame = -1;
-            this.currentState = this.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
-        }
+        // TODO: Used for jumping
+        // if (up && !this.jumping) {
+        //     this.jumping = true;
+        //     this.currentFrame = -1;
+        //     this.currentState = this.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
+        // }
 
-        if (this.jumping) {
-            if (this.currentFrame < 2) {
-                this.position.y += .25;
-            } else if (this.currentFrame < 4) {
-                this.position.y += .125;
-            } else if (this.currentFrame >= 8) {
-                this.position.y -= .25;
-            } else if (this.currentFrame >= 6) {
-                this.position.y -= .125;
-            }
-        }
+        // TODO: Used for jumping
+        // if (this.jumping) {
+        //     if (this.currentFrame < 2) {
+        //         this.position.y += .25;
+        //     } else if (this.currentFrame < 4) {
+        //         this.position.y += .125;
+        //     } else if (this.currentFrame >= 8) {
+        //         this.position.y -= .25;
+        //     } else if (this.currentFrame >= 6) {
+        //         this.position.y -= .125;
+        //     }
+        // }
 
         if (right) {
             this.movingRight = true;
@@ -85,6 +113,20 @@ export class Ninja {
             this.movingRight = false;
             if (!this.jumping) { this.currentState = AnimationTypes.RUN_LEFT; }
             this.position.x -= this.speed;
+        }
+
+        // FIXME: Delete this if block after collision detection is fixed
+        if (up) {
+            this.movingRight = true;
+            if (!this.jumping) { this.currentState = AnimationTypes.RUN_RIGHT; }
+            this.position.y += this.speed;
+        }
+
+        // FIXME: Delete this if block after collision detection is fixed
+        if (down) {
+            this.movingRight = false;
+            if (!this.jumping) { this.currentState = AnimationTypes.RUN_LEFT; }
+            this.position.y -= this.speed;
         }
     }
 
@@ -107,34 +149,54 @@ export class Ninja {
     }
 
     draw() {
+        console.log('p', this.position);
+        // TODO: Decouple everything not related to drawing into separate methods
+        this.screenPosition = this.gameView.toScreenCoordinates(this.position);
+        this.screenDimensions = this.gameView.toScreenDimensions(this.getSize());
+
         const dimensions = this.gameView.getDimensions();
-        this.gameView.setPosition({x: this.position.x - dimensions.w/2, y: this.position.y - 4});
-        const screenPosition = this.gameView.toScreenCoordinates(this.position);
-        const screenDimensions = this.gameView.toScreenDimensions(this.getSize());
+        this.gameView.setPosition({ x: this.position.x - dimensions.w / 2, y: this.position.y - 4 });
+
         this.ctx.drawImage(
             this.currentImage,
-            screenPosition.x,
-            screenPosition.y,
-            screenDimensions.w,
-            screenDimensions.h
+            this.screenPosition.x,
+            this.screenPosition.y,
+            this.screenDimensions.w,
+            this.screenDimensions.h
         );
 
-        this.drawHitbox(screenPosition, screenDimensions);
+        // console.log(this.screenDimensions);
+
+        this.drawHitbox(this.hitbox);
+        this.drawCollisionDetectionBox(this.hitbox);
     }
 
     getSize(): Dimensions {
         return {
             w: this.currentImage.width / this.SPRITE_SIZER,
             h: this.currentImage.height / this.SPRITE_SIZER
-        }
+        };
     }
 
-    drawHitbox(position: Point, dimensions: Dimensions) {
+    drawHitbox(box: any) {
+        this.ctx.strokeStyle = 'yellow';
         this.ctx.strokeRect(
-            position.x,
-            position.y,
-            dimensions.w,
-            dimensions.h
+            box.position.x,
+            box.position.y,
+            box.dimensions.w,
+            box.dimensions.h
         );
+        this.ctx.strokeStyle = 'black';
+    }
+
+    drawCollisionDetectionBox(box: any) {
+        this.ctx.strokeStyle = 'red';
+        this.ctx.strokeRect(
+            box.position.x - box.dimensions.w,
+            box.position.y - box.dimensions.h / 2,
+            box.dimensions.w * 3,
+            box.dimensions.h * 2
+        );
+        this.ctx.strokeStyle = 'black';
     }
 }

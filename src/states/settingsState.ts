@@ -1,5 +1,5 @@
-import {DisplayText} from "../objects/displayText";
-import {Grid} from "../objects/grid";
+import { DisplayText } from '../objects/displayText';
+import { Grid } from '../objects/grid';
 
 export class SettingsState {
     debugMode: boolean = true;

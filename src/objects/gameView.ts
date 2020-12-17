@@ -1,34 +1,34 @@
-import {Point} from "../interfaces/point";
-import {Dimensions} from "../interfaces/dimensions";
-import {Line} from "../interfaces/line";
+import { Point } from '../interfaces/point';
+import { Dimensions } from '../interfaces/dimensions';
+import { Line } from '../interfaces/line';
 
 export class GameView {
     private ctx: CanvasRenderingContext2D;
     private pixelsPerUnit: number;
 
-    private p: Point = {x: 0, y: 0}; // the screen position indicates the coordinates of the center of the view in game coords
+    private p: Point = { x: 0, y: 0 }; // the screen position indicates the coordinates of the center of the view in game coords
     private d: Dimensions; // d represents the dimensions of the view in game units
     private view: Dimensions;
 
-    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = {w: 22, h: 10}) {
+    constructor(ctx: CanvasRenderingContext2D, d: Dimensions = { w: 22, h: 10 }) {
         this.ctx = ctx;
         this.setDimensions(d);
     }
 
-    setPosition(position: Point) {
-        this.p = {...position};
+    getPosition() {
+        return { ...this.p };
     }
 
-    getPosition() {
-        return {...this.p};
+    setPosition(position: Point) {
+        this.p = { ...position };
     }
 
     getDimensions(): Dimensions {
-        return {...this.d};
+        return { ...this.d };
     }
 
     setDimensions(d: Dimensions) {
-        this.d = {...d};
+        this.d = { ...d };
 
         // when we set the dimensions of the game, determine the pixelsPerUnit conversion for later use
         const dx = innerWidth / this.d.w;
@@ -41,35 +41,35 @@ export class GameView {
     }
 
     getView() {
-        return {...this.view};
+        return { ...this.view };
     }
 
     toScreenCoordinates(gameCoords: Point): Point {
         return {
             x: gameCoords.x * this.pixelsPerUnit - this.p.x * this.pixelsPerUnit,
             y: -gameCoords.y * this.pixelsPerUnit + this.p.y * this.pixelsPerUnit + this.view.h
-        }
+        };
     }
 
     toGameCoordinates(screenCoords: Point): Point {
         return {
             x: screenCoords.x / this.pixelsPerUnit + this.p.x,
             y: -screenCoords.y / this.pixelsPerUnit + this.p.y + this.d.h
-        }
+        };
     }
 
     toScreenDimensions(gameDimensions: Dimensions): Dimensions {
         return {
             w: this.toPixels(gameDimensions.w),
             h: this.toPixels(gameDimensions.h)
-        }
+        };
     }
 
     toGameDimensions(screenDimensions: Dimensions): Dimensions {
         return {
             w: this.toUnits(screenDimensions.w),
             h: this.toUnits(screenDimensions.h)
-        }
+        };
     }
 
     toPixels(gameLength: number): number {
@@ -82,7 +82,7 @@ export class GameView {
 
     isInView(point: Point, dimensions: Dimensions): boolean {
         // if (point.x + dimensions.w > this.p.x - this.d.w / 2 && x
-        return false
+        return false;
     }
 
     /**

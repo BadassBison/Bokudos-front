@@ -1,31 +1,33 @@
-import {GridTile} from './gridTile';
-import {Platforms} from './platforms';
-import {GameView} from "./gameView";
+import { StageTile } from './stageTile';
+import { Platforms } from './platforms';
+import { GameView } from './gameView';
 
 export class Stage {
 
     ctx: CanvasRenderingContext2D;
     gameView: GameView;
     platforms: Platforms;
-    tiles: GridTile[];
+    tiles: Map<string, StageTile>;
 
     constructor(ctx: CanvasRenderingContext2D, gameView: GameView, tileList: string[][]) {
         this.ctx = ctx;
         this.gameView = gameView;
         this.platforms = new Platforms();
 
-        this.tiles = [];
+        this.tiles = new Map();
         for (let row = 0; row < tileList.length; row++) {
             for (let col = 0; col < tileList[row].length; col++) {
-                this.tiles.push(new GridTile(tileList.length - row, col, tileList[row][col]));
+                this.tiles.set(`${row}${col}`, new StageTile(tileList.length - row, col, tileList[row][col]));
             }
         }
     }
 
     render() {
-        for (const tile of this.tiles) {
+        this.tiles.forEach((tile: StageTile) => {
             if (tile.lookupValue !== '00') {
-                const position = this.gameView.toScreenCoordinates({x: tile.col, y: tile.row});
+                const position = this.gameView.toScreenCoordinates({ x: tile.col, y: tile.row });
+                // TODO: console
+
                 this.ctx.drawImage(
                     this.platforms.imageMap.get(Number(tile.lookupValue)),
                     position.x,
@@ -34,6 +36,6 @@ export class Stage {
                     this.gameView.toPixels(1)
                 );
             }
-        }
+        });
     }
 }
