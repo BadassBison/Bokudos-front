@@ -69,8 +69,17 @@ export class Ninja implements UpdateObject {
             this.state.position.y += this.state.speed;
         }
 
+        // FIXME: Delete this.state if block after collision detection is fixed
+        if (down) {
+            this.state.movingRight = true;
+            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
+            this.state.position.y -= this.state.speed;
+        }
+
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
         State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
+        this.state.hitbox.position = this.state.position;
+        this.state.collisionDetectionBox.position = { x: this.state.position.x - 2, y: this.state.position.y + 2 };
     }
 
     updateSprite() {
@@ -91,27 +100,8 @@ export class Ninja implements UpdateObject {
         }
     }
 
-    // drawHitbox(box: any) {
-    //     this.ctx.strokeStyle = 'yellow';
-    //     this.ctx.strokeRect(
-    //         box.position.x,
-    //         box.position.y,
-    //         box.dimensions.w,
-    //         box.dimensions.h
-    //     );
-    //     this.ctx.strokeStyle = 'black';
-    // }
 
-    // drawCollisionDetectionBox(box: any) {
-    //     this.ctx.strokeStyle = 'red';
-    //     this.ctx.strokeRect(
-    //         box.position.x - box.dimensions.w,
-    //         box.position.y - box.dimensions.h / 2,
-    //         box.dimensions.w * 3,
-    //         box.dimensions.h * 2
-    //     );
-    //     this.ctx.strokeStyle = 'black';
-    // }
+
 
     static draw() {
         const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);
@@ -120,9 +110,6 @@ export class Ninja implements UpdateObject {
         State.gameState.canvas.ctx.drawImage(
             State.ninjaState.currentImage, x, y, w, h
         );
-
-        // this.drawHitbox(this.hitbox);
-        // this.drawCollisionDetectionBox(this.hitbox);
     }
 
     static getSize(): Dimensions {
