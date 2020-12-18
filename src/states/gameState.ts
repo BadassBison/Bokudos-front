@@ -1,8 +1,8 @@
-import { CanvasElement } from '../objects/canvas';
-import { Point } from '../interfaces/point';
-import { Keys } from '../interfaces/keys';
-import { Dimensions } from '../interfaces/dimensions';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
+import {CanvasElement} from '../objects/canvas';
+import {Point} from '../interfaces/point';
+import {Keys} from '../interfaces/keys';
+import {Dimensions} from '../interfaces/dimensions';
+
 export class GameState {
     canvas: CanvasElement;
     keys: Keys;
@@ -10,7 +10,7 @@ export class GameState {
     screenHeight: number;
     screenWidth: number;
     pixelsPerUnit: number;
-    position: Point = { x: 0, y: 0 }; // the screen position indicates the coordinates of the center of the view in game coords
+    position: Point; // the screen position indicates the coordinates of the center of the view in game coords
     gameUnitDimensions: Dimensions; // d represents the dimensions of the view in game units
     screenPixelDimensions: Dimensions;
 
@@ -30,6 +30,7 @@ export class GameState {
             y: height / 2
         };
         this.canvas = new CanvasElement(innerWidth, innerHeight);
+        this.position = { x: 0, y: 0 };
     }
 
     parseKey(key: string, pressed: boolean) {

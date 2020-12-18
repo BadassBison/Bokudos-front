@@ -51,9 +51,9 @@ export class Game {
       );
     });
 
-    window.addEventListener('resize', (ev => {
-      State.gameState.canvas.canvasElement.height = innerHeight;
-      State.gameState.canvas.canvasElement.width = innerWidth;
-    }));
+    // window.addEventListener('resize', (ev => {
+    //   State.gameState.canvas.canvasElement.height = innerHeight;
+    //   State.gameState.canvas.canvasElement.width = innerWidth;
+    // }));
   }
 }

@@ -18,8 +18,6 @@ export class NinjaState {
     jumping: boolean;
     movingRight: boolean;
     position: Point;
-    screenPosition: Point;
-    screenDimensions: Dimensions;
     size: number;
     speed: number;
 

@@ -1,15 +1,15 @@
 import { DisplayText } from '../objects/displayText';
-import { Grid } from '../objects/grid';
+import { DebugGrid } from '../objects/debugGrid';
 
 export class DebugState {
     debugMode: boolean;
     cursorCoords: DisplayText;
-    grid: Grid;
+    grid: DebugGrid;
 
     constructor(debugMode: boolean = true) {
         this.debugMode = debugMode;
         this.cursorCoords = new DisplayText();
-        new Grid()
+        new DebugGrid()
     }
 
     parseKey(key: string) {
