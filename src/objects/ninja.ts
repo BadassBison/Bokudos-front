@@ -69,14 +69,8 @@ export class Ninja implements UpdateObject {
             this.state.position.y += this.state.speed;
         }
 
-        // FIXME: Delete this.state if block after collision detection is fixed
-        if (down) {
-            this.state.movingRight = false;
-            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
-            this.state.position.y -= this.state.speed;
-        }
-
-        this.state.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
+        // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
+        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
     }
 
     updateSprite() {

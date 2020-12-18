@@ -1,4 +1,4 @@
-import { GameState } from '../states/gameState';
+import { GameState } from './gameState';
 import { DebugState } from './debugState';
 import { one } from '../stages/stage_1';
 import { NinjaState } from './ninjaState';

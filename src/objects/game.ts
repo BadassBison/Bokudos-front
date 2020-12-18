@@ -1,10 +1,11 @@
+import {State} from '../states/rootState';
+import {RenderingEngine} from '../engines/renderingEngine';
+import {PhysicsEngine} from '../engines/physicsEngine';
+import {RenderingUtilities} from '../utilites/renderingUtilities';
+import {Ninja} from './ninja';
+import {UpdateObject} from '../interfaces/updateObject';
+import '../styles.css';
 
-import { State } from '../states/rootState';
-import { RenderingEngine } from './renderingEngine';
-import { PhysicsEngine } from './physicsEngine';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { Ninja } from './ninja';
-import { UpdateObject } from '../interfaces/updateObject';
 
 export class Game {
 
