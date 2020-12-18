@@ -17,7 +17,7 @@ export class Game {
     this.assets = [new Ninja()];
     this.renderingEngine = new RenderingEngine();
     this.physicsEngine = new PhysicsEngine(this.assets);
-    RenderingUtilities.setDimensions({ w: 22, h: 10 });
+    RenderingUtilities.setDimensions();
   }
 
   getCanvas(): { [key: string]: HTMLCanvasElement } {

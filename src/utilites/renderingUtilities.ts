@@ -5,16 +5,18 @@ import { State } from '../states/rootState';
 
 export class RenderingUtilities {
 
-    static setDimensions(gameUnitDimensions: Dimensions = { w: 22, h: 10 }) {
-        State.gameState.gameUnitDimensions = { ...gameUnitDimensions };
-
+    static setDimensions(minGameDimensions: Dimensions = { w: 12, h: 12 }) {
         // when we set the dimensions of the game, determine the pixelsPerUnit conversion for later use
-        const dx = innerWidth / gameUnitDimensions.w;
-        const dy = innerHeight / gameUnitDimensions.h;
+        const dx = innerWidth / minGameDimensions.w;
+        const dy = innerHeight / minGameDimensions.h;
         State.gameState.pixelsPerUnit = Math.min(dx, dy);
+        State.gameState.gameUnitDimensions = {
+            w: innerWidth / State.gameState.pixelsPerUnit,
+            h: innerHeight / State.gameState.pixelsPerUnit
+        };
         State.gameState.screenPixelDimensions = {
-            w: gameUnitDimensions.w * State.gameState.pixelsPerUnit,
-            h: gameUnitDimensions.h * State.gameState.pixelsPerUnit
+            w: innerWidth,
+            h: innerHeight
         };
     }
 

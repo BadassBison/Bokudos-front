@@ -11,7 +11,7 @@ export class BackgroundState {
     constructor(width: number, height: number) {
         this.bgCanvas = new CanvasElement(width, height);
         this.ctx = this.bgCanvas.ctx;
-        this.bgImage = new Image(width);
+        this.bgImage = new Image();
         this.bgImage.src = bgImageSrc;
     }
 }

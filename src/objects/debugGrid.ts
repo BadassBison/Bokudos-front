@@ -13,13 +13,6 @@ export class DebugGrid {
                 this.drawGrid(Math.round(row), Math.round(col));
             }
         }
-
-        State.gameState.canvas.ctx.strokeStyle = 'blue';
-        State.gameState.canvas.ctx.lineWidth = 2;
-        State.gameState.canvas.ctx.beginPath();
-        State.gameState.canvas.ctx.rect(0, 0, view.w, view.h);
-        State.gameState.canvas.ctx.stroke();
-        State.gameState.canvas.ctx.strokeStyle = 'black';
     }
 
     static drawGrid(row: number, col: number) {
