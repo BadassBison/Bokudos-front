@@ -3,6 +3,9 @@ import { Dimensions } from '../interfaces/dimensions';
 import { Line } from '../interfaces/line';
 import { State } from '../states/rootState';
 
+/*
+ * These utilities are to be used within the rendering engine only
+ */
 export class RenderingUtilities {
 
     static setDimensions(gameUnitDimensions: Dimensions = { w: 22, h: 10 }) {

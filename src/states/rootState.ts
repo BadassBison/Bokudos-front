@@ -4,6 +4,9 @@ import { NinjaState } from './ninjaState';
 import { StageState } from './stageState';
 import { BackgroundState } from './backgroundState';
 
+/*
+ * This state is a global object. The parent of the state should only mutate its state and no other
+ */
 export const State: StateInterface = {
     backgroundState: new BackgroundState(innerWidth, innerHeight),
     debugState: new DebugState(),
