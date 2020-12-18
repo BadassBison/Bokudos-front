@@ -1,26 +1,18 @@
-import { CanvasElement } from '../objects/canvas';
-import { Point } from '../interfaces/point';
-import { Keys } from '../interfaces/keys';
-import { Box } from '../objects/box';
-import { Character } from '../objects/character';
-import { Ninja } from '../objects/ninja';
-import { Background } from '../objects/background';
-import { Platforms } from '../objects/platforms';
-import { Stage } from '../objects/stage';
+import {CanvasElement} from '../objects/canvas';
+import {Point} from '../interfaces/point';
+import {Keys} from '../interfaces/keys';
+import {Dimensions} from '../interfaces/dimensions';
 
 export class GameState {
-    background: Background;
-    box: Box;
     canvas: CanvasElement;
-    character: Character;
-    gamePaused: boolean;
-    gameRunning: boolean;
     keys: Keys;
-    ninja: Ninja;
     playerPosition: Point;
     screenHeight: number;
     screenWidth: number;
-    stage: Stage;
+    pixelsPerUnit: number;
+    position: Point; // the screen position indicates the coordinates of the center of the view in game coords
+    gameUnitDimensions: Dimensions; // d represents the dimensions of the view in game units
+    screenPixelDimensions: Dimensions;
 
     constructor(width: number, height: number) {
         this.keys = {
@@ -37,6 +29,8 @@ export class GameState {
             x: width / 2,
             y: height / 2
         };
+        this.canvas = new CanvasElement(innerWidth, innerHeight);
+        this.position = { x: 0, y: 0 };
     }
 
     parseKey(key: string, pressed: boolean) {

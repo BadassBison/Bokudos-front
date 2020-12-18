@@ -1,4 +1,4 @@
-export class GridTile {
+export class StageTile {
     row: number;
     col: number;
     lookupValue: string;

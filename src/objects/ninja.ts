@@ -1,50 +1,17 @@
 import { Keys } from '../interfaces/keys';
 
-import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
-import { Point } from '../interfaces/point';
-import {GameView} from "./gameView";
-import {Dimensions} from "../interfaces/dimensions";
+import { Dimensions } from '../interfaces/dimensions';
+import { State } from '../states/rootState';
+import { NinjaState } from '../states/ninjaState';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { UpdateObject } from '../interfaces/updateObject';
 
-export class Ninja {
-    animations: NinjaAnimations;
-    attacking: boolean;
-    ctx: CanvasRenderingContext2D;
-    currentFrame: number;
-    currentImage: HTMLImageElement;
-    currentState: string;
-    falling: boolean;
-    frameCount: number;
-    frameDelay: number;
-    framesPerAnimation: number;
-    gameView: GameView;
-    jumping: boolean;
-    movingRight: boolean;
-    position: Point;
-    size: number;
-    speed: number;
+export class Ninja implements UpdateObject {
+    state: NinjaState;
 
-    readonly HEIGHT_IN_UNITS: number = 2;
-    readonly SPRITE_SIZER: number;
-
-    constructor(ctx: CanvasRenderingContext2D, gameView: GameView) {
-        this.animations = new NinjaAnimations();
-        this.attacking = false;
-        this.ctx = ctx;
-        this.currentFrame = 0;
-        this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
-        this.currentState = AnimationTypes.IDLE_RIGHT;
-        this.falling = false;
-        this.frameCount = 0;
-        this.frameDelay = 6;
-        this.framesPerAnimation = 10;
-        this.gameView = gameView;
-        this.jumping = false;
-        this.movingRight = true;
-        this.position = { x: 3, y: 6 };
-        this.size = 0.15;
-        this.speed = .25;
-        this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
+    constructor() {
+        this.state = State.ninjaState;
     }
 
     update(keys: Keys): void {
@@ -52,89 +19,116 @@ export class Ninja {
         this.updateSprite();
     }
 
-    updatePosition({ up, right, left }: Keys): void {
-        if (!right && !left && !this.jumping) {
-            this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+    updatePosition({ up, right, left, down }: Keys): void {
+        // FIXME: this is commented out to add up and down movement
+        // if (!right && !left && !this.jumping) {
+        //     this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+        // }
+
+        // FIXME: this is temp for up and down movement for collision testing
+        if (!right && !left && !up && !down) {
+            this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
         }
 
-        if (up && !this.jumping) {
-            this.jumping = true;
-            this.currentFrame = -1;
-            this.currentState = this.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
-        }
+        // TODO: Used for jumping
+        // if (up && !this.jumping) {
+        //     this.jumping = true;
+        //     this.currentFrame = -1;
+        //     this.currentState = this.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
+        // }
 
-        if (this.jumping) {
-            if (this.currentFrame < 2) {
-                this.position.y += .25;
-            } else if (this.currentFrame < 4) {
-                this.position.y += .125;
-            } else if (this.currentFrame >= 8) {
-                this.position.y -= .25;
-            } else if (this.currentFrame >= 6) {
-                this.position.y -= .125;
-            }
-        }
+        // TODO: Used for jumping
+        // if (this.jumping) {
+        //     if (this.currentFrame < 2) {
+        //         this.position.y += .25;
+        //     } else if (this.currentFrame < 4) {
+        //         this.position.y += .125;
+        //     } else if (this.currentFrame >= 8) {
+        //         this.position.y -= .25;
+        //     } else if (this.currentFrame >= 6) {
+        //         this.position.y -= .125;
+        //     }
+        // }
 
         if (right) {
-            this.movingRight = true;
-            if (!this.jumping) { this.currentState = AnimationTypes.RUN_RIGHT; }
-            this.position.x += this.speed;
+            this.state.movingRight = true;
+            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
+            this.state.position.x += this.state.speed;
         }
 
         if (left) {
-            this.movingRight = false;
-            if (!this.jumping) { this.currentState = AnimationTypes.RUN_LEFT; }
-            this.position.x -= this.speed;
+            this.state.movingRight = false;
+            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
+            this.state.position.x -= this.state.speed;
         }
+
+        // FIXME: Delete this.state if block after collision detection is fixed
+        if (up) {
+            this.state.movingRight = true;
+            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
+            this.state.position.y += this.state.speed;
+        }
+
+        // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
+        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
     }
 
     updateSprite() {
-        this.frameCount++;
-        this.frameCount %= this.frameDelay;
+        this.state.frameCount++;
+        this.state.frameCount %= this.state.frameDelay;
 
-        if (this.frameCount === 0) {
-            if (this.jumping) {
-                this.currentFrame++;
-                if (this.currentFrame >= this.framesPerAnimation) {
-                    this.currentFrame %= this.framesPerAnimation;
-                    this.jumping = false;
+        if (this.state.frameCount === 0) {
+            if (this.state.jumping) {
+                this.state.currentFrame++;
+                if (this.state.currentFrame >= this.state.framesPerAnimation) {
+                    this.state.currentFrame %= this.state.framesPerAnimation;
+                    this.state.jumping = false;
                 }
             } else {
-                this.currentFrame = (this.currentFrame + 1) % this.framesPerAnimation;
+                this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
             }
-            this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
+            this.state.currentImage = this.state.animations.getAnimation(this.state.currentState).getImages()[this.state.currentFrame];
         }
     }
 
-    draw() {
-        const dimensions = this.gameView.getDimensions();
-        this.gameView.setPosition({x: this.position.x - dimensions.w/2, y: this.position.y - 4});
-        const screenPosition = this.gameView.toScreenCoordinates(this.position);
-        const screenDimensions = this.gameView.toScreenDimensions(this.getSize());
-        this.ctx.drawImage(
-            this.currentImage,
-            screenPosition.x,
-            screenPosition.y,
-            screenDimensions.w,
-            screenDimensions.h
+    // drawHitbox(box: any) {
+    //     this.ctx.strokeStyle = 'yellow';
+    //     this.ctx.strokeRect(
+    //         box.position.x,
+    //         box.position.y,
+    //         box.dimensions.w,
+    //         box.dimensions.h
+    //     );
+    //     this.ctx.strokeStyle = 'black';
+    // }
+
+    // drawCollisionDetectionBox(box: any) {
+    //     this.ctx.strokeStyle = 'red';
+    //     this.ctx.strokeRect(
+    //         box.position.x - box.dimensions.w,
+    //         box.position.y - box.dimensions.h / 2,
+    //         box.dimensions.w * 3,
+    //         box.dimensions.h * 2
+    //     );
+    //     this.ctx.strokeStyle = 'black';
+    // }
+
+    static draw() {
+        const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);
+        const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize());
+
+        State.gameState.canvas.ctx.drawImage(
+            State.ninjaState.currentImage, x, y, w, h
         );
 
-        this.drawHitbox(screenPosition, screenDimensions);
+        // this.drawHitbox(this.hitbox);
+        // this.drawCollisionDetectionBox(this.hitbox);
     }
 
-    getSize(): Dimensions {
+    static getSize(): Dimensions {
         return {
-            w: this.currentImage.width / this.SPRITE_SIZER,
-            h: this.currentImage.height / this.SPRITE_SIZER
-        }
-    }
-
-    drawHitbox(position: Point, dimensions: Dimensions) {
-        this.ctx.strokeRect(
-            position.x,
-            position.y,
-            dimensions.w,
-            dimensions.h
-        );
+            w: State.ninjaState.currentImage.width / State.ninjaState.SPRITE_SIZER,
+            h: State.ninjaState.currentImage.height / State.ninjaState.SPRITE_SIZER
+        };
     }
 }

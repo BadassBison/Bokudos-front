@@ -1,22 +1,22 @@
-import { CanvasElement } from './canvas';
-
-// @ts-ignore
-import bgImageSrc from '../../assets/sprites/tileset_1/BG/BG.png';
+import { State } from '../states/rootState';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { Dimensions } from '../interfaces/dimensions';
 
 export class Background {
-    bgCanvas: CanvasElement;
-    bgImage: HTMLImageElement;
-    ctx: CanvasRenderingContext2D;
+    static draw() {
+        const { width } = State.backgroundState.bgCanvas.canvasElement;
+        const scale = State.backgroundState.bgImage.height / State.gameState.gameUnitDimensions.h;
+        const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize(scale));
 
-    constructor(width: number, height: number) {
-        this.bgCanvas = new CanvasElement(width, height);
-        this.ctx = this.bgCanvas.ctx;
-        this.bgImage = new Image(width);
-        this.bgImage.src = bgImageSrc;
+        for (let dx = 0; dx < width / w; dx++) {
+            State.backgroundState.ctx.drawImage(State.backgroundState.bgImage, dx * w, 0, w, h);
+        }
     }
 
-    draw() {
-        const { width, height } = this.bgCanvas.canvasElement;
-        this.ctx.drawImage(this.bgImage, 0, 0, width, height);
+    static getSize(scale: number): Dimensions {
+        return {
+            w: State.backgroundState.bgImage.width / scale,
+            h: State.backgroundState.bgImage.height / scale
+        };
     }
 }

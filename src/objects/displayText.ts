@@ -1,25 +1,25 @@
-import {Point} from "../interfaces/point";
+import { Point } from '../interfaces/point';
 
 export class DisplayText {
-    ctx: CanvasRenderingContext2D;
-    position: Point = {x: 0, y:0};
-    font: string = '11px serif';
+    position: Point = { x: 0, y: 0 };
+    font: string;
     text: string;
 
-    constructor(ctx: CanvasRenderingContext2D) {
-        this.ctx = ctx;
+    constructor() {
+        this.font = '11px serif';
+
     }
 
-    draw() {
-        this.ctx.font = this.font;
-        this.ctx.strokeText(this.text, this.position.x, this.position.y);
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.font = this.font;
+        ctx.strokeText(this.text, this.position.x, this.position.y);
     }
 
     setText(text: string) {
         this.text = text;
     }
 
-    setfont(font: string ) {
+    setfont(font: string) {
         this.font = font;
     }
 
