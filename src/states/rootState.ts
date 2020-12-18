@@ -1,6 +1,5 @@
 import { GameState } from './gameState';
 import { DebugState } from './debugState';
-import { one } from '../stages/stage_1';
 import { NinjaState } from './ninjaState';
 import { StageState } from './stageState';
 import { BackgroundState } from './backgroundState';
@@ -10,7 +9,7 @@ export const State: StateInterface = {
     debugState: new DebugState(),
     gameState: new GameState(innerWidth, innerHeight),
     ninjaState: new NinjaState(),
-    stageState: new StageState(one)
+    stageState: new StageState()
 };
 
 export interface StateInterface {

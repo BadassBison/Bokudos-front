@@ -1,8 +1,8 @@
-import {State} from '../states/rootState';
-import {Ninja} from '../objects/ninja';
-import {Stage} from '../objects/stage';
-import {Background} from '../objects/background';
-import {DebugGrid} from '../objects/debugGrid';
+import { State } from '../states/rootState';
+import { Ninja } from '../objects/ninja';
+import { Stage } from '../objects/stage';
+import { Background } from '../objects/background';
+import { DebugGrid } from '../objects/debugGrid';
 
 export class RenderingEngine {
 
@@ -14,12 +14,9 @@ export class RenderingEngine {
         Stage.draw();
         Ninja.draw();
 
-        if(State.debugState.debugMode) {
+        if (State.debugState.debugMode) {
             DebugGrid.draw();
         }
-
-        // TODO: decouple the updating
-        // this.update();
     }
 
     refreshCanvas(): void {
