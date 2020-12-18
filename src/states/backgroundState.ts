@@ -1,6 +1,4 @@
 import { CanvasElement } from '../objects/canvas';
-
-// @ts-ignore
 import bgImageSrc from '../../assets/sprites/tileset_1/BG/BG.png';
 
 export class BackgroundState {
