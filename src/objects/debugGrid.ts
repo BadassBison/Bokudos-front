@@ -5,7 +5,7 @@ export class DebugGrid {
 
     static draw() {
         const position = State.gameState.position;
-        const gameUnitDimensions = State.gameState.screenPixelDimensions;
+        const gameUnitDimensions = State.gameState.gameUnitDimensions;
         const view = State.gameState.screenPixelDimensions;
 
         for (let row = position.y; row <= position.y + gameUnitDimensions.h + 1; row++) {

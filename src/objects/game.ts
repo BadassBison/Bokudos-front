@@ -40,20 +40,12 @@ export class Game {
 
     document.addEventListener('keyup', (evt: KeyboardEvent) => State.debugState.parseKey(evt.key));
 
-    document.addEventListener('mousemove', (evt: MouseEvent) => {
-      State.debugState.cursorCoords.updatePosition({ x: evt.clientX, y: evt.clientY });
-      const gameCoords = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
-      const screenCoords = RenderingUtilities.toScreenCoordinates(gameCoords);
-
-      State.debugState.cursorCoords.setText(
-        `(${gameCoords.x.toFixed(2)}, ${gameCoords.y.toFixed(2)}), ` +
-        `(${screenCoords.x.toFixed(0)}, ${screenCoords.y.toFixed(0)})`
-      );
-    });
-
-    // window.addEventListener('resize', (ev => {
-    //   State.gameState.canvas.canvasElement.height = innerHeight;
-    //   State.gameState.canvas.canvasElement.width = innerWidth;
-    // }));
+    window.addEventListener('resize', (ev => {
+      State.gameState.canvas.canvasElement.height = innerHeight;
+      State.gameState.canvas.canvasElement.width = innerWidth;
+      State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
+      State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
+      RenderingUtilities.setDimensions();
+    }));
   }
 }

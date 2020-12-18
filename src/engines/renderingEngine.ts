@@ -14,10 +14,9 @@ export class RenderingEngine {
         Stage.draw();
         Ninja.draw();
 
-        // TODO: this is causing slowness right now. disabling until it is resolved.
-        // if(State.debugState.debugMode) {
-        //     DebugGrid.draw();
-        // }
+        if(State.debugState.debugMode) {
+            DebugGrid.draw();
+        }
 
         // TODO: decouple the updating
         // this.update();
