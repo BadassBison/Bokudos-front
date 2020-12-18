@@ -16,7 +16,7 @@ export class Game {
     this.state.assets = [new Ninja()];
     this.state.renderingEngine = new RenderingEngine();
     this.state.physicsEngine = new PhysicsEngine();
-    RenderingUtilities.setDimensions({ w: 22, h: 10 });
+    RenderingUtilities.setDimensions();
   }
 
   parseKey(key: string, pressed: boolean) {

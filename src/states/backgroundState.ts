@@ -9,7 +9,7 @@ export class BackgroundState {
     constructor() {
         this.bgCanvas = new CanvasElement(innerWidth, innerHeight);
         this.ctx = this.bgCanvas.ctx;
-        this.bgImage = new Image(innerWidth);
+        this.bgImage = new Image();
         this.bgImage.src = bgImageSrc;
     }
 }
