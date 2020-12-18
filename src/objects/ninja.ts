@@ -70,7 +70,7 @@ export class Ninja implements UpdateObject {
         }
 
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
-        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
+        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };
     }
 
     updateSprite() {

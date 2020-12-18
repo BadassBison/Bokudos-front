@@ -56,21 +56,4 @@ export class RenderingUtilities {
         return pixels / State.gameState.pixelsPerUnit;
     }
 
-    static isInView(point: Point, dimensions: Dimensions): boolean {
-        // if (point.x + dimensions.w > this.p.x - this.d.w / 2 && x
-        return false;
-    }
-
-    /**
-     * Check to see where the point lies in regards to the line.
-     * @param p Point to be checked against the line
-     * @param l Line
-     * @return 0 if point is on the line
-     *         <0 if point is to the left of the line
-     *         >0 if point is to the right of the line
-     */
-    static checkLine(p: Point, l: Line): number {
-        return (l.p2.x - l.p1.x) * (p.y - l.p1.y) - (p.x - l.p1.x) * (l.p2.y - l.p1.y);
-    }
-
 }
