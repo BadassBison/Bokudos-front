@@ -6,6 +6,7 @@ export class StageState {
 
     platforms: Platforms;
     tiles: Map<string, StageTile>;
+    detectionTiles: StageTile[];
 
     constructor() {
         this.platforms = new Platforms();
@@ -13,7 +14,8 @@ export class StageState {
         this.tiles = new Map();
         for (let row = 0; row < stageOneTileList.length; row++) {
             for (let col = 0; col < stageOneTileList[row].length; col++) {
-                this.tiles.set(`${row}${col}`, new StageTile(stageOneTileList.length - row, col, stageOneTileList[row][col]));
+                const gridRow = stageOneTileList.length - row;
+                this.tiles.set(`${gridRow}-${col}`, new StageTile(gridRow, col, stageOneTileList[row][col]));
             }
         }
     }
