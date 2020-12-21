@@ -6,3 +6,49 @@ body {
 canvas {
     position: absolute;
 }
+
+.wrapper {
+    border: 1px solid black;
+    width: 240px;
+}
+
+label {
+    display: flex;
+    margin: 6px;
+    padding: 6px;
+    justify-content: space-between;
+    font-size: medium;
+}
+
+.menu {
+    background: rgb(211, 238, 247);
+    position: absolute;
+    padding: 30px;
+    top: 150px;
+    left: 50px;
+    width: 250px;
+    height: 500px;
+    overflow: scroll;
+}
+
+.menuBtn {
+    background: rgb(66, 184, 221);
+    color: white;
+    border-radius: 10px;
+    font-size: large;
+    font-weight: 500;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+    outline: none;
+}
+
+.menuBtn:hover {
+    background: rgb(46, 163, 199);
+}
+
+.menuBtn:Active {
+    background: rgb(11, 63, 79);
+}

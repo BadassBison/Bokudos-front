@@ -2,7 +2,7 @@ import { State } from '../states/rootState';
 import { Ninja } from '../objects/ninja';
 import { Stage } from '../objects/stage';
 import { Background } from '../objects/background';
-import { DebugGrid } from '../objects/debugGrid';
+import { DebugMode } from '../objects/debugMode';
 
 export class RenderingEngine {
 
@@ -14,9 +14,7 @@ export class RenderingEngine {
         Stage.draw();
         Ninja.draw();
 
-        if (State.debugState.debugMode) {
-            DebugGrid.draw();
-        }
+        DebugMode.draw();
     }
 
     refreshCanvas(): void {

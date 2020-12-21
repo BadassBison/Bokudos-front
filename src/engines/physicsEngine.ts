@@ -1,40 +1,37 @@
 import { State } from '../states/rootState';
 import { UpdateObject } from '../interfaces/updateObject';
 import { DetectionArea } from '../interfaces/detectionArea';
-import { StageTile } from '../objects/stageTile';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
 
 export class PhysicsEngine {
 
-    assets: UpdateObject[];
     detectionArea: DetectionArea;
 
-    constructor(assets: UpdateObject[]) {
-        this.assets = assets;
+    constructor() {
     }
 
     run() {
         this.detectCollision();
-        this.assets.forEach((asset: UpdateObject) => {
+        State.gameState.assets.forEach((asset: UpdateObject) => {
             asset.update(State.gameState.keys);
         });
     }
 
     detectCollision() {
         this.getTilesInDetectionArea();
+        State.stageState.collisionTiles = [];
         const tilesToCheck = State.stageState.detectionTiles;
         const hitbox = State.ninjaState.hitbox;
 
         for (const tile of tilesToCheck) {
 
-            if (hitbox.position.x < tile.col + 1 &&                     // TL.x of hitbox < TR.x of tile
-                hitbox.position.x + hitbox.dimensions.w > tile.col &&   // TR.x of hitbox > TL.x of tile
-                hitbox.position.y + 1 > tile.row &&                     // TL.y of hitbox < BL.y of tile
-                hitbox.position.y - hitbox.dimensions.h < tile.row) {   // BL.y of hitbox > TL.y of tile
-                console.log('collision detected');
+            if (hitbox.position.x <= tile.col + 1.0 &&                     // TL.x of hitbox < TR.x of tile
+                hitbox.position.x + hitbox.dimensions.w >= tile.col &&   // TR.x of hitbox > TL.x of tile
+                hitbox.position.y + .95 >= tile.row &&                     // TL.y of hitbox < BL.y of tile
+                hitbox.position.y - hitbox.dimensions.h <= tile.row) {   // BL.y of hitbox > TL.y of tile
+                // console.log('collision detected');
+
+                State.stageState.collisionTiles.push(tile);
             }
-
-
         }
     }
 

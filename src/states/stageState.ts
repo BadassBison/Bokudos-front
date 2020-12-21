@@ -7,6 +7,7 @@ export class StageState {
     platforms: Platforms;
     tiles: Map<string, StageTile>;
     detectionTiles: StageTile[];
+    collisionTiles: StageTile[];
 
     constructor() {
         this.platforms = new Platforms();

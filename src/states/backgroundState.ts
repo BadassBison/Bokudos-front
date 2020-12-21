@@ -6,10 +6,10 @@ export class BackgroundState {
     bgImage: HTMLImageElement;
     ctx: CanvasRenderingContext2D;
 
-    constructor(width: number, height: number) {
-        this.bgCanvas = new CanvasElement(width, height);
+    constructor() {
+        this.bgCanvas = new CanvasElement(innerWidth, innerHeight);
         this.ctx = this.bgCanvas.ctx;
-        this.bgImage = new Image(width);
+        this.bgImage = new Image(innerWidth);
         this.bgImage.src = bgImageSrc;
     }
 }

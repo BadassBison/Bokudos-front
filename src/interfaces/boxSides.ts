@@ -1,4 +1,4 @@
-export interface PlatformSides {
+export interface BoxSides {
     top: boolean;
     right: boolean;
     bottom: boolean;

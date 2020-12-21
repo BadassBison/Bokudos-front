@@ -6,6 +6,6 @@ export class CanvasElement {
     this.canvasElement = document.createElement('canvas');
     this.canvasElement.width = width;
     this.canvasElement.height = height;
-    this.ctx = this.canvasElement.getContext("2d");
+    this.ctx = this.canvasElement.getContext('2d');
   }
 }

@@ -2,7 +2,6 @@ import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
 import { Box } from '../interfaces/box';
 import { Dimensions } from '../interfaces/dimensions';
-import { PlatformSides } from '../interfaces/platformSides';
 import { Point } from '../interfaces/point';
 
 export class NinjaState {
@@ -17,12 +16,11 @@ export class NinjaState {
     frameDelay: number;
     framesPerAnimation: number;
     hitbox: Box;
+    hitboxOffset: Dimensions;
     jumping: boolean;
     movingRight: boolean;
     position: Point;
-    size: number;
     speed: number;
-    walls: PlatformSides;
 
     readonly HEIGHT_IN_UNITS: number = 2;
     readonly SPRITE_SIZER: number;
@@ -39,16 +37,22 @@ export class NinjaState {
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 3, y: 6 };
-        this.size = 0.15;
+        this.position = { x: 12, y: 6 };
         this.speed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
 
+        this.hitboxOffset = {
+            w: .25,
+            h: .25
+        };
         this.hitbox = {
-            position: this.position,
+            position: {
+                x: this.position.x,
+                y: this.position.y - this.hitboxOffset.h
+            },
             dimensions: {
-                w: this.currentImage.width / this.SPRITE_SIZER,
-                h: this.currentImage.height / this.SPRITE_SIZER
+                w: this.currentImage.width / this.SPRITE_SIZER + this.hitboxOffset.w,
+                h: this.currentImage.height / this.SPRITE_SIZER - this.hitboxOffset.h
             }
         };
 
@@ -59,7 +63,5 @@ export class NinjaState {
                 h: this.currentImage.height / this.SPRITE_SIZER + 4
             }
         };
-
-        this.walls = { top: false, right: false, bottom: false, left: false }
     }
 }

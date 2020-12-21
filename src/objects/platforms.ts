@@ -18,12 +18,12 @@ import p17 from '../../assets/sprites/tileset_1/Tiles/17.png';
 import p18 from '../../assets/sprites/tileset_1/Tiles/18.png';
 
 import { ImageBuilder } from '../animations/imageBuilder';
-import { PlatformSides } from '../interfaces/platformSides';
+import { BoxSides } from '../interfaces/boxSides';
 
 export class Platforms {
 
     imageMap: Map<number, HTMLImageElement>;
-    collisionMap: Map<number, PlatformSides>;
+    collisionMap: Map<number, BoxSides>;
 
     constructor() {
         this.imageMap = new Map();
@@ -37,22 +37,40 @@ export class Platforms {
             this.imageMap.set(index + 1, img);
         });
 
-        this.collisionMap.set(0, { top: false, right: false, bottom: false, left: false });
-        this.collisionMap.set(1, { top: true, right: false, bottom: false, left: true });
-        this.collisionMap.set(2, { top: true, right: false, bottom: false, left: false });
-        this.collisionMap.set(3, { top: true, right: true, bottom: false, left: false });
-        this.collisionMap.set(4, { top: false, right: false, bottom: false, left: true });
-        this.collisionMap.set(5, { top: false, right: false, bottom: false, left: false });
-        this.collisionMap.set(6, { top: false, right: true, bottom: false, left: false });
-        this.collisionMap.set(7, { top: true, right: false, bottom: false, left: false });
-        this.collisionMap.set(8, { top: false, right: false, bottom: false, left: false });
-        this.collisionMap.set(9, { top: false, right: false, bottom: true, left: false });
-        this.collisionMap.set(10, { top: false, right: false, bottom: false, left: false });
-        this.collisionMap.set(11, { top: true, right: false, bottom: false, left: false });
-        this.collisionMap.set(12, { top: false, right: false, bottom: true, left: true });
-        this.collisionMap.set(13, { top: true, right: false, bottom: false, left: false });
-        this.collisionMap.set(14, { top: true, right: false, bottom: false, left: false });
-        this.collisionMap.set(15, { top: true, right: false, bottom: true, left: false });
-        this.collisionMap.set(16, { top: false, right: true, bottom: true, left: false });
+        this.collisionMap.set(0, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(1, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(2, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(3, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(4, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(5, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(6, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(7, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(8, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(9, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(10, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(11, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(12, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(13, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(14, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(15, { top: true, right: true, bottom: true, left: true });
+        this.collisionMap.set(16, { top: true, right: true, bottom: true, left: true });
+
+        // this.collisionMap.set(0, { top: false, right: false, bottom: false, left: false });
+        // this.collisionMap.set(1, { top: true, right: false, bottom: false, left: true });
+        // this.collisionMap.set(2, { top: true, right: false, bottom: false, left: false });
+        // this.collisionMap.set(3, { top: true, right: true, bottom: false, left: false });
+        // this.collisionMap.set(4, { top: false, right: false, bottom: false, left: true });
+        // this.collisionMap.set(5, { top: false, right: false, bottom: false, left: false });
+        // this.collisionMap.set(6, { top: false, right: true, bottom: false, left: false });
+        // this.collisionMap.set(7, { top: true, right: false, bottom: false, left: false });
+        // this.collisionMap.set(8, { top: false, right: false, bottom: false, left: false });
+        // this.collisionMap.set(9, { top: false, right: false, bottom: true, left: false });
+        // this.collisionMap.set(10, { top: false, right: false, bottom: false, left: false });
+        // this.collisionMap.set(11, { top: true, right: false, bottom: false, left: false });
+        // this.collisionMap.set(12, { top: false, right: false, bottom: true, left: true });
+        // this.collisionMap.set(13, { top: true, right: false, bottom: false, left: false });
+        // this.collisionMap.set(14, { top: true, right: false, bottom: false, left: false });
+        // this.collisionMap.set(15, { top: true, right: false, bottom: true, left: false });
+        // this.collisionMap.set(16, { top: false, right: true, bottom: true, left: false });
     }
 }

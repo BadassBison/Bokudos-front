@@ -23,11 +23,12 @@ export class RenderingUtilities {
 
     static toScreenCoordinates(gameCoords: Point): Point {
         return {
-            x: gameCoords.x * State.gameState.pixelsPerUnit - State.gameState.position.x * State.gameState.pixelsPerUnit,
-            y: -gameCoords.y * State.gameState.pixelsPerUnit + State.gameState.position.y * State.gameState.pixelsPerUnit + State.gameState.screenPixelDimensions.h
+            x: (gameCoords.x - State.gameState.position.x) * State.gameState.pixelsPerUnit,
+            y: ((State.gameState.position.y - gameCoords.y) * State.gameState.pixelsPerUnit) + State.gameState.screenPixelDimensions.h
         };
     }
 
+    // FIXME: Returns the wrong coords
     static toGameCoordinates(screenCoords: Point): Point {
         return {
             x: screenCoords.x / State.gameState.pixelsPerUnit + State.gameState.position.x,
