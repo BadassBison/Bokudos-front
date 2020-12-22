@@ -26,10 +26,8 @@ export class PhysicsEngine {
 
             if (hitbox.position.x <= tile.col + 1.0 &&                     // TL.x of hitbox < TR.x of tile
                 hitbox.position.x + hitbox.dimensions.w >= tile.col &&   // TR.x of hitbox > TL.x of tile
-                hitbox.position.y + .95 >= tile.row &&                     // TL.y of hitbox < BL.y of tile
+                hitbox.position.y + 1 >= tile.row &&                     // TL.y of hitbox < BL.y of tile
                 hitbox.position.y - hitbox.dimensions.h <= tile.row) {   // BL.y of hitbox > TL.y of tile
-                // console.log('collision detected');
-
                 State.stageState.collisionTiles.push(tile);
             }
         }

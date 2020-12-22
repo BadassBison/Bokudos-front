@@ -1,5 +1,4 @@
-import { findLastIndex } from 'lodash';
-import { Point } from '../interfaces/point';
+import {Point} from '../interfaces/point';
 
 export class DebugState {
     debugMode: boolean;

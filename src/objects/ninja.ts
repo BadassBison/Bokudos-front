@@ -114,25 +114,28 @@ export class Ninja implements UpdateObject {
         }
     }
 
-    /*
-    *   This method uses the boxes in the collision array and determines which sides the ninja has collisions
-    */
+    /**
+     * This method uses the boxes in the collision array and determines which sides the ninja has collisions
+     */
     getCollisionSides(): BoxSides {
         const boxSides = { top: false, right: false, bottom: false, left: false };
 
-        const posCol1 = Math.floor(this.state.hitbox.position.x);
-        const posCol2 = Math.floor(this.state.hitbox.position.x + this.state.hitbox.dimensions.w);
-        const posRow1 = Math.floor(this.state.hitbox.position.y + .95);
-        const posRow2 = Math.floor(this.state.hitbox.position.y - this.state.hitbox.dimensions.h + 1);
+        const posCol1 = this.state.hitbox.position.x;
+        const posCol2 = this.state.hitbox.position.x + this.state.hitbox.dimensions.w;
+        const posRow1 = this.state.hitbox.position.y;
+        const posRow2 = this.state.hitbox.position.y - this.state.hitbox.dimensions.h;
+
+        // console.log("Right Pos: " + (this.state.hitbox.position.x + this.state.hitbox.dimensions.w).toFixed(2));
+        // console.log("pos1: " + posCol1.toFixed(2) + ", " + posRow1.toFixed(2));
+        // console.log("pos2: " + posCol2.toFixed(2) + ", " + posRow2.toFixed(2));
 
         for (const tile of State.stageState.collisionTiles) {
 
+            // console.log("Tile: " + tile.col + ", " + tile.row);
             if ((posCol1 > tile.col) && (posRow1 >= tile.row) && (posRow2 <= tile.row)) {
                 boxSides.left = true;
-                continue;
-            } else if ((posCol2 <= tile.col) && (posRow1 >= tile.row) && (posRow2 <= tile.row)) {
+            } else if ((posCol2 > tile.col) && (posRow1 >= tile.row) && (posRow2 <= tile.row)) {
                 boxSides.right = true;
-                continue;
             }
 
             if (posRow1 <= tile.row) {
@@ -141,12 +144,14 @@ export class Ninja implements UpdateObject {
                 boxSides.bottom = true;
             }
         }
+        // console.log(boxSides);
 
         return boxSides;
     }
 
 
     static draw() {
+        // console.log('Ninja Position: ' + State.ninjaState.position.x + ', ' + State.ninjaState.position.y);
         const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);
         const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize());
 

@@ -14,8 +14,8 @@ export class DebugMode {
             if (State.debugState.gridEnabled) {
                 for (let row = position.y; row <= position.y + gameUnitDimensions.h + gameUnit; row++) {
                     for (let col = position.x - gameUnit; col <= position.x + gameUnitDimensions.w; col++) {
-                        this.drawGrid(Math.floor(row), Math.floor(col));
-                        this.drawGridCoords(Math.floor(row), Math.floor(col));
+                        this.drawGrid(Math.round(row), Math.round(col));
+                        this.drawGridCoords(Math.round(row), Math.round(col));
                     }
                 }
             }
@@ -55,7 +55,7 @@ export class DebugMode {
 
             const { x, y } = RenderingUtilities.toScreenCoordinates({ x: col, y: row });
             const pixelOffset = 4;
-            State.gameState.canvas.ctx.fillText(`(${row}, ${col})`, x + pixelOffset, y - pixelOffset);
+            State.gameState.canvas.ctx.fillText(`(${col}, ${row})`, x + pixelOffset, y - pixelOffset);
         }
     }
 
@@ -159,17 +159,17 @@ export class DebugMode {
     // FIXME: Currently the conversion from pixels to grid coords is incorrect
     static handleMouseMove(evt: MouseEvent) {
         if (State.debugState.handleMouseMove) {
-            const { x, y } = RenderingUtilities.toGameCoordinates({ x: evt.screenX, y: evt.screenY });
-            console.log(`(${Math.floor(y)}, ${Math.floor(x)})`);
+            const { x, y } = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
+            console.log(`(${Math.floor(x)}, ${Math.floor(y)})`);
         }
     }
 
     // TODO: To be used to get data from the clicked grid coord
-    // FIXME: Currently the conversion from pixels to grid coords is incorrect
     static handleMouseClick(evt: MouseEvent) {
         if (State.debugState.handleMouseClick) {
-            State.debugState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.screenX, y: evt.screenY });
-            console.log(State.debugState.clickedPosition);
+            State.debugState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
+            const {x, y} = State.debugState.clickedPosition;
+            console.log(`Clicked: (${Math.floor(x)}, ${Math.floor(y)})`);
         }
     }
 

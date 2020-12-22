@@ -23,6 +23,7 @@ export class Game {
     switch (key) {
       case 'ArrowUp':
       case 'w':
+      case 'W':
         if (pressed && !this.state.keys.up || !pressed && this.state.keys.up) {
           this.state.keys.up = pressed;
         }
@@ -30,6 +31,7 @@ export class Game {
 
       case 'ArrowDown':
       case 's':
+      case 'S':
         if (pressed && !this.state.keys.down || !pressed && this.state.keys.down) {
           this.state.keys.down = pressed;
         }
@@ -37,6 +39,7 @@ export class Game {
 
       case 'ArrowLeft':
       case 'a':
+      case 'A':
         if (pressed && !this.state.keys.left || !pressed && this.state.keys.left) {
           this.state.keys.left = pressed;
         }
@@ -44,6 +47,7 @@ export class Game {
 
       case 'ArrowRight':
       case 'd':
+      case 'D':
         if (pressed && !this.state.keys.right || !pressed && this.state.keys.right) {
           this.state.keys.right = pressed;
         }
@@ -64,6 +68,22 @@ export class Game {
       case 'F9':
         if (pressed) { State.debugState.debugMode = !State.debugState.debugMode; }
         break;
+      case 'F10':
+        if (pressed) {
+          State.debugState.debugMode = true;
+          State.debugState.gridEnabled = true;
+          State.debugState.gridCoordsEnabled = true;
+          State.debugState.screenEdgeEnabled = true;
+          State.debugState.tileOutlinesEnabled = true;
+          State.debugState.collisionDetectionBoxEnabled = true;
+          State.debugState.hitboxEnabled = true;
+          State.debugState.ninjaGridOutlinesEnabled = true;
+          State.debugState.collisionsOutlinesEnabled = true;
+        }
+        break;
+      case 'Escape':
+        if(pressed) { State.gameState.paused = !State.gameState.paused; }
+        break;
     }
   }
 
@@ -73,8 +93,10 @@ export class Game {
 
   run(): void {
     requestAnimationFrame(() => {
-      this.state.renderingEngine.run();
-      this.state.physicsEngine.run();
+      if(!this.state.paused) {
+        this.state.renderingEngine.run();
+        this.state.physicsEngine.run();
+      }
       this.run();
     });
   }
@@ -95,6 +117,9 @@ export class Game {
       State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
       State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
       RenderingUtilities.setDimensions();
+      if(this.state.paused) {
+        this.state.renderingEngine.run();
+      }
     }));
 
     this.run();

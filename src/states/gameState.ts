@@ -19,6 +19,7 @@ export class GameState {
     position: Point; // the screen position indicates the coordinates of the center of the view in game coords
     gameUnitDimensions: Dimensions; // d represents the dimensions of the view in game units
     screenPixelDimensions: Dimensions;
+    paused: boolean;
 
     constructor() {
         this.keys = {
@@ -34,5 +35,6 @@ export class GameState {
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight);
         this.position = { x: 0, y: 0 };
+        this.paused = false;
     }
 }

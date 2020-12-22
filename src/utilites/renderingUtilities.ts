@@ -30,7 +30,10 @@ export class RenderingUtilities {
         };
     }
 
-    // FIXME: Returns the wrong coords
+    /**
+     * When passing coordinates from the screen or click events, you should use event.clientX and event.clientY.
+     * @param screenCoords
+     */
     static toGameCoordinates(screenCoords: Point): Point {
         return {
             x: screenCoords.x / State.gameState.pixelsPerUnit + State.gameState.position.x,
