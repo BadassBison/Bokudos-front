@@ -223,6 +223,7 @@ export class DebugMode {
     }
 
     static addMenuOptions(menu: HTMLElement) {
+        menu.appendChild(this.addFramesPerSecondOption());
         menu.appendChild(this.addGridOptions());
         menu.appendChild(this.addGridCoordOptions());
         menu.appendChild(this.addScreenEdgeOptions());
@@ -231,6 +232,28 @@ export class DebugMode {
         menu.appendChild(this.addHitboxOptions());
         menu.appendChild(this.addNinjaGridOutlinesOptions());
         menu.appendChild(this.addCollisionsOutlinesOptions());
+    }
+
+    static addFramesPerSecondOption(): HTMLElement {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('wrapper');
+
+        const fpsLabel = document.createElement('label');
+        fpsLabel.innerHTML = 'FPS &nbsp;';
+
+        const fpsInput = document.createElement('input');
+        fpsInput.type = 'range';
+        fpsInput.max = "60";
+        fpsInput.min = "0";
+        fpsInput.value = State.gameState.framesPerSecond.toString();
+
+        fpsInput.addEventListener('change', () => {
+            State.gameState.framesPerSecond = Number(fpsInput.value);
+        });
+        fpsLabel.appendChild(fpsInput);
+        wrapper.appendChild(fpsLabel);
+
+        return wrapper;
     }
 
     static addGridOptions(): HTMLElement {

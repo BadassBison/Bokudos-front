@@ -12,6 +12,8 @@ export class GameState {
     renderingEngine: RenderingEngine;
     physicsEngine: PhysicsEngine;
     keys: Keys;
+    defaultFramesPerSecond: number;
+    framesPerSecond: number;
     gameUnit: number;
     screenHeight: number;
     screenWidth: number;
@@ -35,6 +37,8 @@ export class GameState {
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight);
         this.position = { x: 0, y: 0 };
+        this.defaultFramesPerSecond = 60;
+        this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;
     }
 }

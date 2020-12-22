@@ -82,7 +82,11 @@ export class Game {
         }
         break;
       case 'Escape':
-        if(pressed) { State.gameState.paused = !State.gameState.paused; }
+        if(pressed && !State.gameState.paused) {
+          State.gameState.framesPerSecond = 0;
+        } else if (pressed && State.gameState.paused) {
+          State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
+        }
         break;
     }
   }
@@ -92,13 +96,15 @@ export class Game {
   }
 
   run(): void {
-    requestAnimationFrame(() => {
-      if(!this.state.paused) {
+    const delay = this.state.framesPerSecond > 0 ?  1000 / this.state.framesPerSecond : 0;
+    this.state.paused = delay <= 0;
+    setTimeout(() => {
+      if (!this.state.paused) {
         this.state.renderingEngine.run();
         this.state.physicsEngine.run();
       }
       this.run();
-    });
+    }, delay);
   }
 
   start(): void {

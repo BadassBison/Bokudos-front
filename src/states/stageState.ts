@@ -16,7 +16,7 @@ export class StageState {
         for (let row = 0; row < stageOneTileList.length; row++) {
             for (let col = 0; col < stageOneTileList[row].length; col++) {
                 const gridRow = stageOneTileList.length - row;
-                this.tiles.set(`${gridRow}-${col}`, new StageTile(gridRow, col, stageOneTileList[row][col]));
+                this.tiles.set(`${col}-${gridRow}`, new StageTile(gridRow, col, stageOneTileList[row][col]));
             }
         }
     }

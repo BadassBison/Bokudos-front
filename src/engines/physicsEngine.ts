@@ -65,7 +65,7 @@ export class PhysicsEngine {
             for (let col = topLeftX; col <= topRightX; col++) {
                 if (row < 0 || col < 0) { continue; }
 
-                const tile = State.stageState.tiles.get(`${row}-${col}`);
+                const tile = State.stageState.tiles.get(`${col}-${row}`);
                 if (tile && tile.lookupValue !== '00') {
                     State.stageState.detectionTiles.push(tile);
                 }
