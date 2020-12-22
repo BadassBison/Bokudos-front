@@ -132,15 +132,15 @@ export class Ninja implements UpdateObject {
         for (const tile of State.stageState.collisionTiles) {
 
             // console.log("Tile: " + tile.col + ", " + tile.row);
-            if ((posCol1 > tile.col) && (posRow1 >= tile.row) && (posRow2 <= tile.row)) {
+            if ((posCol1 > tile.col) && (posRow2 != tile.row && posRow1 != tile.row - 1)) {
                 boxSides.left = true;
-            } else if ((posCol2 > tile.col) && (posRow1 >= tile.row) && (posRow2 <= tile.row)) {
+            } else if ((posCol2 > tile.col) && (posRow2 != tile.row && posRow1 != tile.row - 1)) {
                 boxSides.right = true;
             }
 
-            if (posRow1 <= tile.row) {
+            if ((posRow1 <= tile.row) && (posCol1 != tile.col + 1 && posCol2 != tile.col)) {
                 boxSides.top = true;
-            } else if (posRow2 > tile.row) {
+            } else if (posRow2 >= tile.row && (posCol1 != tile.col + 1)) {
                 boxSides.bottom = true;
             }
         }

@@ -9,13 +9,17 @@ export class DebugMode {
             if (!State.debugState.hasMenuBtn) { this.addMenuButton(); }
             const position = State.gameState.position;
             const gameUnitDimensions = State.gameState.gameUnitDimensions;
-            const gameUnit = State.gameState.gameUnit;
 
             if (State.debugState.gridEnabled) {
-                for (let row = position.y; row <= position.y + gameUnitDimensions.h + gameUnit; row++) {
-                    for (let col = position.x - gameUnit; col <= position.x + gameUnitDimensions.w; col++) {
-                        this.drawGrid(Math.round(row), Math.round(col));
-                        this.drawGridCoords(Math.round(row), Math.round(col));
+                const startingRow = Math.floor(position.y);
+                const endingRow =  Math.ceil(position.y + gameUnitDimensions.h);
+                const startingCol = Math.floor(position.x);
+                const endingCol = Math.floor(position.x + gameUnitDimensions.w);
+                // console.log("Rendering Grid: " + startingCol + ", " + startingRow + " ---> " + endingCol + ", " + endingRow);
+                for (let row = startingRow; row <= endingRow; row++) {
+                    for (let col = startingCol; col <= endingCol; col++) {
+                        this.drawGrid(row, col);
+                        this.drawGridCoords(row, col);
                     }
                 }
             }
