@@ -1,6 +1,5 @@
 import {Point} from "../interfaces/point";
 import {Box} from "../interfaces/box";
-import {BoxSides} from "../interfaces/boxSides";
 import {State} from "../states/rootState";
 import {Velocity} from "../interfaces/velocity";
 import {StageTile} from "../objects/stageTile";
@@ -22,6 +21,7 @@ export class CollisionUtilities {
             y: hitbox.position.y - hitbox.dimensions.h
         };
         const tiles = this.getTilesInDetectionArea(State.ninjaState.collisionDetectionBox);
+        let modification: number;
 
         for (const tile of tiles) {
             // if moving to the right, check tiles to the right of the hitbox
@@ -30,7 +30,11 @@ export class CollisionUtilities {
                 if (this.hasOverlap(bottomRight.y, topLeft.y, tile.row - 1, tile.row)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(bottomRight.x, bottomRight.x + velocity.dx, tile.col, tile.col + 1)) {
-                        velocity.dx = 0;
+                        modification = (bottomRight.x + velocity.dx - tile.col);
+                        // console.log("wall: " + tile.col.toFixed(2));
+                        // console.log("New Position: " + (bottomRight.x + velocity.dx).toFixed(2));
+                        // console.log("DX Dif: " + modification.toFixed(2));
+                        velocity.dx -= modification;
                     }
                 }
             } else if (velocity.dx < 0) {
@@ -38,7 +42,11 @@ export class CollisionUtilities {
                 if (this.hasOverlap(bottomRight.y, topLeft.y, tile.row - 1, tile.row)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(topLeft.x + velocity.dx, topLeft.x, tile.col, tile.col + 1)) {
-                        velocity.dx = 0;
+                        modification = (tile.col + 1) - (topLeft.x + velocity.dx);
+                        // console.log("wall: " + (tile.col + 1).toFixed(2));
+                        // console.log("New Position: " + (topLeft.x + velocity.dx).toFixed(2));
+                        // console.log("DX Dif: " + modification.toFixed(2));
+                        velocity.dx += modification;
                     }
                 }
             }
@@ -49,7 +57,11 @@ export class CollisionUtilities {
                 if (this.hasOverlap(topLeft.x, bottomRight.x, tile.col, tile.col + 1)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(topLeft.y, topLeft.y + velocity.dy, tile.row - 1 , tile.row)) {
-                        velocity.dy = 0;
+                        modification =  topLeft.y + velocity.dy - (tile.row -1);
+                        // console.log("wall: " + (tile.row - 1).toFixed(2));
+                        // console.log("New Position: " + (topLeft.y + velocity.dy).toFixed(2));
+                        // console.log("DX Dif: " + modification.toFixed(2));
+                        velocity.dy -= modification;
                     }
                 }
             } else if (velocity.dy < 0) {
@@ -57,7 +69,11 @@ export class CollisionUtilities {
                 if (this.hasOverlap(topLeft.x, bottomRight.x, tile.col, tile.col + 1)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(bottomRight.y + velocity.dy, bottomRight.y, tile.row - 1 , tile.row)) {
-                        velocity.dy = 0;
+                        modification = (tile.row) - (bottomRight.y + velocity.dy);
+                        // console.log("wall: " + tile.row.toFixed(2));
+                        // console.log("New Position: " + (bottomRight.y + velocity.dy).toFixed(2));
+                        // console.log("DX Dif: " + modification.toFixed(2));
+                        velocity.dy += modification;
                     }
                 }
             }
