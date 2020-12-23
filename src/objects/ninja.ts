@@ -6,7 +6,7 @@ import {State} from '../states/rootState';
 import {NinjaState} from '../states/ninjaState';
 import {RenderingUtilities} from '../utilites/renderingUtilities';
 import {UpdateObject} from '../interfaces/updateObject';
-import {BoxSides} from '../interfaces/boxSides';
+import {CollisionUtilities} from "../utilites/collisionUtilities";
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -21,8 +21,6 @@ export class Ninja implements UpdateObject {
     }
 
     updatePosition({ up, right, left, down }: Keys): void {
-        const collisionSides = this.getCollisionSides();
-
         // FIXME: this is commented out to add up and down movement
         // if (!right && !left && !this.jumping) {
         //     this.currentState = this.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
@@ -53,36 +51,38 @@ export class Ninja implements UpdateObject {
         //     }
         // }
 
-        let dx = 0, dy = 0;
+        let velocity = {dx: 0, dy: 0};
 
         if (right) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
-            if (!collisionSides.right) { dx += this.state.speed; }
+            velocity.dx += this.state.speed;
         }
 
         if (left) {
             this.state.movingRight = false;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
-            if (!collisionSides.left) { dx -= this.state.speed; }
+            velocity.dx -= this.state.speed;
         }
 
         // FIXME: Delete this.state if block after collision detection is fixed
         if (up) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
-            if (!collisionSides.top) { dy += this.state.speed; }
+            velocity.dy += this.state.speed;
         }
 
         // FIXME: Delete this.state if block after collision detection is fixed
         if (down) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
-            if (!collisionSides.bottom) { dy -= this.state.speed; }
+            velocity.dy -= this.state.speed;
         }
 
-        this.state.position.x += dx;
-        this.state.position.y += dy;
+        const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);
+
+        this.state.position.x += updatedVelocity.dx;
+        this.state.position.y += updatedVelocity.dy;
 
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
         State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };
@@ -118,43 +118,7 @@ export class Ninja implements UpdateObject {
         }
     }
 
-    /**
-     * This method uses the boxes in the collision array and determines which sides the ninja has collisions
-     */
-    getCollisionSides(): BoxSides {
-        const boxSides = { top: false, right: false, bottom: false, left: false };
-
-        const posCol1 = this.state.hitbox.position.x;
-        const posCol2 = this.state.hitbox.position.x + this.state.hitbox.dimensions.w;
-        const posRow1 = this.state.hitbox.position.y;
-        const posRow2 = this.state.hitbox.position.y - this.state.hitbox.dimensions.h;
-
-        // console.log("Right Pos: " + (this.state.hitbox.position.x + this.state.hitbox.dimensions.w).toFixed(2));
-        // console.log("pos1: " + posCol1.toFixed(2) + ", " + posRow1.toFixed(2));
-        // console.log("pos2: " + posCol2.toFixed(2) + ", " + posRow2.toFixed(2));
-
-        for (const tile of State.stageState.collisionTiles) {
-
-            // console.log("Tile: " + tile.col + ", " + tile.row);
-            if ((posCol1 > tile.col) && (posRow2 != tile.row && posRow1 != tile.row - 1)) {
-                boxSides.left = true;
-            } else if ((posCol2 > tile.col) && (posRow2 != tile.row && posRow1 != tile.row - 1)) {
-                boxSides.right = true;
-            }
-
-            if ((posRow1 <= tile.row) && (posCol1 != tile.col + 1 && posCol2 != tile.col)) {
-                boxSides.top = true;
-            } else if (posRow2 >= tile.row && (posCol1 != tile.col + 1)) {
-                boxSides.bottom = true;
-            }
-        }
-        // console.log(boxSides);
-
-        return boxSides;
-    }
-
     static draw() {
-        // console.log('Ninja Position: ' + State.ninjaState.position.x + ', ' + State.ninjaState.position.y);
         const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);
         const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize());
 
