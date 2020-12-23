@@ -6,7 +6,6 @@ export class MenuOptions {
     public static DETECTION_BOX = 'Detection Box';
     public static DETECTED_TILES = 'Detected Tiles';
     public static COLLISION_TILES = 'Collision Tiles';
-    public static CHARACTER_TILES = 'Character Tiles';
 
     static getOptionList(): string[] {
         return [
@@ -17,7 +16,6 @@ export class MenuOptions {
             this.DETECTION_BOX,
             this.DETECTED_TILES,
             this.COLLISION_TILES,
-            this.CHARACTER_TILES
         ];
     }
 }

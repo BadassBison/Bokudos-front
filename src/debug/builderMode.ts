@@ -22,8 +22,22 @@ export class BuilderMode {
         builderBtn.classList.add('button', 'builderBtn');
         builderBtn.innerHTML = 'Builder';
         builderBtn.addEventListener('click', () => this.toggleBuilder());
+        builderBtn.addEventListener('mouseenter', () => {
+            State.builderState.handleMouseClick = false;
+        });
+        builderBtn.addEventListener('mouseleave', () => {
+            if (State.builderState.tileSelectorOpen || State.builderState.removingTiles) {
+                State.builderState.handleMouseClick = true;
+            }
+        });
+
         const body = document.querySelector('body');
         body.appendChild(builderBtn);
+    }
+
+    static removeBuilderButton() {
+        const btn = document.querySelector('.builderBtn');
+        btn.remove();
     }
 
     static toggleBuilder() {
@@ -49,10 +63,21 @@ export class BuilderMode {
         this.addBuilderOptions(builder);
         const body = document.querySelector('body');
         body.appendChild(builder);
+
+        builder.addEventListener('mouseenter', () => {
+            State.builderState.handleMouseClick = false;
+        });
+        builder.addEventListener('mouseleave', () => {
+            if (State.builderState.tileSelectorOpen || State.builderState.removingTiles) {
+                State.builderState.handleMouseClick = true;
+            }
+        });
     }
 
     static closeBuilderMode() {
         State.builderState.builderMode = false;
+        State.builderState.handleMouseClick = false;
+        State.builderState.removingTiles = false;
 
         const btn = document.querySelector('.builderBtn');
         btn.classList.remove('active');
@@ -109,10 +134,9 @@ export class BuilderMode {
             button.addEventListener('click', () => {
                 if (!State.builderState.tileSelectorOpen) {
                     this.openTileSelector();
-                    button.innerHTML = '-';
+                    State.builderState.removingTiles = false;
                 } else {
                     this.closeTileSelector();
-                    button.innerHTML = '+';
                 }
             });
         });
@@ -123,10 +147,9 @@ export class BuilderMode {
             button.addEventListener('click', () => {
                 if (!State.builderState.removingTiles) {
                     this.removeTileMode(true);
-                    button.innerHTML = 'X';
+                    this.closeTileSelector();
                 } else {
                     this.removeTileMode(false);
-                    button.innerHTML = '+';
                 }
             });
         });
@@ -151,10 +174,12 @@ export class BuilderMode {
     }
 
     static closeTileSelector() {
-        State.builderState.tileSelectorOpen = false;
+        if (State.builderState.tileSelectorOpen) {
+            State.builderState.tileSelectorOpen = false;
 
-        const tileSelector = document.querySelector('.builder--tile-selector');
-        tileSelector.remove();
+            const tileSelector = document.querySelector('.builder--tile-selector');
+            tileSelector.remove();
+        }
     }
 
     static addTiles(tileSelector: HTMLElement) {
@@ -206,8 +231,20 @@ export class BuilderMode {
     }
 
     static removeTileMode(enabled: boolean) {
-        // Remove selected tile
         State.builderState.removingTiles = enabled;
-        console.log('Removing Tile');
+        const canvas = document.querySelector('#canvas-fg');
+        if (enabled) {
+            canvas.classList.add('removing-tiles');
+        } else {
+            canvas.classList.remove('removing-tiles');
+        }
+    }
+
+    static cleanup() {
+        State.builderState.builderMode = false;
+        State.builderState.handleMouseClick = false;
+        State.builderState.removingTiles = false;
+        this.removeBuilderButton();
+        this.closeTileSelector();
     }
 }

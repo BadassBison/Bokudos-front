@@ -40,17 +40,6 @@ label {
     overflow: scroll;
 }
 
-.builder-mode {
-    background: rgb(211, 238, 247);
-    position: absolute;
-    padding: 30px;
-    top: 125px;
-    left: 50px;
-    width: 350px;
-    height: 600px;
-    overflow-y: scroll;
-}
-
 .button {
     background: rgb(66, 184, 221);
     color: white;
@@ -72,6 +61,16 @@ label {
     background: rgb(11, 63, 79);
 }
 
+.saveBtn {
+    background: rgb(34, 228, 95);
+    color: white;
+    position: absolute;
+    top: 790px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+}
+
 .menuBtn {
     position: absolute;
     top: 50px;
@@ -88,20 +87,20 @@ label {
     height: 50px;
 }
 
-.saveBtn {
-    background: rgb(34, 228, 95);
-    color: white;
+.builder-mode {
+    background: rgb(211, 238, 247);
     position: absolute;
-    top: 790px;
+    padding: 30px;
+    top: 125px;
     left: 50px;
-    width: 100px;
-    height: 50px;
+    width: 350px;
+    overflow-y: scroll;
 }
 
 .builder--tile-selector {
     background: rgb(71, 75, 72);
     color: white;
-    padding: 20px;
+    padding: 40px 20px;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -114,4 +113,8 @@ label {
     width: 100px;
     margin: 10px;
     overflow: scroll;
+}
+
+.removing-tiles:hover {
+    cursor: url('../assets/Crosshair_Red.cur'), default;
 }

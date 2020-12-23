@@ -35,11 +35,8 @@ export class DebugMode {
             this.drawCollisionDetectionBox();
             this.drawHitbox();
             this.drawCollisionsOutlines();
-            this.drawNinjaGridOutlines();
-            // if (State.builderState.clickedPosition) {
-            //     BuilderMode.drawTileAtClickedPosition();
-            // }
             this.resetCtx();
+
         } else if (State.debugState.hasButtons) {
             this.debugModeCleanUp();
         }
@@ -132,25 +129,6 @@ export class DebugMode {
         }
     }
 
-    static drawNinjaGridOutlines() {
-        if (State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].enabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].color;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].lineWidth;
-
-            const dim = RenderingUtilities.toPixels(1);
-            const characterCol1 = Math.floor(State.ninjaState.hitbox.position.x);
-            const characterCol2 = Math.floor(State.ninjaState.hitbox.position.x + State.ninjaState.hitbox.dimensions.w);
-            const characterRow1 = Math.floor(State.ninjaState.hitbox.position.y + .95);
-            const characterRow2 = Math.floor(State.ninjaState.hitbox.position.y - State.ninjaState.hitbox.dimensions.h + 1);
-            for (let col = characterCol1; col <= characterCol2; col++) {
-                for (let row = characterRow1; row >= characterRow2; row--) {
-                    const { x, y } = RenderingUtilities.toScreenCoordinates({ x: col, y: row });
-                    State.gameState.canvas.ctx.strokeRect(x, y, dim, dim);
-                }
-            }
-        }
-    }
-
     static resetCtx() {
         State.gameState.canvas.ctx.strokeStyle = State.debugState.defaultColor;
         State.gameState.canvas.ctx.lineWidth = State.debugState.defaultLineWidth;
@@ -163,6 +141,7 @@ export class DebugMode {
         }
     }
 
+    // TODO: Move this with the properties
     static addFramesPerSecondOption(): HTMLElement {
         const wrapper = document.createElement('div');
         wrapper.classList.add('wrapper');
@@ -186,7 +165,7 @@ export class DebugMode {
     }
 
     static debugModeCleanUp() {
-        DebugMenu.removeMenuButton();
-        if (State.debugState.menuOpen) { DebugMenu.removeMenu(); }
+        DebugMenu.cleanup();
+        BuilderMode.cleanup();
     }
 }

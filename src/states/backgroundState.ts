@@ -7,7 +7,7 @@ export class BackgroundState {
     ctx: CanvasRenderingContext2D;
 
     constructor() {
-        this.bgCanvas = new CanvasElement(innerWidth, innerHeight);
+        this.bgCanvas = new CanvasElement(innerWidth, innerHeight, 'canvas-bg');
         this.ctx = this.bgCanvas.ctx;
         this.bgImage = new Image();
         this.bgImage.src = bgImageSrc;

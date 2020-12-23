@@ -10,6 +10,12 @@ export class DebugMenu {
         menuBtn.classList.add('button', 'menuBtn');
         menuBtn.innerHTML = 'Menu';
         menuBtn.addEventListener('click', () => this.toggleMenu());
+        menuBtn.addEventListener('mouseenter', () => {
+            State.builderState.handleMouseClick = false;
+        });
+        menuBtn.addEventListener('mouseleave', () => {
+            State.builderState.handleMouseClick = true;
+        });
         const body = document.querySelector('body');
         body.appendChild(menuBtn);
     }
@@ -17,7 +23,6 @@ export class DebugMenu {
     static removeMenuButton() {
         State.debugState.hasButtons = false;
         const menuBtn = document.querySelector('.menuBtn');
-        menuBtn.removeEventListener('click', () => { });
         menuBtn.remove();
     }
 
@@ -75,7 +80,6 @@ export class DebugMenu {
 
     static removeSaveButton() {
         const saveBtn = document.querySelector('.saveBtn');
-        // menu.removeEventListener('click', () => { });
         saveBtn.remove();
     }
 
@@ -87,7 +91,6 @@ export class DebugMenu {
         this.addMenuOption(menu, MenuOptions.DETECTION_BOX);
         this.addMenuOption(menu, MenuOptions.DETECTED_TILES);
         this.addMenuOption(menu, MenuOptions.COLLISION_TILES);
-        this.addMenuOption(menu, MenuOptions.CHARACTER_TILES);
     }
 
     static addMenuOption(menu: HTMLElement, name: string): HTMLElement {
@@ -169,5 +172,10 @@ export class DebugMenu {
         }
 
         return null;
+    }
+
+    static cleanup() {
+        this.removeMenuButton();
+        if (State.debugState.menuOpen) { this.removeMenu(); }
     }
 }
