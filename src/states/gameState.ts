@@ -22,6 +22,9 @@ export class GameState {
     gameUnitDimensions: Dimensions; // d represents the dimensions of the view in game units
     screenPixelDimensions: Dimensions;
     paused: boolean;
+    defaultColor: string;
+    defaultLineWidth: number;
+
 
     constructor() {
         this.keys = {
@@ -40,5 +43,7 @@ export class GameState {
         this.defaultFramesPerSecond = 60;
         this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;
+        this.defaultColor = 'black';
+        this.defaultLineWidth = 1;
     }
 }

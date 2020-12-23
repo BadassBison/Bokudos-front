@@ -3,19 +3,28 @@ body {
     overflow: hidden;
 }
 
+h1 {
+    margin: 0 0 14px 0;
+}
+
+h3 {
+    margin: 6px;
+    border-bottom: 1px solid black;
+}
+
 canvas {
     position: absolute;
 }
 
 .wrapper {
-    border: 1px solid black;
-    width: 240px;
+    border: 2px solid black;
+    width: 100%;
+    padding: 6px;
 }
 
 label {
     display: flex;
     margin: 6px;
-    padding: 6px;
     justify-content: space-between;
     font-size: medium;
 }
@@ -24,31 +33,85 @@ label {
     background: rgb(211, 238, 247);
     position: absolute;
     padding: 30px;
-    top: 150px;
+    top: 125px;
     left: 50px;
-    width: 250px;
-    height: 500px;
+    width: 350px;
+    height: 600px;
     overflow: scroll;
 }
 
-.menuBtn {
+.builder-mode {
+    background: rgb(211, 238, 247);
+    position: absolute;
+    padding: 30px;
+    top: 125px;
+    left: 50px;
+    width: 350px;
+    height: 600px;
+    overflow-y: scroll;
+}
+
+.button {
     background: rgb(66, 184, 221);
     color: white;
     border-radius: 10px;
     font-size: large;
     font-weight: 500;
+    outline: none;
+}
+
+.active {
+    border: 6px solid yellow;
+}
+
+.button:hover {
+    background: rgb(46, 163, 199);
+}
+
+.button:active {
+    background: rgb(11, 63, 79);
+}
+
+.menuBtn {
     position: absolute;
     top: 50px;
     left: 50px;
     width: 100px;
     height: 50px;
-    outline: none;
 }
 
-.menuBtn:hover {
-    background: rgb(46, 163, 199);
+.builderBtn {
+    position: absolute;
+    top: 50px;
+    left: 175px;
+    width: 100px;
+    height: 50px;
 }
 
-.menuBtn:Active {
-    background: rgb(11, 63, 79);
+.saveBtn {
+    background: rgb(34, 228, 95);
+    color: white;
+    position: absolute;
+    top: 790px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+}
+
+.builder--tile-selector {
+    background: rgb(71, 75, 72);
+    color: white;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+}
+
+.builder--tile-image {
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+    overflow: scroll;
 }

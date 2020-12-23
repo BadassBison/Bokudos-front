@@ -7,7 +7,6 @@ export class DisplayText {
 
     constructor() {
         this.font = '11px serif';
-
     }
 
     draw(ctx: CanvasRenderingContext2D) {

@@ -1,12 +1,12 @@
-import {Keys} from '../interfaces/keys';
+import { Keys } from '../interfaces/keys';
 
-import {AnimationTypes} from '../constants/animationTypes';
-import {Dimensions} from '../interfaces/dimensions';
-import {State} from '../states/rootState';
-import {NinjaState} from '../states/ninjaState';
-import {RenderingUtilities} from '../utilites/renderingUtilities';
-import {UpdateObject} from '../interfaces/updateObject';
-import {CollisionUtilities} from "../utilites/collisionUtilities";
+import { AnimationTypes } from '../constants/animationTypes';
+import { Dimensions } from '../interfaces/dimensions';
+import { State } from '../states/rootState';
+import { NinjaState } from '../states/ninjaState';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { UpdateObject } from '../interfaces/updateObject';
+import { CollisionUtilities } from "../utilites/collisionUtilities";
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -51,7 +51,7 @@ export class Ninja implements UpdateObject {
         //     }
         // }
 
-        let velocity = {dx: 0, dy: 0};
+        let velocity = { dx: 0, dy: 0 };
 
         if (right) {
             this.state.movingRight = true;
