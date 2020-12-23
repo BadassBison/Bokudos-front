@@ -190,7 +190,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = this.getSelectedTileLookUpValue(State.builderState.selectedTile);
 
-        const gridId = `${row}-${col}`;
+        const gridId = `${col}-${row}`;
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }
@@ -200,7 +200,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = '00';
 
-        const gridId = `${row}-${col}`;
+        const gridId = `${col}-${row}`;
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }
