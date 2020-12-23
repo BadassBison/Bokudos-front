@@ -9,7 +9,7 @@ export class Stage {
             if (tile.lookupValue !== '00') {
                 const { x, y } = RenderingUtilities.toScreenCoordinates({ x: tile.col, y: tile.row });
                 State.gameState.canvas.ctx.drawImage(
-                    State.stageState.platforms.imageMap.get(Number(tile.lookupValue)),
+                    State.tileSetState.imageMap.get(Number(tile.lookupValue)),
                     x,
                     y,
                     RenderingUtilities.toPixels(1),

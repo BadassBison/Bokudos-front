@@ -3,8 +3,9 @@ import { GameState } from '../states/gameState';
 import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { DebugMode } from './debugMode';
+import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
+import { BuilderMode } from '../debug/builderMode';
 import '../styles.css';
 
 export class Game {
@@ -68,21 +69,9 @@ export class Game {
       case 'F9':
         if (pressed) { State.debugState.debugMode = !State.debugState.debugMode; }
         break;
-      case 'F10':
-        if (pressed) {
-          State.debugState.debugMode = true;
-          State.debugState.gridEnabled = true;
-          State.debugState.gridCoordsEnabled = true;
-          State.debugState.screenEdgeEnabled = true;
-          State.debugState.tileOutlinesEnabled = true;
-          State.debugState.collisionDetectionBoxEnabled = true;
-          State.debugState.hitboxEnabled = true;
-          State.debugState.ninjaGridOutlinesEnabled = true;
-          State.debugState.collisionsOutlinesEnabled = true;
-        }
-        break;
+
       case 'Escape':
-        if(pressed && !State.gameState.paused) {
+        if (pressed && !State.gameState.paused) {
           State.gameState.framesPerSecond = 0;
         } else if (pressed && State.gameState.paused) {
           State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
@@ -96,7 +85,7 @@ export class Game {
   }
 
   run(): void {
-    const delay = this.state.framesPerSecond > 0 ?  1000 / this.state.framesPerSecond : 0;
+    const delay = this.state.framesPerSecond > 0 ? 1000 / this.state.framesPerSecond : 0;
     this.state.paused = delay <= 0;
     setTimeout(() => {
       if (!this.state.paused) {
@@ -110,12 +99,8 @@ export class Game {
   start(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
-    document.addEventListener('mousemove', (evt: MouseEvent) => {
-      if (State.debugState.debugMode) { DebugMode.handleMouseMove(evt); }
-    });
-    document.addEventListener('click', (evt: MouseEvent) => {
-      if (State.debugState.debugMode) { DebugMode.handleMouseClick(evt); }
-    });
+    document.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
+    document.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
 
     window.addEventListener('resize', (ev => {
       State.gameState.canvas.canvasElement.height = innerHeight;
@@ -123,7 +108,7 @@ export class Game {
       State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
       State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
       RenderingUtilities.setDimensions();
-      if(this.state.paused) {
+      if (this.state.paused) {
         this.state.renderingEngine.run();
       }
     }));

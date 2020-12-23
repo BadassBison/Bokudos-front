@@ -1,21 +1,27 @@
 import { State } from '../states/rootState';
+import { DebugMenu } from './debugMenu';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { StageTile } from './stageTile';
+import { StageTile } from '../objects/stageTile';
+import { MenuOptions } from '../constants/menuOptions';
+import { BuilderMode } from './builderMode';
 
 export class DebugMode {
 
     static draw() {
         if (State.debugState.debugMode) {
-            if (!State.debugState.hasMenuBtn) { this.addMenuButton(); }
+            if (!State.debugState.hasButtons) {
+                DebugMenu.addMenuButton();
+                BuilderMode.addBuilderButton();
+            }
             const position = State.gameState.position;
             const gameUnitDimensions = State.gameState.gameUnitDimensions;
 
-            if (State.debugState.gridEnabled) {
+            if (State.debugState.menuOptions[MenuOptions.GRID].enabled) {
                 const startingRow = Math.floor(position.y);
-                const endingRow =  Math.ceil(position.y + gameUnitDimensions.h);
+                const endingRow = Math.ceil(position.y + gameUnitDimensions.h);
                 const startingCol = Math.floor(position.x);
                 const endingCol = Math.floor(position.x + gameUnitDimensions.w);
-                // console.log("Rendering Grid: " + startingCol + ", " + startingRow + " ---> " + endingCol + ", " + endingRow);
+
                 for (let row = startingRow; row <= endingRow; row++) {
                     for (let col = startingCol; col <= endingCol; col++) {
                         this.drawGrid(row, col);
@@ -25,23 +31,23 @@ export class DebugMode {
             }
 
             this.drawScreenEdge();
-            this.drawTileOutlines();
+            this.drawDetectedTileOutlines();
             this.drawCollisionDetectionBox();
             this.drawHitbox();
             this.drawCollisionsOutlines();
             this.drawNinjaGridOutlines();
-            if (State.debugState.clickedPosition) {
-                this.drawBoxAtClick();
-            }
+            // if (State.builderState.clickedPosition) {
+            //     BuilderMode.drawTileAtClickedPosition();
+            // }
             this.resetCtx();
-        } else if (State.debugState.hasMenuBtn) {
+        } else if (State.debugState.hasButtons) {
             this.debugModeCleanUp();
         }
     }
 
     static drawGrid(row: number, col: number) {
-        State.gameState.canvas.ctx.strokeStyle = State.debugState.gridColor;
-        State.gameState.canvas.ctx.lineWidth = State.debugState.gridLineWidth;
+        State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.GRID].color;
+        State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.GRID].lineWidth;
 
         const position = RenderingUtilities.toScreenCoordinates({ x: col, y: row });
         State.gameState.canvas.ctx.strokeRect(
@@ -53,9 +59,9 @@ export class DebugMode {
     }
 
     static drawGridCoords(row: number, col: number) {
-        if (State.debugState.gridCoordsEnabled) {
-            State.gameState.canvas.ctx.fillStyle = State.debugState.gridCoordsColor;
-            State.gameState.canvas.ctx.font = State.debugState.gridCoordsFont;
+        if (State.debugState.menuOptions[MenuOptions.COORDINATES].enabled) {
+            State.gameState.canvas.ctx.fillStyle = State.debugState.menuOptions[MenuOptions.COORDINATES].color;
+            State.gameState.canvas.ctx.font = State.debugState.menuOptions[MenuOptions.COORDINATES].font;
 
             const { x, y } = RenderingUtilities.toScreenCoordinates({ x: col, y: row });
             const pixelOffset = 4;
@@ -64,9 +70,9 @@ export class DebugMode {
     }
 
     static drawScreenEdge() {
-        if (State.debugState.screenEdgeEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.screenEdgeColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.screenEdgeLineWidth;
+        if (State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].lineWidth;
 
             const view = State.gameState.screenPixelDimensions;
             State.gameState.canvas.ctx.lineWidth = 2;
@@ -76,10 +82,10 @@ export class DebugMode {
         }
     }
 
-    static drawTileOutlines() {
-        if (State.debugState.tileOutlinesEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.tileOutlinesColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.tileOutlinesLineWidth;
+    static drawDetectedTileOutlines() {
+        if (State.debugState.menuOptions[MenuOptions.DETECTED_TILES].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.DETECTED_TILES].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.DETECTED_TILES].lineWidth;
 
             State.stageState.detectionTiles.forEach((tile: StageTile) => {
                 const dim = RenderingUtilities.toPixels(1);
@@ -90,9 +96,9 @@ export class DebugMode {
     }
 
     static drawCollisionDetectionBox() {
-        if (State.debugState.collisionDetectionBoxEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.collisionDetectionBoxColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.collisionDetectionBoxLineWidth;
+        if (State.debugState.menuOptions[MenuOptions.DETECTION_BOX].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.DETECTION_BOX].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.DETECTION_BOX].lineWidth;
 
             const box = State.ninjaState.collisionDetectionBox;
             const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
@@ -102,9 +108,9 @@ export class DebugMode {
     }
 
     static drawHitbox() {
-        if (State.debugState.hitboxEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.hitboxColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.hitboxLineWidth;
+        if (State.debugState.menuOptions[MenuOptions.HITBOX].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.HITBOX].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.HITBOX].lineWidth;
 
             const box = State.ninjaState.hitbox;
             const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
@@ -114,9 +120,9 @@ export class DebugMode {
     }
 
     static drawCollisionsOutlines() {
-        if (State.debugState.collisionsOutlinesEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.collisionsOutlinesColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.collisionsOutlinesLineWidth;
+        if (State.debugState.menuOptions[MenuOptions.COLLISION_TILES].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.COLLISION_TILES].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.COLLISION_TILES].lineWidth;
 
             const dim = RenderingUtilities.toPixels(1);
             State.stageState.collisionTiles.forEach((tile: StageTile) => {
@@ -127,9 +133,9 @@ export class DebugMode {
     }
 
     static drawNinjaGridOutlines() {
-        if (State.debugState.ninjaGridOutlinesEnabled) {
-            State.gameState.canvas.ctx.strokeStyle = State.debugState.ninjaGridOutlinesColor;
-            State.gameState.canvas.ctx.lineWidth = State.debugState.ninjaGridOutlinesLineWidth;
+        if (State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.CHARACTER_TILES].lineWidth;
 
             const dim = RenderingUtilities.toPixels(1);
             const characterCol1 = Math.floor(State.ninjaState.hitbox.position.x);
@@ -145,35 +151,15 @@ export class DebugMode {
         }
     }
 
-    static drawBoxAtClick() {
-        State.gameState.canvas.ctx.strokeStyle = State.debugState.boxAtClickColor;
-        State.gameState.canvas.ctx.lineWidth = State.debugState.boxAtClickLineWidth;
-
-        const dim = RenderingUtilities.toPixels(1);
-        const { x, y } = RenderingUtilities.toScreenCoordinates(State.debugState.clickedPosition);
-        State.gameState.canvas.ctx.strokeRect(x, y, dim, dim);
-    }
-
     static resetCtx() {
         State.gameState.canvas.ctx.strokeStyle = State.debugState.defaultColor;
         State.gameState.canvas.ctx.lineWidth = State.debugState.defaultLineWidth;
     }
 
-    // TODO: To send the grid coord data
-    // FIXME: Currently the conversion from pixels to grid coords is incorrect
     static handleMouseMove(evt: MouseEvent) {
         if (State.debugState.handleMouseMove) {
             const { x, y } = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
-            console.log(`(${Math.floor(x)}, ${Math.floor(y)})`);
-        }
-    }
-
-    // TODO: To be used to get data from the clicked grid coord
-    static handleMouseClick(evt: MouseEvent) {
-        if (State.debugState.handleMouseClick) {
-            State.debugState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
-            const {x, y} = State.debugState.clickedPosition;
-            console.log(`Clicked: (${Math.floor(x)}, ${Math.floor(y)})`);
+            // console.log(`(${Math.floor(x)}, ${Math.floor(y)})`);
         }
     }
 
@@ -424,8 +410,7 @@ export class DebugMode {
     }
 
     static debugModeCleanUp() {
-        this.removeMenuBtn();
-        if (State.debugState.menuOpen) { this.removeMenu(); }
+        DebugMenu.removeMenuButton();
+        if (State.debugState.menuOpen) { DebugMenu.removeMenu(); }
     }
-
 }

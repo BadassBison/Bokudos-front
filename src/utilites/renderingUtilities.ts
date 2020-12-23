@@ -32,12 +32,22 @@ export class RenderingUtilities {
 
     /**
      * When passing coordinates from the screen or click events, you should use event.clientX and event.clientY.
-     * @param screenCoords
      */
-    static toGameCoordinates(screenCoords: Point): Point {
+    static toGameCoordinates({ x: cltX, y: cltY }: Point): Point {
         return {
-            x: screenCoords.x / State.gameState.pixelsPerUnit + State.gameState.position.x,
-            y: -screenCoords.y / State.gameState.pixelsPerUnit + State.gameState.position.y + State.gameState.gameUnitDimensions.h
+            x: cltX / State.gameState.pixelsPerUnit + State.gameState.position.x,
+            y: -cltY / State.gameState.pixelsPerUnit + State.gameState.position.y + State.gameState.gameUnitDimensions.h
+        };
+    }
+
+    /**
+     * Will return the root of the grid position for rendering imgs in a grid space
+     * e.g. { x: 3.86, y: 2.13 } => { x: 3, y: 3}
+     */
+    static toGameCoordsImgRoot({ x, y }: Point): Point {
+        return {
+            x: Math.floor(x),
+            y: Math.ceil(y)
         };
     }
 
@@ -61,6 +71,13 @@ export class RenderingUtilities {
 
     static toUnits(pixels: number): number {
         return pixels / State.gameState.pixelsPerUnit;
+    }
+
+    static gridAxisOfPosition(position: Point): Point {
+        const { x, y } = position;
+        const gridX = Math.floor(x);
+        const gridY = Math.floor(y);
+        return { x: gridX, y: gridY };
     }
 
 }

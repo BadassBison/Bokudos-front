@@ -2,7 +2,7 @@ import { State } from '../states/rootState';
 import { Ninja } from '../objects/ninja';
 import { Stage } from '../objects/stage';
 import { Background } from '../objects/background';
-import { DebugMode } from '../objects/debugMode';
+import { DebugMode } from '../debug/debugMode';
 
 export class RenderingEngine {
 
