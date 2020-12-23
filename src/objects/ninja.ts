@@ -1,11 +1,12 @@
-import { Keys } from '../interfaces/keys';
+import {Keys} from '../interfaces/keys';
 
-import { AnimationTypes } from '../constants/animationTypes';
-import { Dimensions } from '../interfaces/dimensions';
-import { State } from '../states/rootState';
-import { NinjaState } from '../states/ninjaState';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { UpdateObject } from '../interfaces/updateObject';
+import {AnimationTypes} from '../constants/animationTypes';
+import {Dimensions} from '../interfaces/dimensions';
+import {State} from '../states/rootState';
+import {NinjaState} from '../states/ninjaState';
+import {RenderingUtilities} from '../utilites/renderingUtilities';
+import {UpdateObject} from '../interfaces/updateObject';
+import {CollisionUtilities} from "../utilites/collisionUtilities";
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -50,36 +51,53 @@ export class Ninja implements UpdateObject {
         //     }
         // }
 
+        let velocity = {dx: 0, dy: 0};
+
         if (right) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
-            this.state.position.x += this.state.speed;
+            velocity.dx += this.state.speed;
         }
 
         if (left) {
             this.state.movingRight = false;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
-            this.state.position.x -= this.state.speed;
+            velocity.dx -= this.state.speed;
         }
 
         // FIXME: Delete this.state if block after collision detection is fixed
         if (up) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
-            this.state.position.y += this.state.speed;
+            velocity.dy += this.state.speed;
         }
 
         // FIXME: Delete this.state if block after collision detection is fixed
         if (down) {
             this.state.movingRight = true;
             if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
-            this.state.position.y -= this.state.speed;
+            velocity.dy -= this.state.speed;
         }
 
+        const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);
+
+        this.state.position.x += updatedVelocity.dx;
+        this.state.position.y += updatedVelocity.dy;
+
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
-        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 4 };
-        this.state.hitbox.position = this.state.position;
-        this.state.collisionDetectionBox.position = { x: this.state.position.x - 2, y: this.state.position.y + 2 };
+        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };
+        this.updateHitboxAndCollisionDetectionBoxPositions();
+    }
+
+    updateHitboxAndCollisionDetectionBoxPositions() {
+        this.state.hitbox.position = {
+            x: this.state.position.x,
+            y: this.state.position.y - this.state.hitboxOffset.h
+        };
+        this.state.collisionDetectionBox.position = {
+            x: this.state.position.x - 2,
+            y: this.state.position.y + 2
+        };
     }
 
     updateSprite() {
@@ -99,9 +117,6 @@ export class Ninja implements UpdateObject {
             this.state.currentImage = this.state.animations.getAnimation(this.state.currentState).getImages()[this.state.currentFrame];
         }
     }
-
-
-
 
     static draw() {
         const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);

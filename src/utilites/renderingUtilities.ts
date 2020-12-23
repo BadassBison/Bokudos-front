@@ -8,26 +8,32 @@ import { State } from '../states/rootState';
  */
 export class RenderingUtilities {
 
-    static setDimensions(gameUnitDimensions: Dimensions = { w: 22, h: 10 }) {
-        State.gameState.gameUnitDimensions = { ...gameUnitDimensions };
-
+    static setDimensions(minGameDimensions: Dimensions = { w: 12, h: 12 }) {
         // when we set the dimensions of the game, determine the pixelsPerUnit conversion for later use
-        const dx = innerWidth / gameUnitDimensions.w;
-        const dy = innerHeight / gameUnitDimensions.h;
+        const dx = innerWidth / minGameDimensions.w;
+        const dy = innerHeight / minGameDimensions.h;
         State.gameState.pixelsPerUnit = Math.min(dx, dy);
+        State.gameState.gameUnitDimensions = {
+            w: innerWidth / State.gameState.pixelsPerUnit,
+            h: innerHeight / State.gameState.pixelsPerUnit
+        };
         State.gameState.screenPixelDimensions = {
-            w: gameUnitDimensions.w * State.gameState.pixelsPerUnit,
-            h: gameUnitDimensions.h * State.gameState.pixelsPerUnit
+            w: innerWidth,
+            h: innerHeight
         };
     }
 
     static toScreenCoordinates(gameCoords: Point): Point {
         return {
-            x: gameCoords.x * State.gameState.pixelsPerUnit - State.gameState.position.x * State.gameState.pixelsPerUnit,
-            y: -gameCoords.y * State.gameState.pixelsPerUnit + State.gameState.position.y * State.gameState.pixelsPerUnit + State.gameState.screenPixelDimensions.h
+            x: (gameCoords.x - State.gameState.position.x) * State.gameState.pixelsPerUnit,
+            y: ((State.gameState.position.y - gameCoords.y) * State.gameState.pixelsPerUnit) + State.gameState.screenPixelDimensions.h
         };
     }
 
+    /**
+     * When passing coordinates from the screen or click events, you should use event.clientX and event.clientY.
+     * @param screenCoords
+     */
     static toGameCoordinates(screenCoords: Point): Point {
         return {
             x: screenCoords.x / State.gameState.pixelsPerUnit + State.gameState.position.x,
@@ -55,23 +61,6 @@ export class RenderingUtilities {
 
     static toUnits(pixels: number): number {
         return pixels / State.gameState.pixelsPerUnit;
-    }
-
-    static isInView(point: Point, dimensions: Dimensions): boolean {
-        // if (point.x + dimensions.w > this.p.x - this.d.w / 2 && x
-        return false;
-    }
-
-    /**
-     * Check to see where the point lies in regards to the line.
-     * @param p Point to be checked against the line
-     * @param l Line
-     * @return 0 if point is on the line
-     *         <0 if point is to the left of the line
-     *         >0 if point is to the right of the line
-     */
-    static checkLine(p: Point, l: Line): number {
-        return (l.p2.x - l.p1.x) * (p.y - l.p1.y) - (p.x - l.p1.x) * (l.p2.y - l.p1.y);
     }
 
 }

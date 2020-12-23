@@ -8,9 +8,9 @@ import { BackgroundState } from './backgroundState';
  * This state is a global object. The parent of the state should only mutate its state and no other
  */
 export const State: StateInterface = {
-    backgroundState: new BackgroundState(innerWidth, innerHeight),
+    backgroundState: new BackgroundState(),
     debugState: new DebugState(),
-    gameState: new GameState(innerWidth, innerHeight),
+    gameState: new GameState(),
     ninjaState: new NinjaState(),
     stageState: new StageState()
 };
