@@ -134,6 +134,7 @@ export class BuilderMode {
             button.addEventListener('click', () => {
                 if (!State.builderState.tileSelectorOpen) {
                     this.openTileSelector();
+                    this.removeTileMode(false);
                     State.builderState.removingTiles = false;
                 } else {
                     this.closeTileSelector();
