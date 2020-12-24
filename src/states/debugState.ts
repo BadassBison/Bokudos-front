@@ -8,6 +8,7 @@ export class DebugState {
     hasButtons: boolean;
     menuOpen: boolean;
     menuOptions: { [key: string]: MenuOption };
+    propertiesOpen: boolean;
     defaultColor: string;
     defaultLineWidth: number;
 
@@ -17,6 +18,7 @@ export class DebugState {
 
         this.hasButtons = debugMode;
         this.menuOpen = false;
+        this.propertiesOpen = false;
 
         const menuOptionsJson = localStorage.getItem('menuOptions');
         if (menuOptionsJson) {

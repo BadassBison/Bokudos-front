@@ -6,7 +6,7 @@ import { State } from '../states/rootState';
 import { NinjaState } from '../states/ninjaState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { UpdateObject } from '../interfaces/updateObject';
-import { CollisionUtilities } from "../utilites/collisionUtilities";
+import { CollisionUtilities } from '../utilites/collisionUtilities';
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -21,13 +21,12 @@ export class Ninja implements UpdateObject {
     }
 
     updatePosition({ up, right, left, down }: Keys): void {
-        // FIXME: this is commented out to add up and down movement
         if (!right && !left && !this.state.jumping) {
             this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
         }
 
-        let velocity = { dx: 0, dy: this.state.velocity.dy};
-        if (up && !this.state.jumping) {
+        const velocity = { dx: 0, dy: this.state.velocity.dy };
+        if (up && !this.state.jumping && !this.state.jumpUsed) {
             this.state.jumping = true;
             this.state.currentFrame = -1;
             this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
@@ -46,22 +45,28 @@ export class Ninja implements UpdateObject {
             velocity.dx -= this.state.movementSpeed;
         }
 
-
-        if(velocity.dy > -this.state.terminalVelocity) {
+        if (velocity.dy > -this.state.terminalVelocity) {
             velocity.dy -= this.state.gravity;
         }
 
         const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);
 
-        if(!this.state.jumping && updatedVelocity.dy !== 0) {
+        if (!this.state.jumping && updatedVelocity.dy !== 0) {
             this.state.jumping = true;
-        } else if(updatedVelocity.dy === 0) {
+        } else if (updatedVelocity.dy === 0) {
             this.state.jumping = false;
         }
         this.state.velocity = updatedVelocity;
 
         this.state.position.x += updatedVelocity.dx;
         this.state.position.y += updatedVelocity.dy;
+
+        // To remove repetitive jumping when key is held
+        if (up) {
+            this.state.jumpUsed = true;
+        } else {
+            this.state.jumpUsed = false;
+        }
 
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
         State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };

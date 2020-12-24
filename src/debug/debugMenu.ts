@@ -10,12 +10,6 @@ export class DebugMenu {
         menuBtn.classList.add('button', 'menuBtn');
         menuBtn.innerHTML = 'Menu';
         menuBtn.addEventListener('click', () => this.toggleMenu());
-        menuBtn.addEventListener('mouseenter', () => {
-            State.builderState.handleMouseClick = false;
-        });
-        menuBtn.addEventListener('mouseleave', () => {
-            State.builderState.handleMouseClick = true;
-        });
         const body = document.querySelector('body');
         body.appendChild(menuBtn);
     }
@@ -53,15 +47,17 @@ export class DebugMenu {
     }
 
     static removeMenu() {
-        State.debugState.menuOpen = false;
-        const menu = document.querySelector('.menu');
-        menu.remove();
+        if (State.debugState.menuOpen) {
+            State.debugState.menuOpen = false;
+            const menu = document.querySelector('.menu');
+            menu.remove();
 
-        const btn = document.querySelector('.menuBtn');
-        btn.classList.remove('active');
+            const btn = document.querySelector('.menuBtn');
+            btn.classList.remove('active');
 
-        const saveBtn = document.querySelector('.saveBtn');
-        saveBtn.remove();
+            const saveBtn = document.querySelector('.saveBtn');
+            saveBtn.remove();
+        }
     }
 
     static addSaveButton() {
@@ -83,14 +79,14 @@ export class DebugMenu {
         saveBtn.remove();
     }
 
-    static addMenuOptions(menu: HTMLElement) {
+    static addMenuOptions(menu: HTMLElement): void {
         this.addMenuOption(menu, MenuOptions.GRID);
         this.addMenuOption(menu, MenuOptions.COORDINATES);
-        this.addMenuOption(menu, MenuOptions.SCREEN_EDGE);
         this.addMenuOption(menu, MenuOptions.HITBOX);
         this.addMenuOption(menu, MenuOptions.DETECTION_BOX);
         this.addMenuOption(menu, MenuOptions.DETECTED_TILES);
         this.addMenuOption(menu, MenuOptions.COLLISION_TILES);
+        this.addMenuOption(menu, MenuOptions.SCREEN_EDGE);
     }
 
     static addMenuOption(menu: HTMLElement, name: string): HTMLElement {

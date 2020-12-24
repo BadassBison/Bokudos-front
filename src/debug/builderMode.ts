@@ -2,6 +2,7 @@ import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMenu } from './debugMenu';
 import { StageTile } from '../objects/stageTile';
+import { DebugMode } from './debugMode';
 
 export class BuilderMode {
 
@@ -14,6 +15,7 @@ export class BuilderMode {
             } else {
                 this.addTileToStage();
             }
+            this.cycleOneFrame();
         }
     }
 
@@ -22,15 +24,6 @@ export class BuilderMode {
         builderBtn.classList.add('button', 'builderBtn');
         builderBtn.innerHTML = 'Builder';
         builderBtn.addEventListener('click', () => this.toggleBuilder());
-        builderBtn.addEventListener('mouseenter', () => {
-            State.builderState.handleMouseClick = false;
-        });
-        builderBtn.addEventListener('mouseleave', () => {
-            if (State.builderState.tileSelectorOpen || State.builderState.removingTiles) {
-                State.builderState.handleMouseClick = true;
-            }
-        });
-
         const body = document.querySelector('body');
         body.appendChild(builderBtn);
     }
@@ -49,10 +42,10 @@ export class BuilderMode {
     }
 
     static openBuilderMode() {
-        if (State.debugState.menuOpen) {
-            DebugMenu.removeMenu();
-        }
+        DebugMode.closeAll();
         State.builderState.builderMode = true;
+        State.builderState.handleMouseClick = true;
+        RenderingUtilities.pauseGame();
 
         const btn = document.querySelector('.builderBtn');
         btn.classList.add('active');
@@ -63,35 +56,28 @@ export class BuilderMode {
         this.addBuilderOptions(builder);
         const body = document.querySelector('body');
         body.appendChild(builder);
-
-        builder.addEventListener('mouseenter', () => {
-            State.builderState.handleMouseClick = false;
-        });
-        builder.addEventListener('mouseleave', () => {
-            if (State.builderState.tileSelectorOpen || State.builderState.removingTiles) {
-                State.builderState.handleMouseClick = true;
-            }
-        });
     }
 
     static closeBuilderMode() {
-        State.builderState.builderMode = false;
-        State.builderState.handleMouseClick = false;
-        State.builderState.removingTiles = false;
+        if (State.builderState.builderMode) {
+            State.builderState.builderMode = false;
+            State.builderState.handleMouseClick = false;
+            State.builderState.removingTiles = false;
 
-        const btn = document.querySelector('.builderBtn');
-        btn.classList.remove('active');
+            const btn = document.querySelector('.builderBtn');
+            btn.classList.remove('active');
 
-        const builderMode = document.querySelector('.builder-mode');
-        builderMode.remove();
+            const builderMode = document.querySelector('.builder-mode');
+            builderMode.remove();
 
-        if (State.builderState.tileSelectorOpen) {
-            this.closeTileSelector();
+            if (State.builderState.tileSelectorOpen) {
+                this.closeTileSelector();
+            }
         }
     }
 
     static addBuilderOptions(builder: HTMLElement) {
-        this.addBuilderOption(builder, 'Platform Tiles', ['Add Tiles', 'Remove Tiles']);
+        this.addBuilderOption(builder, 'Platform Tiles', ['Add Tiles', 'Remove Tiles', 'Clear Stage']);
     }
 
     static addBuilderOption(builder: HTMLElement, category: string, optionNames: string[]) {
@@ -100,8 +86,11 @@ export class BuilderMode {
         this.addTileClickHandling(button1.childNodes);
         const button2 = this.addButton(optionNames[1]);
         this.removeTileClickHandling(button2.childNodes);
+        const button3 = this.addButton(optionNames[2]);
+        this.clearStageClickHandling(button3.childNodes);
         wrapper.appendChild(button1);
         wrapper.appendChild(button2);
+        wrapper.appendChild(button3);
         builder.appendChild(wrapper);
 
         return builder;
@@ -135,7 +124,6 @@ export class BuilderMode {
                 if (!State.builderState.tileSelectorOpen) {
                     this.openTileSelector();
                     this.removeTileMode(false);
-                    State.builderState.removingTiles = false;
                 } else {
                     this.closeTileSelector();
                 }
@@ -156,6 +144,21 @@ export class BuilderMode {
         });
     }
 
+    static clearStageClickHandling(children: NodeListOf<ChildNode>) {
+        children.forEach((button: HTMLElement) => {
+            button.addEventListener('click', () => {
+                State.stageState.tiles.forEach((tile: StageTile) => {
+                    tile.lookupValue = '00';
+                });
+                this.cycleOneFrame();
+            });
+        });
+    }
+
+    static cycleOneFrame() {
+        State.gameState.renderingEngine.run();
+    }
+
     static openTileSelector() {
         State.builderState.tileSelectorOpen = true;
 
@@ -165,13 +168,6 @@ export class BuilderMode {
         this.addTiles(tileSelector);
         const body = document.querySelector('body');
         body.appendChild(tileSelector);
-
-        tileSelector.addEventListener('mouseenter', () => {
-            State.builderState.handleMouseClick = false;
-        });
-        tileSelector.addEventListener('mouseleave', () => {
-            State.builderState.handleMouseClick = true;
-        });
     }
 
     static closeTileSelector() {

@@ -71,10 +71,8 @@ export class Game {
         break;
 
       case 'Escape':
-        if (pressed && !State.gameState.paused) {
-          State.gameState.framesPerSecond = 0;
-        } else if (pressed && State.gameState.paused) {
-          State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
+        if (pressed) {
+          RenderingUtilities.pauseGame();
         }
         break;
     }
@@ -85,6 +83,7 @@ export class Game {
   }
 
   run(): void {
+    // TODO: Division is costly, better we calculate this only when the fps changes
     const delay = this.state.framesPerSecond > 0 ? 1000 / this.state.framesPerSecond : 0;
     this.state.paused = delay <= 0;
     setTimeout(() => {
@@ -99,8 +98,10 @@ export class Game {
   start(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
-    document.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    document.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
+
+    const canvas = State.gameState.canvas.canvasElement;
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
+    canvas.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
 
     window.addEventListener('resize', (ev => {
       State.gameState.canvas.canvasElement.height = innerHeight;

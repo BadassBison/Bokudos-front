@@ -164,6 +164,11 @@ export class DebugMode {
         return wrapper;
     }
 
+    static closeAll() {
+        DebugMenu.removeMenu();
+        BuilderMode.closeBuilderMode();
+    }
+
     static debugModeCleanUp() {
         DebugMenu.cleanup();
         BuilderMode.cleanup();

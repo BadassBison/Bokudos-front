@@ -80,4 +80,13 @@ export class RenderingUtilities {
         return { x: gridX, y: gridY };
     }
 
+    static pauseGame(): void {
+        State.gameState.paused = !State.gameState.paused;
+        if (State.gameState.paused) {
+            State.gameState.framesPerSecond = 0;
+        } else {
+            State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
+        }
+    }
+
 }
