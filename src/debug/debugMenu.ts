@@ -1,6 +1,7 @@
 import { MenuOptions } from '../constants/menuOptions';
 import { State } from '../states/rootState';
 import { BuilderMode } from './builderMode';
+import { DebugMode } from './debugMode';
 
 export class DebugMenu {
 
@@ -29,9 +30,7 @@ export class DebugMenu {
     }
 
     static openMenu() {
-        if (State.builderState.builderMode) {
-            BuilderMode.closeBuilderMode();
-        }
+        DebugMode.resetState();
         State.debugState.menuOpen = true;
 
         const btn = document.querySelector('.menuBtn');
@@ -114,17 +113,17 @@ export class DebugMenu {
 
     static addEnabledCheckBox(name: string): HTMLElement {
         const label = document.createElement('label');
-        label.innerHTML = `Enabled &nbsp;`;
+        label.innerHTML = 'Enabled';
 
-        const checkBox = document.createElement('input');
-        checkBox.type = 'checkbox';
-        checkBox.checked = State.debugState.menuOptions[name].enabled;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = State.debugState.menuOptions[name].enabled;
 
-        checkBox.addEventListener('change', () => {
-            State.debugState.menuOptions[name].enabled = checkBox.checked;
+        checkbox.addEventListener('change', () => {
+            State.debugState.menuOptions[name].enabled = checkbox.checked;
         });
 
-        label.appendChild(checkBox);
+        label.appendChild(checkbox);
 
         return label;
     }

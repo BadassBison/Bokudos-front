@@ -9,8 +9,6 @@ export class DebugState {
     menuOpen: boolean;
     menuOptions: { [key: string]: MenuOption };
     propertiesOpen: boolean;
-    defaultColor: string;
-    defaultLineWidth: number;
 
     constructor(debugMode: boolean = false) {
         this.debugMode = debugMode;

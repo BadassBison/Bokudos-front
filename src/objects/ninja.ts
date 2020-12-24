@@ -15,9 +15,13 @@ export class Ninja implements UpdateObject {
         this.state = State.ninjaState;
     }
 
-    update(keys: Keys): void {
+    updateProperties(keys: Keys): void {
         this.updatePosition(keys);
+    }
+
+    updateAnimation() {
         this.updateSprite();
+        this.draw();
     }
 
     updatePosition({ up, right, left, down }: Keys): void {
@@ -101,7 +105,7 @@ export class Ninja implements UpdateObject {
         }
     }
 
-    static draw() {
+    draw() {
         const { x, y } = RenderingUtilities.toScreenCoordinates(State.ninjaState.position);
         const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize());
 
@@ -110,7 +114,7 @@ export class Ninja implements UpdateObject {
         );
     }
 
-    static getSize(): Dimensions {
+    getSize(): Dimensions {
         return {
             w: State.ninjaState.currentImage.width / State.ninjaState.SPRITE_SIZER,
             h: State.ninjaState.currentImage.height / State.ninjaState.SPRITE_SIZER

@@ -12,7 +12,7 @@ export class PhysicsEngine {
     run() {
         this.detectCollision();
         State.gameState.assets.forEach((asset: UpdateObject) => {
-            asset.update(State.gameState.keys);
+            asset.updateProperties(State.gameState.keys);
         });
     }
 

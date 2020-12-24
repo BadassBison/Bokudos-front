@@ -80,13 +80,52 @@ export class RenderingUtilities {
         return { x: gridX, y: gridY };
     }
 
-    static pauseGame(): void {
-        State.gameState.paused = !State.gameState.paused;
+    static pauseGame(pause: boolean): void {
+        State.gameState.paused = pause;
         if (State.gameState.paused) {
             State.gameState.framesPerSecond = 0;
         } else {
             State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
         }
+    }
+
+    static cycleFrames(n: number, fps = State.gameState.defaultFramesPerSecond) {
+        if (!State.gameState.paused) {
+            console.error('Game must be paused to cycle frames');
+            return;
+        }
+
+        if (n === 0) { return; }
+        setTimeout(() => {
+            State.gameState.renderingEngine.run();
+            this.cycleFrames(n - 1);
+        }, 1000 / fps);
+    }
+
+    static refreshCanvas(): void {
+        State.gameState.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+        State.backgroundState.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+    }
+
+    static nodeBuilder(type: string, content: string, classList: string[] = []): HTMLElement {
+        const node = document.createElement(type);
+        node.innerHTML = content;
+        node.classList.add(...classList);
+
+        return node;
+    }
+
+    static appendNodeToBody(node: HTMLElement): void {
+        const body = document.querySelector('body');
+        body.appendChild(node);
+    }
+
+    static appendChildNodes(parent: HTMLElement, children: HTMLElement[]): HTMLElement {
+        for (const child of children) {
+            parent.appendChild(child);
+        }
+
+        return parent;
     }
 
 }

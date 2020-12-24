@@ -50,7 +50,7 @@ label {
 }
 
 .active {
-    border: 6px solid yellow;
+    outline: 6px solid yellow;
 }
 
 .button:hover {
@@ -101,19 +101,21 @@ label {
     color: white;
     padding: 40px 20px;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
+    right: 0;
+    height: 100%;
 }
 
 .builder--tile-image {
-    height: 100px;
-    width: 100px;
-    margin: 10px;
+    height: 10vh;
+    width: 10vh;
+    margin: 1vh;
     overflow: scroll;
 }
 
 .removing-tiles:hover {
     cursor: url('../assets/Crosshair_Red.cur'), default;
+}
+
+.hidden {
+    display: none;
 }

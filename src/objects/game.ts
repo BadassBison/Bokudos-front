@@ -72,7 +72,8 @@ export class Game {
 
       case 'Escape':
         if (pressed) {
-          RenderingUtilities.pauseGame();
+          const paused = !State.gameState.paused;
+          RenderingUtilities.pauseGame(paused);
         }
         break;
     }
@@ -113,6 +114,9 @@ export class Game {
         this.state.renderingEngine.run();
       }
     }));
+
+    (window as any).cycleFrames = (n: number) => RenderingUtilities.cycleFrames(n);
+    (window as any).pauseGame = (pause: boolean) => RenderingUtilities.pauseGame(pause);
 
     this.run();
   }
