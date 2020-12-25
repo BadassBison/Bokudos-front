@@ -4,13 +4,16 @@ import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { StageTile } from '../objects/stageTile';
 import { MenuOptions } from '../constants/menuOptions';
 import { BuilderMode } from './builderMode';
+import { PropertiesMenu } from './propertiesMenu';
 
 export class DebugMode {
 
   static draw() {
     if (State.debugState.debugMode) {
       if (!State.debugState.hasButtons) {
+        State.debugState.hasButtons = true;
         DebugMenu.addMenuButton();
+        PropertiesMenu.addPropertiesButton();
         BuilderMode.addBuilderButton();
       }
       const position = State.gameState.position;
@@ -171,12 +174,15 @@ export class DebugMode {
   }
 
   static resetState() {
-    DebugMenu.removeMenu();
+    DebugMenu.closeMenu();
+    PropertiesMenu.closePropertyMenu();
     BuilderMode.closeBuilderMode();
   }
 
   static debugModeCleanUp() {
+    State.debugState.hasButtons = false;
     DebugMenu.cleanup();
+    PropertiesMenu.cleanup();
     BuilderMode.cleanup();
   }
 }

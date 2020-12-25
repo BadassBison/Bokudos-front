@@ -25,9 +25,7 @@ export class Ninja implements UpdateObject {
     }
 
     updatePosition({ up, right, left, down }: Keys): void {
-        if (!right && !left && !this.state.jumping) {
-            this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
-        }
+        this.checkIfIdle(right, left);
 
         const velocity = { dx: 0, dy: this.state.velocity.dy };
         if (up && !this.state.jumping && !this.state.jumpUsed) {
@@ -75,6 +73,12 @@ export class Ninja implements UpdateObject {
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
         State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };
         this.updateHitboxAndCollisionDetectionBoxPositions();
+    }
+
+    checkIfIdle(right: boolean, left: boolean) {
+        if (!right && !left && !this.state.jumping) {
+            this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+        }
     }
 
     updateHitboxAndCollisionDetectionBoxPositions() {

@@ -1,10 +1,10 @@
 import { State } from '../states/rootState';
 import { UpdateObject } from '../interfaces/updateObject';
-import { DetectionArea } from '../interfaces/detectionArea';
+import { GridArea } from '../interfaces/gridArea';
 
 export class PhysicsEngine {
 
-    detectionArea: DetectionArea;
+    detectionArea: GridArea;
 
     constructor() {
     }

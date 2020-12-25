@@ -10,11 +10,10 @@ export class DebugState {
     menuOptions: { [key: string]: MenuOption };
     propertiesOpen: boolean;
 
-    constructor(debugMode: boolean = false) {
-        this.debugMode = debugMode;
+    constructor() {
+        this.debugMode = false;
         this.handleMouseMove = false;
-
-        this.hasButtons = debugMode;
+        this.hasButtons = false;
         this.menuOpen = false;
         this.propertiesOpen = false;
 

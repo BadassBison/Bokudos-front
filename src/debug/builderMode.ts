@@ -60,9 +60,9 @@ export class BuilderMode {
 
     static closeBuilderMode() {
         if (State.builderState.builderMode) {
-            State.builderState.handleMouseClick = false;
             State.builderState.builderMode = false;
             State.builderState.builderEngine.stop();
+            State.builderState.handleMouseClick = false;
 
             this.deactivateBuilderButton();
             this.removeBuilderMenu();
@@ -72,11 +72,8 @@ export class BuilderMode {
     }
 
     static addBuilderMenu() {
-        const builderMenu = document.createElement('content');
-        builderMenu.classList.add('builder-mode');
-        builderMenu.innerHTML = '<h1 class="title">Builder Menu</h1>';
+        const builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
         this.addPlatformTileOptions(builderMenu);
-
         RenderingUtilities.appendNodeToBody(builderMenu);
     }
 

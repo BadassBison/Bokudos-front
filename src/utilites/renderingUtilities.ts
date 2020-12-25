@@ -2,6 +2,7 @@ import { Point } from '../interfaces/point';
 import { Dimensions } from '../interfaces/dimensions';
 import { Line } from '../interfaces/line';
 import { State } from '../states/rootState';
+import { GridArea } from '../interfaces/gridArea';
 
 /*
  * These utilities are to be used within the rendering engine only
@@ -126,6 +127,26 @@ export class RenderingUtilities {
         }
 
         return parent;
+    }
+
+    static viewableStageGridArea(): GridArea {
+        const topLeftPixels: Point = { x: 0, y: 0 };
+        const topRightPixels: Point = { x: innerWidth, y: 0 };
+        const bottomLeftPixels: Point = { x: 0, y: innerHeight };
+        const bottomRightPixels: Point = { x: innerWidth, y: innerHeight };
+
+        const topLeftGridUnits = this.toGameCoordinates(topLeftPixels);
+        const topRightGridUnits = this.toGameCoordinates(topRightPixels);
+        const bottomLeftGridUnits = this.toGameCoordinates(bottomLeftPixels);
+        const bottomRightGridUnits = this.toGameCoordinates(bottomRightPixels);
+
+        const viewableGridArea: GridArea = {
+            topLeft: topLeftGridUnits,
+            topRight: topRightGridUnits,
+            bottomLeft: bottomLeftGridUnits,
+            bottomRight: bottomRightGridUnits
+        };
+        return viewableGridArea;
     }
 
 }

@@ -29,17 +29,6 @@ label {
     font-size: medium;
 }
 
-.menu {
-    background: rgb(211, 238, 247);
-    position: absolute;
-    padding: 30px;
-    top: 125px;
-    left: 50px;
-    width: 350px;
-    height: 600px;
-    overflow: scroll;
-}
-
 .button {
     background: rgb(66, 184, 221);
     color: white;
@@ -79,12 +68,40 @@ label {
     height: 50px;
 }
 
-.builderBtn {
+.propertiesBtn {
     position: absolute;
     top: 50px;
     left: 175px;
     width: 100px;
     height: 50px;
+}
+
+.builderBtn {
+    position: absolute;
+    top: 50px;
+    left: 300px;
+    width: 100px;
+    height: 50px;
+}
+
+.menu {
+    background: rgb(211, 238, 247);
+    position: absolute;
+    padding: 30px;
+    top: 125px;
+    left: 50px;
+    width: 350px;
+    height: 600px;
+    overflow: scroll;
+}
+
+.prop-menu {
+    background: rgb(211, 238, 247);
+    position: absolute;
+    padding: 30px;
+    top: 125px;
+    left: 50px;
+    width: 350px; 
 }
 
 .builder-mode {

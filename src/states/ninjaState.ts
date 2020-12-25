@@ -23,6 +23,7 @@ export class NinjaState {
     movingRight: boolean;
     position: Point;
     movementSpeed: number;
+    // TODO: Gravity should be in the gameState, and it should effect a characters mass
     gravity: number;
     velocity: Velocity;
     terminalVelocity: number;
