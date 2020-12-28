@@ -74,6 +74,9 @@ export class CollisionUtilities {
                         // console.log("New Position: " + (bottomRight.y + velocity.dy).toFixed(2));
                         // console.log("DX Dif: " + modification.toFixed(2));
                         velocity.dy += modification;
+                        if(Math.abs(velocity.dy) < 0.00001) {
+                            velocity.dy = 0;
+                        }
                     }
                 }
             }

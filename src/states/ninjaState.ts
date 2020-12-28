@@ -3,6 +3,7 @@ import { AnimationTypes } from '../constants/animationTypes';
 import { Box } from '../interfaces/box';
 import { Dimensions } from '../interfaces/dimensions';
 import { Point } from '../interfaces/point';
+import {Velocity} from "../interfaces/velocity";
 
 export class NinjaState {
     animations: NinjaAnimations;
@@ -20,7 +21,11 @@ export class NinjaState {
     jumping: boolean;
     movingRight: boolean;
     position: Point;
-    speed: number;
+    movementSpeed: number;
+    gravity: number;
+    velocity: Velocity;
+    terminalVelocity: number;
+    jumpSpeed: number;
 
     readonly HEIGHT_IN_UNITS: number = 2;
     readonly SPRITE_SIZER: number;
@@ -38,8 +43,12 @@ export class NinjaState {
         this.jumping = false;
         this.movingRight = true;
         this.position = { x: 12, y: 6 };
-        this.speed = .25;
+        this.movementSpeed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
+        this.gravity = .05;
+        this.velocity = {dx: 0, dy: 0};
+        this.terminalVelocity = .35;
+        this.jumpSpeed = .75;
 
         this.hitboxOffset = {
             w: .25,
