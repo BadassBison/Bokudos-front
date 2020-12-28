@@ -1,10 +1,10 @@
 import { State } from '../states/rootState';
 import { UpdateObject } from '../interfaces/updateObject';
-import { DetectionArea } from '../interfaces/detectionArea';
+import { GridArea } from '../interfaces/gridArea';
 
 export class PhysicsEngine {
 
-    detectionArea: DetectionArea;
+    detectionArea: GridArea;
 
     constructor() {
     }
@@ -12,7 +12,7 @@ export class PhysicsEngine {
     run() {
         this.detectCollision();
         State.gameState.assets.forEach((asset: UpdateObject) => {
-            asset.update(State.gameState.keys);
+            asset.updateProperties(State.gameState.keys);
         });
     }
 

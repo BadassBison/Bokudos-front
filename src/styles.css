@@ -18,7 +18,7 @@ canvas {
 
 .wrapper {
     border: 2px solid black;
-    width: 100%;
+    width: 95%;
     padding: 6px;
 }
 
@@ -27,6 +27,61 @@ label {
     margin: 6px;
     justify-content: space-between;
     font-size: medium;
+}
+
+.button {
+    background: rgb(66, 184, 221);
+    color: white;
+    border-radius: 10px;
+    font-size: large;
+    font-weight: 500;
+    outline: none;
+}
+
+.active {
+    outline: 6px solid yellow;
+}
+
+.button:hover {
+    background: rgb(46, 163, 199);
+}
+
+.button:active {
+    background: rgb(11, 63, 79);
+}
+
+.saveBtn {
+    background: rgb(34, 228, 95);
+    color: white;
+    position: absolute;
+    top: 790px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+}
+
+.menuBtn {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+}
+
+.propertiesBtn {
+    position: absolute;
+    top: 50px;
+    left: 175px;
+    width: 100px;
+    height: 50px;
+}
+
+.builderBtn {
+    position: absolute;
+    top: 50px;
+    left: 300px;
+    width: 100px;
+    height: 50px;
 }
 
 .menu {
@@ -40,6 +95,15 @@ label {
     overflow: scroll;
 }
 
+.prop-menu {
+    background: rgb(211, 238, 247);
+    position: absolute;
+    padding: 30px;
+    top: 125px;
+    left: 50px;
+    width: 350px; 
+}
+
 .builder-mode {
     background: rgb(211, 238, 247);
     position: absolute;
@@ -47,71 +111,28 @@ label {
     top: 125px;
     left: 50px;
     width: 350px;
-    height: 600px;
-    overflow-y: scroll;
-}
-
-.button {
-    background: rgb(66, 184, 221);
-    color: white;
-    border-radius: 10px;
-    font-size: large;
-    font-weight: 500;
-    outline: none;
-}
-
-.active {
-    border: 6px solid yellow;
-}
-
-.button:hover {
-    background: rgb(46, 163, 199);
-}
-
-.button:active {
-    background: rgb(11, 63, 79);
-}
-
-.menuBtn {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    width: 100px;
-    height: 50px;
-}
-
-.builderBtn {
-    position: absolute;
-    top: 50px;
-    left: 175px;
-    width: 100px;
-    height: 50px;
-}
-
-.saveBtn {
-    background: rgb(34, 228, 95);
-    color: white;
-    position: absolute;
-    top: 790px;
-    left: 50px;
-    width: 100px;
-    height: 50px;
 }
 
 .builder--tile-selector {
     background: rgb(71, 75, 72);
     color: white;
-    padding: 20px;
+    padding: 40px 20px;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
+    right: 0;
+    height: 100%;
 }
 
 .builder--tile-image {
-    height: 100px;
-    width: 100px;
-    margin: 10px;
+    height: 10vh;
+    width: 10vh;
+    margin: 1vh;
     overflow: scroll;
+}
+
+.removing-tiles:hover {
+    cursor: url('../assets/Crosshair_Red.cur'), default;
+}
+
+.hidden {
+    display: none;
 }

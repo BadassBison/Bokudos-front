@@ -8,15 +8,14 @@ export class DebugState {
     hasButtons: boolean;
     menuOpen: boolean;
     menuOptions: { [key: string]: MenuOption };
-    defaultColor: string;
-    defaultLineWidth: number;
+    propertiesOpen: boolean;
 
-    constructor(debugMode: boolean = false) {
-        this.debugMode = debugMode;
+    constructor() {
+        this.debugMode = false;
         this.handleMouseMove = false;
-
-        this.hasButtons = debugMode;
+        this.hasButtons = false;
         this.menuOpen = false;
+        this.propertiesOpen = false;
 
         const menuOptionsJson = localStorage.getItem('menuOptions');
         if (menuOptionsJson) {

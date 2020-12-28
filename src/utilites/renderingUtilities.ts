@@ -2,6 +2,7 @@ import { Point } from '../interfaces/point';
 import { Dimensions } from '../interfaces/dimensions';
 import { Line } from '../interfaces/line';
 import { State } from '../states/rootState';
+import { GridArea } from '../interfaces/gridArea';
 
 /*
  * These utilities are to be used within the rendering engine only
@@ -78,6 +79,74 @@ export class RenderingUtilities {
         const gridX = Math.floor(x);
         const gridY = Math.floor(y);
         return { x: gridX, y: gridY };
+    }
+
+    static pauseGame(pause: boolean): void {
+        State.gameState.paused = pause;
+        if (State.gameState.paused) {
+            State.gameState.framesPerSecond = 0;
+        } else {
+            State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
+        }
+    }
+
+    static cycleFrames(n: number, fps = State.gameState.defaultFramesPerSecond) {
+        if (!State.gameState.paused) {
+            console.error('Game must be paused to cycle frames');
+            return;
+        }
+
+        if (n === 0) { return; }
+        setTimeout(() => {
+            State.gameState.renderingEngine.run();
+            this.cycleFrames(n - 1);
+        }, 1000 / fps);
+    }
+
+    static refreshCanvas(): void {
+        State.gameState.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+        State.backgroundState.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
+    }
+
+    static nodeBuilder(type: string, content: string, classList: string[] = []): HTMLElement {
+        const node = document.createElement(type);
+        node.innerHTML = content;
+        node.classList.add(...classList);
+
+        return node;
+    }
+
+    static appendNodeToBody(node: HTMLElement): void {
+        const body = document.querySelector('body');
+        body.appendChild(node);
+    }
+
+    static appendChildNodes(parent: HTMLElement, children: HTMLElement[]): HTMLElement {
+        for (const child of children) {
+            parent.appendChild(child);
+        }
+
+        return parent;
+    }
+
+    static viewableStageGridArea(): GridArea {
+        const topLeftPixels: Point = { x: 0, y: 0 };
+        const topRightPixels: Point = { x: innerWidth, y: 0 };
+        const bottomLeftPixels: Point = { x: 0, y: innerHeight };
+        const bottomRightPixels: Point = { x: innerWidth, y: innerHeight };
+
+        const topLeftGridUnits = this.toGameCoordinates(topLeftPixels);
+        const topRightGridUnits = this.toGameCoordinates(topRightPixels);
+        const bottomLeftGridUnits = this.toGameCoordinates(bottomLeftPixels);
+        const bottomRightGridUnits = this.toGameCoordinates(bottomRightPixels);
+
+        const viewableGridArea: GridArea = {
+            topLeft: topLeftGridUnits,
+            topRight: topRightGridUnits,
+            bottomLeft: bottomLeftGridUnits,
+            bottomRight: bottomRightGridUnits
+        };
+        return viewableGridArea;
     }
 
 }

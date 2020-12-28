@@ -1,5 +1,6 @@
 import { Keys } from './keys';
 
 export interface UpdateObject {
-    update(keys: Keys): void;
+    updateProperties(keys: Keys): void;
+    updateAnimation(keys: Keys): void;
 }

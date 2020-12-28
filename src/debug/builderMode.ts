@@ -2,6 +2,7 @@ import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMenu } from './debugMenu';
 import { StageTile } from '../objects/stageTile';
+import { DebugMode } from './debugMode';
 
 export class BuilderMode {
 
@@ -10,7 +11,7 @@ export class BuilderMode {
             State.builderState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
             State.builderState.clickedGridCoords = RenderingUtilities.toGameCoordsImgRoot(State.builderState.clickedPosition);
             if (State.builderState.removingTiles) {
-                this.removeTileFromStage();
+                this.deleteTileFromStage();
             } else {
                 this.addTileToStage();
             }
@@ -18,12 +19,24 @@ export class BuilderMode {
     }
 
     static addBuilderButton() {
-        const builderBtn = document.createElement('button');
-        builderBtn.classList.add('button', 'builderBtn');
-        builderBtn.innerHTML = 'Builder';
+        const builderBtn = RenderingUtilities.nodeBuilder('button', 'Builder', ['button', 'builderBtn']);
         builderBtn.addEventListener('click', () => this.toggleBuilder());
-        const body = document.querySelector('body');
-        body.appendChild(builderBtn);
+        RenderingUtilities.appendNodeToBody(builderBtn);
+    }
+
+    static removeBuilderButton() {
+        const btn = document.querySelector('.builderBtn');
+        btn.remove();
+    }
+
+    static activateBuilderButton() {
+        const btn = document.querySelector('.builderBtn');
+        btn.classList.add('active');
+    }
+
+    static deactivateBuilderButton() {
+        const btn = document.querySelector('.builderBtn');
+        btn.classList.remove('active');
     }
 
     static toggleBuilder() {
@@ -35,135 +48,152 @@ export class BuilderMode {
     }
 
     static openBuilderMode() {
-        if (State.debugState.menuOpen) {
-            DebugMenu.removeMenu();
-        }
+        DebugMode.resetState();
         State.builderState.builderMode = true;
+        State.builderState.handleMouseClick = true;
 
-        const btn = document.querySelector('.builderBtn');
-        btn.classList.add('active');
-
-        const builder = document.createElement('content');
-        builder.classList.add('builder-mode');
-        builder.innerHTML = '<h1 class="title">Builder Mode</h1>';
-        this.addBuilderOptions(builder);
-        const body = document.querySelector('body');
-        body.appendChild(builder);
+        State.builderState.builderEngine.start();
+        this.activateBuilderButton();
+        this.addBuilderMenu();
+        this.openTileSelector();
     }
 
     static closeBuilderMode() {
-        State.builderState.builderMode = false;
+        if (State.builderState.builderMode) {
+            State.builderState.builderMode = false;
+            State.builderState.builderEngine.stop();
+            State.builderState.handleMouseClick = false;
 
-        const btn = document.querySelector('.builderBtn');
-        btn.classList.remove('active');
-
-        const builderMode = document.querySelector('.builder-mode');
-        builderMode.remove();
-
-        if (State.builderState.tileSelectorOpen) {
-            this.closeTileSelector();
+            this.deactivateBuilderButton();
+            this.removeBuilderMenu();
+            this.removeTileSelector();
+            this.deleteTileMode(false);
         }
     }
 
-    static addBuilderOptions(builder: HTMLElement) {
-        this.addBuilderOption(builder, 'Platform Tiles', ['Add Tiles', 'Remove Tiles']);
+    static addBuilderMenu() {
+        const builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
+        this.addPlatformTileOptions(builderMenu);
+        RenderingUtilities.appendNodeToBody(builderMenu);
     }
 
-    static addBuilderOption(builder: HTMLElement, category: string, optionNames: string[]) {
-        const wrapper = this.addWrapper(category);
-        const button1 = this.addButton(optionNames[0]);
-        this.addTileClickHandling(button1.childNodes);
-        const button2 = this.addButton(optionNames[1]);
-        this.removeTileClickHandling(button2.childNodes);
-        wrapper.appendChild(button1);
-        wrapper.appendChild(button2);
-        builder.appendChild(wrapper);
-
-        return builder;
+    static removeBuilderMenu() {
+        const builderMode = document.querySelector('.builder-mode');
+        builderMode.remove();
     }
 
-    static addWrapper(category: string): HTMLElement {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('wrapper');
-        const title = document.createElement('h3');
-        title.innerText = category;
+    static addPlatformTileOptions(builder: HTMLElement): void {
+        const wrapper = this.addWrapper(builder, 'Platform Tiles');
+
+        const [option1, checkbox1] = this.addCheckbox('Toggle Tile Selector');
+        State.builderState.tileSelectorCheckbox = checkbox1 as HTMLInputElement;
+        this.addTileCheckboxHandling(checkbox1);
+
+        const [option2, checkbox2] = this.addCheckbox('Remove Tiles');
+        State.builderState.removingTilesCheckbox = checkbox2 as HTMLInputElement;
+        this.addDeleteTileCheckboxHandling(checkbox2);
+
+        const [option3, button] = this.addButton('Clear Stage');
+        this.addClearStageClickHandling(button);
+
+        RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3]);
+    }
+
+    static addWrapper(parentNode: HTMLElement, category: string): HTMLElement {
+        const wrapper = RenderingUtilities.nodeBuilder('div', '', ['wrapper']);
+        const title = RenderingUtilities.nodeBuilder('h3', category);
+
         wrapper.appendChild(title);
+        parentNode.appendChild(wrapper);
 
         return wrapper;
     }
 
-    static addButton(name: string): HTMLElement {
-        const label = document.createElement('label');
-        label.innerHTML = `${name} &nbsp;`;
+    static addCheckbox(name: string): HTMLElement[] {
+        const label = RenderingUtilities.nodeBuilder('label', `${name}`);
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        label.appendChild(checkbox);
 
-        const button = document.createElement('button');
-        button.innerHTML = '+';
+        return [label, checkbox];
+    }
 
+    static addButton(name: string): HTMLElement[] {
+        const label = RenderingUtilities.nodeBuilder('label', `${name}`);
+        const button = RenderingUtilities.nodeBuilder('button', `+`);
         label.appendChild(button);
 
-        return label;
+        return [label, button];
     }
 
-    static addTileClickHandling(children: NodeListOf<ChildNode>) {
-        children.forEach((button: HTMLElement) => {
-            button.addEventListener('click', () => {
-                if (!State.builderState.tileSelectorOpen) {
-                    this.openTileSelector();
-                    button.innerHTML = '-';
-                } else {
-                    this.closeTileSelector();
-                    button.innerHTML = '+';
-                }
+    static addTileCheckboxHandling(checkbox: HTMLElement) {
+        checkbox.addEventListener('change', () => {
+            this.toggleTileSelector();
+        });
+    }
+
+    static addDeleteTileCheckboxHandling(checkbox: HTMLElement) {
+        checkbox.addEventListener('change', () => {
+            if (!State.builderState.removingTiles) {
+                this.deleteTileMode(true);
+            } else {
+                this.deleteTileMode(false);
+            }
+        });
+    }
+
+    static addClearStageClickHandling(button: HTMLElement) {
+        button.addEventListener('click', () => {
+            State.stageState.tiles.forEach((tile: StageTile) => {
+                tile.lookupValue = '00';
             });
         });
     }
 
-    static removeTileClickHandling(children: NodeListOf<ChildNode>) {
-        children.forEach((button: HTMLElement) => {
-            button.addEventListener('click', () => {
-                if (!State.builderState.removingTiles) {
-                    this.removeTileMode(true);
-                    button.innerHTML = 'X';
-                } else {
-                    this.removeTileMode(false);
-                    button.innerHTML = '+';
-                }
-            });
-        });
-    }
-
-    static openTileSelector() {
+    static openTileSelector(): void {
         State.builderState.tileSelectorOpen = true;
+        State.builderState.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
+        State.builderState.tileSelector = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Tile Selector</h1>', ['builder--tile-selector']);
+        this.addTiles(State.builderState.tileSelector);
 
-        const tileSelector = document.createElement('content');
-        tileSelector.classList.add('builder--tile-selector');
-        tileSelector.innerHTML = '<h1 class="title">Tile Selector</h1>';
-        this.addTiles(tileSelector);
-        const body = document.querySelector('body');
-        body.appendChild(tileSelector);
-
-        tileSelector.addEventListener('mouseenter', () => {
-            State.builderState.handleMouseClick = false;
-        });
-        tileSelector.addEventListener('mouseleave', () => {
-            State.builderState.handleMouseClick = true;
-        });
+        RenderingUtilities.appendNodeToBody(State.builderState.tileSelector);
     }
 
-    static closeTileSelector() {
-        State.builderState.tileSelectorOpen = false;
+    static removeTileSelector() {
+        if (State.builderState.tileSelector) {
+            State.builderState.tileSelector.remove();
+            State.builderState.tileSelector = null;
+            State.builderState.tileSelectorOpen = false;
+            State.builderState.tileSelectorCheckbox = null;
+        }
+    }
 
-        const tileSelector = document.querySelector('.builder--tile-selector');
-        tileSelector.remove();
+    static toggleTileSelector(): void {
+        if (State.builderState.tileSelectorOpen) {
+            State.builderState.tileSelector.classList.add('hidden');
+            State.builderState.tileSelectorOpen = false;
+        } else {
+            State.builderState.tileSelector.classList.remove('hidden');
+            State.builderState.tileSelectorOpen = true;
+        }
+        State.builderState.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
     }
 
     static addTiles(tileSelector: HTMLElement) {
+        let imgRowWrapper: HTMLElement;
         for (let i = 1; i <= 18; i++) {
             const img = State.tileSetState.imageMap.get(i);
             img.classList.add('builder--tile-image');
             img.addEventListener('click', (evt: MouseEvent) => this.selectedTile(evt));
             img.id = `img-${i}`;
-            tileSelector.appendChild(img);
+            img.alt = `Tile image ${i}`;
+
+            if (i % 3 === 1) {
+                imgRowWrapper = document.createElement('div');
+                imgRowWrapper.classList.add('tile-selector-img-row');
+                tileSelector.appendChild(imgRowWrapper);
+            }
+            imgRowWrapper.appendChild(img);
         }
         this.setActiveTile(State.tileSetState.imageMap.get(1));
     }
@@ -195,7 +225,7 @@ export class BuilderMode {
         State.stageState.tiles.set(gridId, stageTile);
     }
 
-    static removeTileFromStage() {
+    static deleteTileFromStage() {
         const col = State.builderState.clickedGridCoords.x;
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = '00';
@@ -205,9 +235,20 @@ export class BuilderMode {
         State.stageState.tiles.set(gridId, stageTile);
     }
 
-    static removeTileMode(enabled: boolean) {
-        // Remove selected tile
+    static deleteTileMode(enabled: boolean) {
         State.builderState.removingTiles = enabled;
-        console.log('Removing Tile');
+        const canvas = document.querySelector('#canvas-fg');
+        if (enabled) {
+            canvas.classList.add('removing-tiles');
+        } else {
+            canvas.classList.remove('removing-tiles');
+        }
+    }
+
+    static cleanup() {
+        if (State.builderState.builderMode) {
+            this.closeBuilderMode();
+            this.removeBuilderButton();
+        }
     }
 }

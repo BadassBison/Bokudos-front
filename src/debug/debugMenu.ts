@@ -1,62 +1,60 @@
 import { MenuOptions } from '../constants/menuOptions';
 import { State } from '../states/rootState';
-import { BuilderMode } from './builderMode';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { DebugMode } from './debugMode';
 
 export class DebugMenu {
 
     static addMenuButton() {
-        State.debugState.hasButtons = true;
-        const menuBtn = document.createElement('button');
-        menuBtn.classList.add('button', 'menuBtn');
-        menuBtn.innerHTML = 'Menu';
+        const menuBtn = RenderingUtilities.nodeBuilder('button', 'Debug', ['button', 'menuBtn']);
         menuBtn.addEventListener('click', () => this.toggleMenu());
-        const body = document.querySelector('body');
-        body.appendChild(menuBtn);
+        RenderingUtilities.appendNodeToBody(menuBtn);
     }
 
     static removeMenuButton() {
-        State.debugState.hasButtons = false;
         const menuBtn = document.querySelector('.menuBtn');
-        menuBtn.removeEventListener('click', () => { });
         menuBtn.remove();
+    }
+
+    static activateMenuButton() {
+        const btn = document.querySelector('.menuBtn');
+        btn.classList.add('active');
+    }
+
+    static deactivateMenuButton() {
+        const btn = document.querySelector('.menuBtn');
+        btn.classList.remove('active');
     }
 
     static toggleMenu() {
         if (State.debugState.menuOpen) {
-            this.removeMenu();
+            this.closeMenu();
         } else {
             this.openMenu();
         }
     }
 
     static openMenu() {
-        if (State.builderState.builderMode) {
-            BuilderMode.closeBuilderMode();
-        }
+        DebugMode.resetState();
         State.debugState.menuOpen = true;
-
-        const btn = document.querySelector('.menuBtn');
-        btn.classList.add('active');
-
-        const menu = document.createElement('content');
-        menu.classList.add('menu');
-        menu.innerHTML = '<h1 class="title">Menu</h1>';
+        this.activateMenuButton();
+        const menu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Debug Menu</h1>', ['menu']);
         this.addMenuOptions(menu);
-        const body = document.querySelector('body');
-        body.appendChild(menu);
+        RenderingUtilities.appendNodeToBody(menu);
         this.addSaveButton();
     }
 
-    static removeMenu() {
-        State.debugState.menuOpen = false;
-        const menu = document.querySelector('.menu');
-        menu.remove();
+    static closeMenu() {
+        if (State.debugState.menuOpen) {
+            State.debugState.menuOpen = false;
+            this.deactivateMenuButton();
+            const menu = document.querySelector('.menu');
+            menu.remove();
 
-        const btn = document.querySelector('.menuBtn');
-        btn.classList.remove('active');
 
-        const saveBtn = document.querySelector('.saveBtn');
-        saveBtn.remove();
+            const saveBtn = document.querySelector('.saveBtn');
+            saveBtn.remove();
+        }
     }
 
     static addSaveButton() {
@@ -75,19 +73,17 @@ export class DebugMenu {
 
     static removeSaveButton() {
         const saveBtn = document.querySelector('.saveBtn');
-        // menu.removeEventListener('click', () => { });
         saveBtn.remove();
     }
 
-    static addMenuOptions(menu: HTMLElement) {
+    static addMenuOptions(menu: HTMLElement): void {
         this.addMenuOption(menu, MenuOptions.GRID);
         this.addMenuOption(menu, MenuOptions.COORDINATES);
-        this.addMenuOption(menu, MenuOptions.SCREEN_EDGE);
         this.addMenuOption(menu, MenuOptions.HITBOX);
         this.addMenuOption(menu, MenuOptions.DETECTION_BOX);
         this.addMenuOption(menu, MenuOptions.DETECTED_TILES);
         this.addMenuOption(menu, MenuOptions.COLLISION_TILES);
-        this.addMenuOption(menu, MenuOptions.CHARACTER_TILES);
+        this.addMenuOption(menu, MenuOptions.SCREEN_EDGE);
     }
 
     static addMenuOption(menu: HTMLElement, name: string): HTMLElement {
@@ -114,26 +110,22 @@ export class DebugMenu {
     }
 
     static addEnabledCheckBox(name: string): HTMLElement {
-        const label = document.createElement('label');
-        label.innerHTML = `Enabled &nbsp;`;
+        const label = RenderingUtilities.nodeBuilder('label', 'Enabled');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = State.debugState.menuOptions[name].enabled;
 
-        const checkBox = document.createElement('input');
-        checkBox.type = 'checkbox';
-        checkBox.checked = State.debugState.menuOptions[name].enabled;
-
-        checkBox.addEventListener('change', () => {
-            State.debugState.menuOptions[name].enabled = checkBox.checked;
+        checkbox.addEventListener('change', () => {
+            State.debugState.menuOptions[name].enabled = checkbox.checked;
         });
 
-        label.appendChild(checkBox);
+        label.appendChild(checkbox);
 
         return label;
     }
 
     static addColorInput(name: string): HTMLElement {
-        const label = document.createElement('label');
-        label.innerHTML = `Color &nbsp;`;
-
+        const label = RenderingUtilities.nodeBuilder('label', 'Color');
         const input = document.createElement('input');
         input.type = 'text';
         input.value = State.debugState.menuOptions[name].color;
@@ -149,9 +141,7 @@ export class DebugMenu {
 
     static addLineWidthRange(name: string): HTMLElement {
         if (State.debugState.menuOptions[name].lineWidth) {
-            const label = document.createElement('label');
-            label.innerHTML = `Line Width &nbsp;`;
-
+            const label = RenderingUtilities.nodeBuilder('label', 'Line Width');
             const input = document.createElement('input');
             input.type = 'range';
             input.min = '1';
@@ -169,5 +159,10 @@ export class DebugMenu {
         }
 
         return null;
+    }
+
+    static cleanup() {
+        this.removeMenuButton();
+        if (State.debugState.menuOpen) { this.closeMenu(); }
     }
 }

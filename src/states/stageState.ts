@@ -1,4 +1,3 @@
-import { TileSetState } from './tileSetState';
 import { StageTile } from '../objects/stageTile';
 import { stageOneTileList } from '../stages/stage_1';
 

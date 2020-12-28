@@ -71,10 +71,9 @@ export class Game {
         break;
 
       case 'Escape':
-        if (pressed && !State.gameState.paused) {
-          State.gameState.framesPerSecond = 0;
-        } else if (pressed && State.gameState.paused) {
-          State.gameState.framesPerSecond = State.gameState.defaultFramesPerSecond;
+        if (pressed) {
+          const paused = !State.gameState.paused;
+          RenderingUtilities.pauseGame(paused);
         }
         break;
     }
@@ -85,6 +84,7 @@ export class Game {
   }
 
   run(): void {
+    // TODO: Division is costly, better we calculate this only when the fps changes
     const delay = this.state.framesPerSecond > 0 ? 1000 / this.state.framesPerSecond : 0;
     this.state.paused = delay <= 0;
     setTimeout(() => {
@@ -99,8 +99,10 @@ export class Game {
   start(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
-    document.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    document.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
+
+    const canvas = State.gameState.canvas.canvasElement;
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
+    canvas.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
 
     window.addEventListener('resize', (ev => {
       State.gameState.canvas.canvasElement.height = innerHeight;
@@ -112,6 +114,9 @@ export class Game {
         this.state.renderingEngine.run();
       }
     }));
+
+    (window as any).cycleFrames = (n: number) => RenderingUtilities.cycleFrames(n);
+    (window as any).pauseGame = (pause: boolean) => RenderingUtilities.pauseGame(pause);
 
     this.run();
   }

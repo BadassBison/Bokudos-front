@@ -1,6 +1,6 @@
 import { Point } from './point';
 
-export interface DetectionArea {
+export interface GridArea {
     topLeft: Point;
     topRight: Point;
     bottomLeft: Point;

@@ -38,7 +38,7 @@ export class GameState {
         this.gameUnit = 1;
         this.screenWidth = innerWidth;
         this.screenHeight = innerHeight;
-        this.canvas = new CanvasElement(innerWidth, innerHeight);
+        this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
         this.position = { x: 0, y: 0 };
         this.defaultFramesPerSecond = 60;
         this.framesPerSecond = this.defaultFramesPerSecond;
