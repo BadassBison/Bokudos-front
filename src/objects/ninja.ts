@@ -1,12 +1,12 @@
-import { Keys } from '../interfaces/keys';
+import {Keys} from '../interfaces/keys';
 
-import { AnimationTypes } from '../constants/animationTypes';
-import { Dimensions } from '../interfaces/dimensions';
-import { State } from '../states/rootState';
-import { NinjaState } from '../states/ninjaState';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { UpdateObject } from '../interfaces/updateObject';
-import { CollisionUtilities } from '../utilites/collisionUtilities';
+import {AnimationTypes} from '../constants/animationTypes';
+import {Dimensions} from '../interfaces/dimensions';
+import {State} from '../states/rootState';
+import {NinjaState} from '../states/ninjaState';
+import {RenderingUtilities} from '../utilites/renderingUtilities';
+import {UpdateObject} from '../interfaces/updateObject';
+import {CollisionUtilities} from '../utilites/collisionUtilities';
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -20,64 +20,59 @@ export class Ninja implements UpdateObject {
     }
 
     updateAnimation() {
+        this.setCurrentAnimationState();
         this.updateSprite();
         this.draw();
     }
 
     updatePosition({ up, right, left, down }: Keys): void {
-        this.checkIfIdle(right, left);
-
         const velocity = { dx: 0, dy: this.state.velocity.dy };
         if (up && !this.state.jumping && !this.state.jumpUsed) {
-            this.state.jumping = true;
-            this.state.currentFrame = -1;
-            this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
             velocity.dy += this.state.jumpSpeed;
         }
-
         if (right) {
-            this.state.movingRight = true;
-            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_RIGHT; }
             velocity.dx += this.state.movementSpeed;
         }
-
         if (left) {
-            this.state.movingRight = false;
-            if (!this.state.jumping) { this.state.currentState = AnimationTypes.RUN_LEFT; }
             velocity.dx -= this.state.movementSpeed;
         }
-
         if (velocity.dy > -this.state.terminalVelocity) {
             velocity.dy -= this.state.gravity;
         }
 
         const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);
-
-        if (!this.state.jumping && updatedVelocity.dy !== 0) {
-            this.state.jumping = true;
-        } else if (updatedVelocity.dy === 0) {
-            this.state.jumping = false;
-        }
         this.state.velocity = updatedVelocity;
 
         this.state.position.x += updatedVelocity.dx;
         this.state.position.y += updatedVelocity.dy;
 
         // To remove repetitive jumping when key is held
-        if (up) {
-            this.state.jumpUsed = true;
-        } else {
-            this.state.jumpUsed = false;
-        }
+        this.state.jumpUsed = up;
 
         // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
         State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2 + .5, y: this.state.position.y - 5 };
         this.updateHitboxAndCollisionDetectionBoxPositions();
     }
 
-    checkIfIdle(right: boolean, left: boolean) {
-        if (!right && !left && !this.state.jumping) {
-            this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+    setCurrentAnimationState() {
+        // if the velocity is 0, keep the direction that the character was last facing
+        if(this.state.velocity.dx !== 0) {
+            this.state.movingRight = this.state.velocity.dx > 0;
+        }
+        if(this.state.velocity.dy === 0) {
+            this.state.jumping = false;
+        } else if (!this.state.jumping) {
+            this.state.jumping = true;
+            this.state.currentFrame = -1;
+            this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
+        }
+
+        if(!this.state.jumping) {
+            if(this.state.velocity.dx === 0) {
+                this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
+            } else {
+                this.state.currentState = this.state.movingRight ? AnimationTypes.RUN_RIGHT : AnimationTypes.RUN_LEFT;
+            }
         }
     }
 

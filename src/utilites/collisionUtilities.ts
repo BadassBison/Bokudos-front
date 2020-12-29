@@ -31,9 +31,6 @@ export class CollisionUtilities {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(bottomRight.x, bottomRight.x + velocity.dx, tile.col, tile.col + 1)) {
                         modification = (bottomRight.x + velocity.dx - tile.col);
-                        // console.log("wall: " + tile.col.toFixed(2));
-                        // console.log("New Position: " + (bottomRight.x + velocity.dx).toFixed(2));
-                        // console.log("DX Dif: " + modification.toFixed(2));
                         velocity.dx -= modification;
                     }
                 }
@@ -43,9 +40,6 @@ export class CollisionUtilities {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(topLeft.x + velocity.dx, topLeft.x, tile.col, tile.col + 1)) {
                         modification = (tile.col + 1) - (topLeft.x + velocity.dx);
-                        // console.log("wall: " + (tile.col + 1).toFixed(2));
-                        // console.log("New Position: " + (topLeft.x + velocity.dx).toFixed(2));
-                        // console.log("DX Dif: " + modification.toFixed(2));
                         velocity.dx += modification;
                     }
                 }
@@ -58,9 +52,6 @@ export class CollisionUtilities {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(topLeft.y, topLeft.y + velocity.dy, tile.row - 1 , tile.row)) {
                         modification =  topLeft.y + velocity.dy - (tile.row -1);
-                        // console.log("wall: " + (tile.row - 1).toFixed(2));
-                        // console.log("New Position: " + (topLeft.y + velocity.dy).toFixed(2));
-                        // console.log("DX Dif: " + modification.toFixed(2));
                         velocity.dy -= modification;
                     }
                 }
@@ -70,9 +61,6 @@ export class CollisionUtilities {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
                     if (this.hasOverlap(bottomRight.y + velocity.dy, bottomRight.y, tile.row - 1 , tile.row)) {
                         modification = (tile.row) - (bottomRight.y + velocity.dy);
-                        // console.log("wall: " + tile.row.toFixed(2));
-                        // console.log("New Position: " + (bottomRight.y + velocity.dy).toFixed(2));
-                        // console.log("DX Dif: " + modification.toFixed(2));
                         velocity.dy += modification;
                         if(Math.abs(velocity.dy) < 0.00001) {
                             velocity.dy = 0;
