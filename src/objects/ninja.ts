@@ -30,14 +30,11 @@ export class Ninja implements UpdateObject {
         if (up && !this.state.jumping && !this.state.jumpUsed) {
             velocity.dy += this.state.jumpSpeed;
         }
-        if (right) {
-            velocity.dx += this.state.movementSpeed;
-        }
-        if (left) {
-            velocity.dx -= this.state.movementSpeed;
+        if(right !== left) {
+            velocity.dx = right ? this.state.movementSpeed : -this.state.movementSpeed;
         }
         if (velocity.dy > -this.state.terminalVelocity) {
-            velocity.dy = Math.min(velocity.dy - this.state.gravity, -this.state.terminalVelocity);
+            velocity.dy -= this.state.gravity;
         }
 
         const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);

@@ -40,7 +40,7 @@ export class NinjaState {
         this.currentState = AnimationTypes.IDLE_RIGHT;
         this.falling = false;
         this.frameCount = 0;
-        this.frameDelay = 6;
+        this.frameDelay = 4;
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
