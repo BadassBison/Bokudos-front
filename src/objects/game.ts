@@ -25,39 +25,31 @@ export class Game {
       case 'ArrowUp':
       case 'w':
       case 'W':
-        if (pressed && !this.state.keys.up || !pressed && this.state.keys.up) {
-          this.state.keys.up = pressed;
-        }
+      case ' ':
+        this.state.keys.up = pressed;
         break;
 
       case 'ArrowDown':
       case 's':
       case 'S':
-        if (pressed && !this.state.keys.down || !pressed && this.state.keys.down) {
-          this.state.keys.down = pressed;
-        }
+        this.state.keys.down = pressed;
         break;
 
       case 'ArrowLeft':
       case 'a':
       case 'A':
-        if (pressed && !this.state.keys.left || !pressed && this.state.keys.left) {
-          this.state.keys.left = pressed;
-        }
+        this.state.keys.left = pressed;
         break;
 
       case 'ArrowRight':
       case 'd':
       case 'D':
-        if (pressed && !this.state.keys.right || !pressed && this.state.keys.right) {
-          this.state.keys.right = pressed;
-        }
+        this.state.keys.right = pressed;
         break;
 
-      case ' ':
-        if (pressed && !this.state.keys.space || !pressed && this.state.keys.space) {
-          this.state.keys.space = pressed;
-        }
+      case 'mousedown':
+      case 'mouseup':
+        this.state.keys.attack = pressed;
         break;
 
       case 'Shift':
@@ -99,6 +91,8 @@ export class Game {
   start(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
+    document.addEventListener('mousedown', (evt: MouseEvent) => this.parseKey(evt.type, true));
+    document.addEventListener('mouseup', (evt: MouseEvent) => this.parseKey(evt.type, false));
 
     const canvas = State.gameState.canvas.canvasElement;
     canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));

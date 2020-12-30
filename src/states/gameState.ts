@@ -25,15 +25,14 @@ export class GameState {
     defaultColor: string;
     defaultLineWidth: number;
 
-
     constructor() {
         this.keys = {
             up: false,
             down: false,
             left: false,
             right: false,
-            space: false,
-            shift: false
+            shift: false,
+            attack: false
         };
         this.gameUnit = 1;
         this.screenWidth = innerWidth;

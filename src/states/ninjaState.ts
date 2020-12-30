@@ -8,6 +8,7 @@ import { Velocity } from '../interfaces/velocity';
 export class NinjaState {
     animations: NinjaAnimations;
     attacking: boolean;
+    attackUsed: boolean;
     collisionDetectionBox: Box;
     currentFrame: number;
     currentImage: HTMLImageElement;
@@ -35,6 +36,7 @@ export class NinjaState {
     constructor() {
         this.animations = new NinjaAnimations();
         this.attacking = false;
+        this.attackUsed = false;
         this.currentFrame = 0;
         this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
         this.currentState = AnimationTypes.IDLE_RIGHT;
@@ -44,7 +46,7 @@ export class NinjaState {
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 12, y: 6 };
+        this.position = { x: 14, y: 6 };
         this.movementSpeed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
         this.gravity = .05;
@@ -74,5 +76,6 @@ export class NinjaState {
                 h: this.currentImage.height / this.SPRITE_SIZER + 4
             }
         };
+
     }
 }
