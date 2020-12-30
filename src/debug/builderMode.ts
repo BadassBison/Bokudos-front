@@ -1,6 +1,5 @@
 import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { DebugMenu } from './debugMenu';
 import { StageTile } from '../objects/stageTile';
 import { DebugMode } from './debugMode';
 
