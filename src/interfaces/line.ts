@@ -1,4 +1,4 @@
-import {Point} from "./point";
+import { Point } from './point';
 
 export interface Line {
     p1: Point,

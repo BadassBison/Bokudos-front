@@ -1,12 +1,12 @@
-import {Keys} from '../interfaces/keys';
+import { Keys } from '../interfaces/keys';
 
-import {AnimationTypes} from '../constants/animationTypes';
-import {Dimensions} from '../interfaces/dimensions';
-import {State} from '../states/rootState';
-import {NinjaState} from '../states/ninjaState';
-import {RenderingUtilities} from '../utilites/renderingUtilities';
-import {UpdateObject} from '../interfaces/updateObject';
-import {CollisionUtilities} from '../utilites/collisionUtilities';
+import { AnimationTypes } from '../constants/animationTypes';
+import { Dimensions } from '../interfaces/dimensions';
+import { State } from '../states/rootState';
+import { NinjaState } from '../states/ninjaState';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { UpdateObject } from '../interfaces/updateObject';
+import { CollisionUtilities } from '../utilites/collisionUtilities';
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -37,7 +37,7 @@ export class Ninja implements UpdateObject {
             velocity.dx -= this.state.movementSpeed;
         }
         if (velocity.dy > -this.state.terminalVelocity) {
-            velocity.dy -= this.state.gravity;
+            velocity.dy = Math.min(velocity.dy - this.state.gravity, -this.state.terminalVelocity);
         }
 
         const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);

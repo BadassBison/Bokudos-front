@@ -4,7 +4,6 @@ import { Background } from '../objects/background';
 import { DebugMode } from '../debug/debugMode';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { Keys } from '../interfaces/keys';
-import { dropRightWhile } from 'lodash';
 
 export class BuilderModeEngine {
 

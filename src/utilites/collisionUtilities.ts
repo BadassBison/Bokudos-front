@@ -1,8 +1,8 @@
-import {Point} from "../interfaces/point";
-import {Box} from "../interfaces/box";
-import {State} from "../states/rootState";
-import {Velocity} from "../interfaces/velocity";
-import {StageTile} from "../objects/stageTile";
+import { Point } from '../interfaces/point';
+import { Box } from '../interfaces/box';
+import { State } from '../states/rootState';
+import { Velocity } from '../interfaces/velocity';
+import { StageTile } from '../objects/stageTile';
 
 export class CollisionUtilities {
 
@@ -50,8 +50,8 @@ export class CollisionUtilities {
                 // check the alignment of the box to ensure its in the same horizontal space
                 if (this.hasOverlap(topLeft.x, bottomRight.x, tile.col, tile.col + 1)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
-                    if (this.hasOverlap(topLeft.y, topLeft.y + velocity.dy, tile.row - 1 , tile.row)) {
-                        modification =  topLeft.y + velocity.dy - (tile.row -1);
+                    if (this.hasOverlap(topLeft.y, topLeft.y + velocity.dy, tile.row - 1, tile.row)) {
+                        modification = topLeft.y + velocity.dy - (tile.row - 1);
                         velocity.dy -= modification;
                     }
                 }
@@ -59,10 +59,10 @@ export class CollisionUtilities {
                 // check the alignment of the box to ensure its in the same horizontal space
                 if (this.hasOverlap(topLeft.x, bottomRight.x, tile.col, tile.col + 1)) {
                     // if the box will be moved beyond the tile boundaries, then update the velocity based off of tile physics
-                    if (this.hasOverlap(bottomRight.y + velocity.dy, bottomRight.y, tile.row - 1 , tile.row)) {
+                    if (this.hasOverlap(bottomRight.y + velocity.dy, bottomRight.y, tile.row - 1, tile.row)) {
                         modification = (tile.row) - (bottomRight.y + velocity.dy);
                         velocity.dy += modification;
-                        if(Math.abs(velocity.dy) < 0.00001) {
+                        if (Math.abs(velocity.dy) < 0.00001) {
                             velocity.dy = 0;
                         }
                     }

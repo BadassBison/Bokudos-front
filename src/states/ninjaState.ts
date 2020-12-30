@@ -49,7 +49,7 @@ export class NinjaState {
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
         this.gravity = .05;
         this.velocity = { dx: 0, dy: 0 };
-        this.terminalVelocity = .35;
+        this.terminalVelocity = .75;
         this.jumpSpeed = .75;
 
         this.hitboxOffset = {

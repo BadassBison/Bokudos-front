@@ -1,6 +1,5 @@
 import { Point } from '../interfaces/point';
 import { Dimensions } from '../interfaces/dimensions';
-import { Line } from '../interfaces/line';
 import { State } from '../states/rootState';
 import { GridArea } from '../interfaces/gridArea';
 
