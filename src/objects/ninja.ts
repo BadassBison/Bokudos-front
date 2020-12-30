@@ -78,6 +78,7 @@ export class Ninja implements UpdateObject {
             if(this.state.attacking) {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_ATTACK_RIGHT : AnimationTypes.JUMP_ATTACK_LEFT;
             } else {
+                this.state.currentFrame = -1;
                 this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
             }
         }
@@ -111,7 +112,10 @@ export class Ninja implements UpdateObject {
         this.state.frameCount %= this.state.frameDelay;
 
         if (this.state.frameCount === 0) {
-            this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
+            // when jumping, we don't want to cycle through the animations, and instead just stay on the last frame (may want a separate falling animation later)
+            if(!this.state.jumping || this.state.currentFrame + 1 < this.state.framesPerAnimation) {
+                this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
+            }
             this.state.currentImage = this.state.animations.getAnimation(this.state.currentState).getImages()[this.state.currentFrame];
         }
     }
