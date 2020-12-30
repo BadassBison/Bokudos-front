@@ -8,12 +8,14 @@
     "start": "webpack-dev-server",
     "start:open": "webpack-dev-server --open",
     "watch": "webpack --watch",
+    "test": "jasmine",
     "clean:branches": "git branch | grep -v \"master\" | xargs git branch -D"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jasmine": "^3.6.3",
     "lodash": "^4.17.19"
   },
   "devDependencies": {
