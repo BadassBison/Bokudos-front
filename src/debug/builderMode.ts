@@ -26,17 +26,17 @@ export class BuilderMode {
 
     static removeBuilderButton() {
         const btn = document.querySelector('.builderBtn');
-        btn.remove();
+        if (btn) { btn.remove(); }
     }
 
     static activateBuilderButton() {
         const btn = document.querySelector('.builderBtn');
-        btn.classList.add('active');
+        if (btn) { btn.classList.add('active'); }
     }
 
     static deactivateBuilderButton() {
         const btn = document.querySelector('.builderBtn');
-        btn.classList.remove('active');
+        if (btn) { btn.classList.remove('active'); }
     }
 
     static toggleBuilder() {
@@ -79,7 +79,7 @@ export class BuilderMode {
 
     static removeBuilderMenu() {
         const builderMode = document.querySelector('.builder-mode');
-        builderMode.remove();
+        if (builderMode) { builderMode.remove(); }
     }
 
     static addPlatformTileOptions(builder: HTMLElement): void {
