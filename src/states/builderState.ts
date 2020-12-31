@@ -5,7 +5,7 @@ export class BuilderState {
 
     builderMode: boolean;
     builderEngine: BuilderModeEngine;
-    tileSelector: HTMLElement;
+    tileSelector?: HTMLElement;
     tileSelectorCheckbox: HTMLInputElement;
     tileSelectorOpen: boolean;
     selectedTile: HTMLElement;
