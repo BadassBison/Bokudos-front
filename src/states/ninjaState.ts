@@ -4,6 +4,7 @@ import { Box } from '../interfaces/box';
 import { Dimensions } from '../interfaces/dimensions';
 import { Point } from '../interfaces/point';
 import { Velocity } from '../interfaces/velocity';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
 
 export class NinjaState {
     animations: NinjaAnimations;
@@ -44,7 +45,7 @@ export class NinjaState {
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 12, y: 6 };
+        this.position = { x: 20, y: 6 };
         this.movementSpeed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
         this.gravity = .05;
@@ -74,5 +75,10 @@ export class NinjaState {
                 h: this.currentImage.height / this.SPRITE_SIZER + 4
             }
         };
+    }
+
+    async loadAssets() {
+        await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_RIGHT].getImages());
+        await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_LEFT].getImages());
     }
 }

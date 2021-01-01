@@ -12,13 +12,18 @@ import '../styles.css';
 export class Game {
 
   state: GameState;
+  loaded: boolean;
 
   constructor() {
-    this.state = State.gameState;
-    this.state.assets = [new Ninja()];
-    this.state.renderingEngine = new RenderingEngine();
-    this.state.physicsEngine = new PhysicsEngine();
-    RenderingUtilities.setDimensions();
+    this.loaded = false;
+    State.BuildState().then(() => {
+      this.state = State.gameState;
+      this.state.assets = [new Ninja()];
+      this.state.renderingEngine = new RenderingEngine();
+      this.state.physicsEngine = new PhysicsEngine();
+      RenderingUtilities.setDimensions();
+      this.loaded = true;
+    });
   }
 
   parseKey(key: string, pressed: boolean) {
@@ -108,7 +113,8 @@ export class Game {
         getStages: () => APIUtilities.getStages(),
         getStage: (stageId: number) => APIUtilities.getStage(stageId),
         searchStageByName: (searchTerm: string) => APIUtilities.searchStagesByName(searchTerm),
-        getRegions: () => APIUtilities.getRegions()
+        getRegions: () => APIUtilities.getRegions(),
+        getRegionsForStage: (stageId: number) => APIUtilities.getRegionsForStage(stageId)
       }
     };
   }
@@ -120,12 +126,15 @@ export class Game {
   run(): void {
 
     setTimeout(() => {
-      if (!this.state.paused) {
-        this.state.renderingEngine.run();
-        this.state.physicsEngine.run();
+      if (this.loaded) {
+        if (!this.state.paused) {
+          this.state.renderingEngine.run();
+          this.state.physicsEngine.run();
+        }
       }
       this.run();
-    }, this.state.defaultFrameDelay);
+      // }, this.state.defaultFrameDelay);
+    }, 1000 / 60);
   }
 
   start(): void {

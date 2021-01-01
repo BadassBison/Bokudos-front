@@ -6,25 +6,34 @@ import { BackgroundState } from './backgroundState';
 import { TileSetState } from './tileSetState';
 import { BuilderState } from './builderState';
 
-/*
- * This state is a global object. The parent of the state should only mutate its state and no other
- */
-export const State: StateInterface = {
-    backgroundState: new BackgroundState(),
-    builderState: new BuilderState(),
-    debugState: new DebugState(),
-    gameState: new GameState(),
-    ninjaState: new NinjaState(),
-    stageState: new StageState(),
-    tileSetState: new TileSetState()
-};
+export class State {
+    static backgroundState: BackgroundState;
+    static builderState: BuilderState;
+    static debugState: DebugState;
+    static gameState: GameState;
+    static ninjaState: NinjaState;
+    static stageState: StageState;
+    static tileSetState: TileSetState;
 
-export interface StateInterface {
-    backgroundState: BackgroundState;
-    builderState: BuilderState;
-    debugState: DebugState;
-    gameState: GameState;
-    ninjaState: NinjaState;
-    stageState: StageState;
-    tileSetState: TileSetState;
+    static async BuildState() {
+        this.backgroundState = new BackgroundState();
+        this.builderState = new BuilderState();
+        this.debugState = new DebugState();
+        this.gameState = new GameState();
+        this.ninjaState = new NinjaState();
+        await this.ninjaState.loadAssets();
+        this.stageState = new StageState();
+        await this.stageState.tilePrep();
+        this.tileSetState = new TileSetState();
+    }
 }
+
+// export interface StateInterface {
+//     backgroundState: BackgroundState;
+//     builderState: BuilderState;
+//     debugState: DebugState;
+//     gameState: GameState;
+//     ninjaState: NinjaState;
+//     stageState: StageState;
+//     tileSetState: TileSetState;
+// }

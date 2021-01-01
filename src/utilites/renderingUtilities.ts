@@ -148,4 +148,13 @@ export class RenderingUtilities {
         return viewableGridArea;
     }
 
+    static async loadImages(images: HTMLImageElement[]) {
+        return new Promise((resolve, reject) => {
+            for (const img of images) {
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+            }
+        });
+    }
+
 }

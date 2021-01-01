@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Region } from '../interfaces/region';
 
 export class APIUtilities {
 
@@ -20,6 +21,12 @@ export class APIUtilities {
   static async getRegions() {
     const regions = await this.get(this.stageBuilderApiUrl + this.regionEndpoint);
     console.log('All Regions: ', regions);
+    return regions;
+  }
+
+  static async getRegionsForStage(stageId: number) {
+    const regions: Region[] = await this.get<Region[]>(this.stageBuilderApiUrl + this.regionEndpoint + stageId);
+    console.log(`All Regions for StageId ${stageId}: `, regions);
     return regions;
   }
 
