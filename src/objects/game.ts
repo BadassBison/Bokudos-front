@@ -8,22 +8,22 @@ import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
 import { BuilderMode } from '../debug/builderMode';
 import '../styles.css';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { StageApiHelpers } from '../http/stageApiHelpers';
 
 export class Game {
 
   state: GameState;
-  loaded: boolean;
 
-  constructor() {
-    this.loaded = false;
-    State.BuildState().then(() => {
-      this.state = State.gameState;
-      this.state.assets = [new Ninja()];
-      this.state.renderingEngine = new RenderingEngine();
-      this.state.physicsEngine = new PhysicsEngine();
-      RenderingUtilities.setDimensions();
-      this.loaded = true;
-    });
+  constructor() { }
+
+  async buildState(): Promise<void> {
+    await State.BuildState();
+    this.state = State.gameState;
+    this.state.assets = [new Ninja()];
+    this.state.renderingEngine = new RenderingEngine();
+    this.state.physicsEngine = new PhysicsEngine();
+    RenderingUtilities.setDimensions();
   }
 
   parseKey(key: string, pressed: boolean) {
@@ -110,36 +110,37 @@ export class Game {
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
       api: {
-        getStages: () => APIUtilities.getStages(),
-        getStage: (stageId: number) => APIUtilities.getStage(stageId),
-        searchStageByName: (searchTerm: string) => APIUtilities.searchStagesByName(searchTerm),
-        getRegions: () => APIUtilities.getRegions(),
-        getRegionsForStage: (stageId: number) => APIUtilities.getRegionsForStage(stageId)
+        getStages: () => StageApiHelpers.getStages(),
+        getStage: (stageId: number) => StageApiHelpers.getStage(stageId),
+        searchStageByName: (searchTerm: string) => StageApiHelpers.searchStagesByName(searchTerm),
+        getRegions: () => RegionApiHelpers.getRegions(),
+        getRegionsForStage: (stageId: number) => RegionApiHelpers.getRegionsForStage(stageId),
+        getSpecificRegionForStage: (stageId: number, row: number, column: number) => RegionApiHelpers.getSpecificRegionForStage(stageId, row, column)
       }
     };
   }
 
-  getCanvas(): { [key: string]: HTMLCanvasElement } {
-    return { canvas: State.gameState.canvas.canvasElement, bgCanvas: State.backgroundState.bgCanvas.canvasElement };
+  setCanvas(): void {
+    document.body.prepend(State.backgroundState.bgCanvas.canvasElement, State.gameState.canvas.canvasElement);
   }
 
   run(): void {
 
     setTimeout(() => {
-      if (this.loaded) {
-        if (!this.state.paused) {
-          this.state.renderingEngine.run();
-          this.state.physicsEngine.run();
-        }
+      if (!this.state.paused) {
+        this.state.renderingEngine.run();
+        this.state.physicsEngine.run();
       }
       this.run();
-      // }, this.state.defaultFrameDelay);
-    }, 1000 / 60);
+    }, this.state.defaultFrameDelay);
   }
 
-  start(): void {
-    this.setupEventListeners();
-    this.setupWindow();
-    this.run();
+  static async start(): Promise<void> {
+    const game = new Game();
+    await game.buildState();
+    game.setupEventListeners();
+    game.setupWindow();
+    game.setCanvas();
+    game.run();
   }
 }

@@ -74,11 +74,32 @@ export class BuilderMode {
         const builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
         this.addPlatformTileOptions(builderMenu);
         RenderingUtilities.appendNodeToBody(builderMenu);
+        this.addSaveButton();
     }
 
     static removeBuilderMenu() {
         const builderMode = document.querySelector('.builder-mode');
-        if (builderMode) { builderMode.remove(); }
+        if (builderMode) {
+            builderMode.remove();
+            this.removeSaveButton();
+        }
+    }
+
+    static addSaveButton() {
+        const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
+        saveBtn.addEventListener('click', async () => await this.saveStage());
+        RenderingUtilities.appendNodeToBody(saveBtn);
+    }
+
+    static removeSaveButton() {
+        const saveBtn = document.querySelector('.builder--saveBtn');
+        saveBtn.remove();
+    }
+
+    static async saveStage(): Promise<void> {
+        console.clear();
+        console.log('SavingStage');
+        await State.stageState.saveStage();
     }
 
     static addPlatformTileOptions(builder: HTMLElement): void {
@@ -245,9 +266,7 @@ export class BuilderMode {
     }
 
     static cleanup() {
-        if (State.builderState.builderMode) {
-            this.closeBuilderMode();
-            this.removeBuilderButton();
-        }
+        this.removeBuilderButton();
+        if (State.builderState.builderMode) { this.closeBuilderMode(); }
     }
 }

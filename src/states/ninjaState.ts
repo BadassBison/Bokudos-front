@@ -77,8 +77,27 @@ export class NinjaState {
         };
     }
 
-    async loadAssets() {
-        await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_RIGHT].getImages());
-        await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_LEFT].getImages());
-    }
+    // async loadAssets() {
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.IDLE_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.ATTACK_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.ATTACK_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.RUN_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.RUN_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.CLIMB].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.DEAD_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.DEAD_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.GLIDE_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.GLIDE_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_ATTACK_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_ATTACK_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_THROW_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.JUMP_THROW_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.SLIDE_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.SLIDE_LEFT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.THROW_RIGHT].getImages());
+    //     await RenderingUtilities.loadImages(this.animations.animations[AnimationTypes.THROW_LEFT].getImages());
+    // }
 }

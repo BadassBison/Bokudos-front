@@ -51,19 +51,15 @@ export class DebugMenu {
             const menu = document.querySelector('.menu');
             menu.remove();
 
-
             const saveBtn = document.querySelector('.saveBtn');
             saveBtn.remove();
         }
     }
 
     static addSaveButton() {
-        const saveBtn = document.createElement('button');
-        saveBtn.classList.add('button', 'saveBtn');
-        saveBtn.innerHTML = 'Save';
+        const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'saveBtn']);
         saveBtn.addEventListener('click', () => this.saveMenuOptions());
-        const body = document.querySelector('body');
-        body.appendChild(saveBtn);
+        RenderingUtilities.appendNodeToBody(saveBtn);
     }
 
     static saveMenuOptions() {

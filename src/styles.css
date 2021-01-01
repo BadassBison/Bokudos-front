@@ -60,6 +60,16 @@ label {
     height: 50px;
 }
 
+.builder--saveBtn {
+    background: rgb(34, 228, 95);
+    color: white;
+    position: absolute;
+    top: 375px;
+    left: 50px;
+    width: 100px;
+    height: 50px;
+}
+
 .menuBtn {
     position: absolute;
     top: 50px;

@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Region } from '../interfaces/region';
 
 export class APIUtilities {
 
@@ -7,52 +6,16 @@ export class APIUtilities {
   // https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
 
   static readonly stageBuilderApiUrl = 'http://localhost:8081/';
-  static readonly stageEndpoint = 'stage/';
-  static readonly regionEndpoint = 'region/';
   static readonly searchEndpoint = 'search?';
-
-  // TODO: Move this specific api method someplace more reasonable
-  static async getStages() {
-    const stages = await this.get(this.stageBuilderApiUrl + this.stageEndpoint);
-    console.log('All Stages: ', stages);
-    return stages;
-  }
-
-  static async getRegions() {
-    const regions = await this.get(this.stageBuilderApiUrl + this.regionEndpoint);
-    console.log('All Regions: ', regions);
-    return regions;
-  }
-
-  static async getRegionsForStage(stageId: number) {
-    const regions: Region[] = await this.get<Region[]>(this.stageBuilderApiUrl + this.regionEndpoint + stageId);
-    console.log(`All Regions for StageId ${stageId}: `, regions);
-    return regions;
-  }
-
-  static async getStage(stageId: number) {
-    if (!stageId) { return; }
-    const stage = await this.get(this.stageBuilderApiUrl + this.stageEndpoint + stageId);
-    console.log(`Stage with id ${stageId}: `, stage);
-    return stage;
-  }
-
-  static async searchStagesByName(searchTerm: string) {
-    if (!searchTerm) { return; }
-    const queryString = `${this.searchEndpoint}name=${searchTerm}`;
-    const stages = await this.get(this.stageBuilderApiUrl + this.stageEndpoint + queryString);
-    console.log(`Stages with name similiar to ${searchTerm}: `, stages);
-    return stages;
-  }
 
   static async get<T>(url: string): Promise<T> {
     const response: T = await this.httpRequest<T>('GET', url);
     return response;
   }
 
-  static async post<T, R>(url: string, request: T): Promise<R> {
+  static async post<T>(url: string, request: T): Promise<T> {
     const body = JSON.stringify(request);
-    const response: R = await this.httpRequest<R>('POST', url, body);
+    const response: T = await this.httpRequest<T>('POST', url, body);
     return response;
   }
 

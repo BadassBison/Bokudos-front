@@ -20,20 +20,10 @@ export class State {
         this.builderState = new BuilderState();
         this.debugState = new DebugState();
         this.gameState = new GameState();
-        this.ninjaState = new NinjaState();
-        await this.ninjaState.loadAssets();
-        this.stageState = new StageState();
-        await this.stageState.tilePrep();
         this.tileSetState = new TileSetState();
+        this.ninjaState = new NinjaState();
+        // await this.ninjaState.loadAssets();
+        this.stageState = new StageState();
+        await this.stageState.tilePrep(0, 0);
     }
 }
-
-// export interface StateInterface {
-//     backgroundState: BackgroundState;
-//     builderState: BuilderState;
-//     debugState: DebugState;
-//     gameState: GameState;
-//     ninjaState: NinjaState;
-//     stageState: StageState;
-//     tileSetState: TileSetState;
-// }
