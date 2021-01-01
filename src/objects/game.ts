@@ -3,6 +3,7 @@ import { GameState } from '../states/gameState';
 import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { APIUtilities } from '../utilites/apiUtilities';
 import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
 import { BuilderMode } from '../debug/builderMode';
@@ -79,24 +80,7 @@ export class Game {
     }
   }
 
-  getCanvas(): { [key: string]: HTMLCanvasElement } {
-    return { canvas: State.gameState.canvas.canvasElement, bgCanvas: State.backgroundState.bgCanvas.canvasElement };
-  }
-
-  run(): void {
-    // TODO: Division is costly, better we calculate this only when the fps changes
-    const delay = this.state.framesPerSecond > 0 ? 1000 / this.state.framesPerSecond : 0;
-    this.state.paused = delay <= 0;
-    setTimeout(() => {
-      if (!this.state.paused) {
-        this.state.renderingEngine.run();
-        this.state.physicsEngine.run();
-      }
-      this.run();
-    }, delay);
-  }
-
-  start(): void {
+  setupEventListeners(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
 
@@ -114,10 +98,39 @@ export class Game {
         this.state.renderingEngine.run();
       }
     }));
+  }
 
-    (window as any).cycleFrames = (n: number) => RenderingUtilities.cycleFrames(n);
-    (window as any).pauseGame = (pause: boolean) => RenderingUtilities.pauseGame(pause);
+  setupWindow(): void {
+    (window as any).bokudos = {
+      cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
+      pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
+      api: {
+        getStages: () => APIUtilities.getStages(),
+        getStage: (stageId: number) => APIUtilities.getStage(stageId),
+        searchStageByName: (searchTerm: string) => APIUtilities.searchStagesByName(searchTerm),
+        getRegions: () => APIUtilities.getRegions()
+      }
+    };
+  }
 
+  getCanvas(): { [key: string]: HTMLCanvasElement } {
+    return { canvas: State.gameState.canvas.canvasElement, bgCanvas: State.backgroundState.bgCanvas.canvasElement };
+  }
+
+  run(): void {
+
+    setTimeout(() => {
+      if (!this.state.paused) {
+        this.state.renderingEngine.run();
+        this.state.physicsEngine.run();
+      }
+      this.run();
+    }, this.state.defaultFrameDelay);
+  }
+
+  start(): void {
+    this.setupEventListeners();
+    this.setupWindow();
     this.run();
   }
 }

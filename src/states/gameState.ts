@@ -13,6 +13,7 @@ export class GameState {
     physicsEngine: PhysicsEngine;
     keys: Keys;
     defaultFramesPerSecond: number;
+    defaultFrameDelay: number;
     framesPerSecond: number;
     gameUnit: number;
     screenHeight: number;
@@ -41,6 +42,7 @@ export class GameState {
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
         this.position = { x: 0, y: 0 };
         this.defaultFramesPerSecond = 60;
+        this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
         this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;
         this.defaultColor = 'black';

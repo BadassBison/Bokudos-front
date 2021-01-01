@@ -30,7 +30,7 @@ export class Ninja implements UpdateObject {
         if (up && !this.state.jumping && !this.state.jumpUsed) {
             velocity.dy += this.state.jumpSpeed;
         }
-        if(right !== left) {
+        if (right !== left) {
             velocity.dx = right ? this.state.movementSpeed : -this.state.movementSpeed;
         }
         if (velocity.dy > -this.state.terminalVelocity) {
@@ -53,10 +53,10 @@ export class Ninja implements UpdateObject {
 
     setCurrentAnimationState() {
         // if the velocity is 0, keep the direction that the character was last facing
-        if(this.state.velocity.dx !== 0) {
+        if (this.state.velocity.dx !== 0) {
             this.state.movingRight = this.state.velocity.dx > 0;
         }
-        if(this.state.velocity.dy === 0) {
+        if (this.state.velocity.dy === 0) {
             this.state.jumping = false;
         } else if (!this.state.jumping) {
             this.state.jumping = true;
@@ -64,8 +64,8 @@ export class Ninja implements UpdateObject {
             this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_RIGHT : AnimationTypes.JUMP_LEFT;
         }
 
-        if(!this.state.jumping) {
-            if(this.state.velocity.dx === 0) {
+        if (!this.state.jumping) {
+            if (this.state.velocity.dx === 0) {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
             } else {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.RUN_RIGHT : AnimationTypes.RUN_LEFT;
