@@ -5,6 +5,9 @@ export class BuilderState {
 
     builderMode: boolean;
     builderEngine: BuilderModeEngine;
+    builderMenu: HTMLElement;
+    saveBtn: HTMLElement;
+    builderMenuOpen: boolean;
     tileSelector?: HTMLElement;
     tileSelectorCheckbox: HTMLInputElement;
     tileSelectorOpen: boolean;
@@ -20,6 +23,7 @@ export class BuilderState {
     constructor() {
         this.builderMode = false;
         this.builderEngine = new BuilderModeEngine();
+        this.builderMenuOpen = false;
         this.tileSelectorOpen = false;
         this.handleMouseClick = false;
         this.removingTiles = false;

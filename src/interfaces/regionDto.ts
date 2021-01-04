@@ -1,4 +1,4 @@
-export interface Region {
+export interface RegionDto {
   stageId: number;
   row: number;
   column: number;

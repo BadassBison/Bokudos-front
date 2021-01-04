@@ -2,6 +2,8 @@ import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { StageTile } from '../objects/stageTile';
 import { DebugMode } from './debugMode';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { RegionDto } from '../interfaces/regionDto';
 
 export class BuilderMode {
 
@@ -19,7 +21,7 @@ export class BuilderMode {
 
     static addBuilderButton() {
         const builderBtn = RenderingUtilities.nodeBuilder('button', 'Builder', ['button', 'builderBtn']);
-        builderBtn.addEventListener('click', () => this.toggleBuilder());
+        builderBtn.addEventListener('click', () => this.toggleBuilderMode());
         RenderingUtilities.appendNodeToBody(builderBtn);
     }
 
@@ -38,9 +40,9 @@ export class BuilderMode {
         if (btn) { btn.classList.remove('active'); }
     }
 
-    static toggleBuilder() {
+    static toggleBuilderMode() {
         if (State.builderState.builderMode) {
-            this.closeBuilderMode();
+            this.toggleBuilderMenu();
         } else {
             this.openBuilderMode();
         }
@@ -71,35 +73,72 @@ export class BuilderMode {
     }
 
     static addBuilderMenu() {
-        const builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
-        this.addPlatformTileOptions(builderMenu);
-        RenderingUtilities.appendNodeToBody(builderMenu);
+        State.builderState.builderMenuOpen = true;
+        State.builderState.builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
+        this.addPlatformTileOptions(State.builderState.builderMenu);
+        RenderingUtilities.appendNodeToBody(State.builderState.builderMenu);
         this.addSaveButton();
     }
 
     static removeBuilderMenu() {
-        const builderMode = document.querySelector('.builder-mode');
-        if (builderMode) {
-            builderMode.remove();
+        State.builderState.builderMenuOpen = false;
+        if (State.builderState.builderMenu) {
+            State.builderState.builderMenu.remove();
+            State.builderState.builderMenu = null;
             this.removeSaveButton();
         }
     }
 
+    static toggleBuilderMenu() {
+        if (State.builderState.builderMenuOpen) {
+            this.hideBuilderMenu();
+        } else {
+            this.showBuilderMenu();
+        }
+        this.toggleSaveButton();
+    }
+
+    static hideBuilderMenu() {
+        State.builderState.builderMenuOpen = false;
+        State.builderState.builderMenu.classList.add('hidden');
+    }
+
+    static showBuilderMenu() {
+        State.builderState.builderMenuOpen = true;
+        State.builderState.builderMenu.classList.remove('hidden');
+    }
+
     static addSaveButton() {
-        const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
-        saveBtn.addEventListener('click', async () => await this.saveStage());
-        RenderingUtilities.appendNodeToBody(saveBtn);
+        State.builderState.saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
+        State.builderState.saveBtn.addEventListener('click', async () => await this.saveStage());
+        RenderingUtilities.appendNodeToBody(State.builderState.saveBtn);
     }
 
     static removeSaveButton() {
-        const saveBtn = document.querySelector('.builder--saveBtn');
-        saveBtn.remove();
+        State.builderState.saveBtn.remove();
+    }
+
+    static toggleSaveButton() {
+        if (State.builderState.builderMenuOpen) {
+            State.builderState.saveBtn.classList.remove('hidden');
+        } else {
+            State.builderState.saveBtn.classList.add('hidden');
+        }
     }
 
     static async saveStage(): Promise<void> {
         console.clear();
         console.log('SavingStage');
-        await State.stageState.saveStage();
+
+        const requests: Promise<RegionDto>[] = [];
+
+        State.stageState.regions.forEach((idx: string) => {
+            const pos = idx.split('-');
+            const regionColumn = Number(pos[0]);
+            const regionRow = Number(pos[1]);
+            requests.push(RegionApiHelpers.postRegion(regionRow, regionColumn));
+        });
+        Promise.all(requests);
     }
 
     static addPlatformTileOptions(builder: HTMLElement): void {

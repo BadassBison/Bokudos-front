@@ -45,7 +45,7 @@ export class NinjaState {
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 20, y: 6 };
+        this.position = { x: 18, y: 13 };
         this.movementSpeed = .25;
         this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
         this.gravity = .05;

@@ -5,6 +5,7 @@ import { StageState } from './stageState';
 import { BackgroundState } from './backgroundState';
 import { TileSetState } from './tileSetState';
 import { BuilderState } from './builderState';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
 
 export class State {
     static backgroundState: BackgroundState;
@@ -24,6 +25,6 @@ export class State {
         this.ninjaState = new NinjaState();
         // await this.ninjaState.loadAssets();
         this.stageState = new StageState();
-        await this.stageState.tilePrep(0, 0);
+        RegionApiHelpers.getRegionForStage(this.gameState.defaultStageId, 0, 0);
     }
 }

@@ -105,17 +105,18 @@ export class Game {
     }));
   }
 
-  setupWindow(): void {
+  setupWindowDebugObject(): void {
     (window as any).bokudos = {
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
       api: {
-        getStages: () => StageApiHelpers.getStages(),
-        getStage: (stageId: number) => StageApiHelpers.getStage(stageId),
+        getPublishedStages: () => StageApiHelpers.getPublishedStages(),
+        getUserStages: (userId: number) => StageApiHelpers.getStagesByUser(userId),
+        getStageById: (stageId: number) => StageApiHelpers.getStageById(stageId),
         searchStageByName: (searchTerm: string) => StageApiHelpers.searchStagesByName(searchTerm),
         getRegions: () => RegionApiHelpers.getRegions(),
-        getRegionsForStage: (stageId: number) => RegionApiHelpers.getRegionsForStage(stageId),
-        getSpecificRegionForStage: (stageId: number, row: number, column: number) => RegionApiHelpers.getSpecificRegionForStage(stageId, row, column)
+        getAllRegionsForStage: (stageId: number) => RegionApiHelpers.getAllRegionsForStage(stageId),
+        getRegionForStage: (stageId: number, row: number, column: number) => RegionApiHelpers.getRegionForStage(stageId, row, column)
       }
     };
   }
@@ -139,7 +140,7 @@ export class Game {
     const game = new Game();
     await game.buildState();
     game.setupEventListeners();
-    game.setupWindow();
+    game.setupWindowDebugObject();
     game.setCanvas();
     game.run();
   }

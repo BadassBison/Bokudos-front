@@ -12,6 +12,7 @@ export class GameState {
     renderingEngine: RenderingEngine;
     physicsEngine: PhysicsEngine;
     keys: Keys;
+    defaultStageId: number;
     defaultFramesPerSecond: number;
     defaultFrameDelay: number;
     framesPerSecond: number;
@@ -41,6 +42,7 @@ export class GameState {
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
         this.position = { x: 0, y: 0 };
+        this.defaultStageId = 1;
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
         this.framesPerSecond = this.defaultFramesPerSecond;
