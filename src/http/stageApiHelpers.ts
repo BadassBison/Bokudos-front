@@ -65,6 +65,12 @@ export class StageApiHelpers {
     if (!stage) { return; }
 
     const url = this.baseUrl + stage.stageId;
+    APIUtilities.put<StageDto>(url, stage);
+    return stage;
+  }
+
+  static async publishStage(stage: StageDto): Promise<StageDto> {
+
     return stage;
   }
 

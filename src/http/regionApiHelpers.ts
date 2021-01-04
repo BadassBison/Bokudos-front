@@ -2,8 +2,6 @@ import { RegionDto } from '../interfaces/regionDto';
 import { APIUtilities } from '../utilites/apiUtilities';
 import { State } from '../states/rootState';
 import { StageTile } from '../objects/stageTile';
-import { BoxSides } from '../interfaces/boxSides';
-import { Point } from '../interfaces/point';
 import { Neighbors } from '../interfaces/neighbors';
 
 export class RegionApiHelpers {
@@ -92,7 +90,7 @@ export class RegionApiHelpers {
 
     for (let row = regionRow; row < regionRow + State.stageState.regionSize; row++) {
       for (let col = regionColumn; col < regionRow + State.stageState.regionSize; col++) {
-        const gridRow = State.stageState.regionSize - row;
+        const gridRow = (regionRow + State.stageState.regionSize) - row;
         State.stageState.tiles.set(`${col}-${gridRow}`, new StageTile(gridRow, col, regionData[row][col] || '0'));
       }
     }
@@ -112,7 +110,7 @@ export class RegionApiHelpers {
 
       for (let col = regionColumn; col < regionColumn + State.stageState.regionSize; col++) {
         if (data[data.length - 1] !== 'n' && data.length !== 0) { data += ','; }
-        const gridRow = State.stageState.regionSize - row;
+        const gridRow = (regionRow + State.stageState.regionSize) - row;
         const tile = State.stageState.tiles.get(`${col}-${gridRow}`);
         data += tile ? tile.lookupValue : '0';
       }

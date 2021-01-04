@@ -3,13 +3,13 @@ import { GameState } from '../states/gameState';
 import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { APIUtilities } from '../utilites/apiUtilities';
 import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
 import { BuilderMode } from '../debug/builderMode';
-import '../styles.css';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
+import '../styles.css';
+import { Dimensions } from '../interfaces/dimensions';
 
 export class Game {
 
@@ -109,6 +109,8 @@ export class Game {
     (window as any).bokudos = {
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
+      setDimensions: (dimensions: Dimensions) => RenderingUtilities.setDimensions(dimensions),
+      panDimensions: (newSize: number) => RenderingUtilities.panDimensionsInOrOut(newSize),
       api: {
         getPublishedStages: () => StageApiHelpers.getPublishedStages(),
         getUserStages: (userId: number) => StageApiHelpers.getStagesByUser(userId),
@@ -142,6 +144,12 @@ export class Game {
     game.setupEventListeners();
     game.setupWindowDebugObject();
     game.setCanvas();
-    game.run();
+
+    // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
+    setTimeout(() => {
+      // Waiting 200 ms so the images in the Ninja can load, then setting properties that depend on image data
+      State.gameState.renderingEngine.prepare();
+      game.run();
+    }, 200);
   }
 }

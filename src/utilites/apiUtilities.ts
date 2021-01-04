@@ -17,9 +17,9 @@ export class APIUtilities {
     return response;
   }
 
-  static async put<T, R>(url: string, request: T): Promise<R> {
+  static async put<T>(url: string, request: T): Promise<T> {
     const body = JSON.stringify(request);
-    const response: R = await this.httpRequest<R>('PUT', url, body);
+    const response: T = await this.httpRequest<T>('PUT', url, body);
     return response;
   }
 

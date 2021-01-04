@@ -6,7 +6,7 @@ export class BuilderState {
     builderMode: boolean;
     builderEngine: BuilderModeEngine;
     builderMenu: HTMLElement;
-    saveBtn: HTMLElement;
+    menuButtons: HTMLElement;
     builderMenuOpen: boolean;
     tileSelector?: HTMLElement;
     tileSelectorCheckbox: HTMLInputElement;

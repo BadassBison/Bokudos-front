@@ -12,9 +12,10 @@ export class GameState {
     renderingEngine: RenderingEngine;
     physicsEngine: PhysicsEngine;
     keys: Keys;
-    defaultStageId: number;
     defaultFramesPerSecond: number;
     defaultFrameDelay: number;
+    defaultGridDimensions: Dimensions;
+    currentGridDimensions: Dimensions;
     framesPerSecond: number;
     gameUnit: number;
     screenHeight: number;
@@ -27,6 +28,10 @@ export class GameState {
     defaultColor: string;
     defaultLineWidth: number;
 
+    // Testing Properties
+    defaultGameId: number;
+    defaultStageId: number;
+    defaultUserId: number;
 
     constructor() {
         this.keys = {
@@ -45,6 +50,8 @@ export class GameState {
         this.defaultStageId = 1;
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
+        this.defaultGridDimensions = { w: 12, h: 12 };
+        this.currentGridDimensions = this.defaultGridDimensions;
         this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;
         this.defaultColor = 'black';

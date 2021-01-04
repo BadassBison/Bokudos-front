@@ -15,6 +15,34 @@ export class Ninja implements UpdateObject {
         this.state = State.ninjaState;
     }
 
+    updateStateAfterImagesLoad(): void {
+
+        this.state.currentImage = this.state.animations
+            .getAnimation(this.state.currentState)
+            .getImages()[this.state.currentFrame];
+
+        this.state.SPRITE_SIZER = this.state.currentImage.height / this.state.HEIGHT_IN_UNITS;
+
+        this.state.hitbox = {
+            position: {
+                x: this.state.position.x,
+                y: this.state.position.y - this.state.hitboxOffset.h
+            },
+            dimensions: {
+                w: this.state.currentImage.width / this.state.SPRITE_SIZER + this.state.hitboxOffset.w,
+                h: this.state.currentImage.height / this.state.SPRITE_SIZER - this.state.hitboxOffset.h
+            }
+        };
+
+        this.state.collisionDetectionBox = {
+            position: { x: this.state.position.x - 2, y: this.state.position.y + 2 },
+            dimensions: {
+                w: this.state.currentImage.width / this.state.SPRITE_SIZER + 4,
+                h: this.state.currentImage.height / this.state.SPRITE_SIZER + 4
+            }
+        };
+    }
+
     updateProperties(keys: Keys): void {
         this.updatePosition(keys);
     }

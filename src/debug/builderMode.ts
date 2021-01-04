@@ -54,6 +54,7 @@ export class BuilderMode {
         State.builderState.handleMouseClick = true;
 
         State.builderState.builderEngine.start();
+        RenderingUtilities.panDimensionsInOrOut(18);
         this.activateBuilderButton();
         this.addBuilderMenu();
         this.openTileSelector();
@@ -65,6 +66,7 @@ export class BuilderMode {
             State.builderState.builderEngine.stop();
             State.builderState.handleMouseClick = false;
 
+            RenderingUtilities.setDimensions();
             this.deactivateBuilderButton();
             this.removeBuilderMenu();
             this.removeTileSelector();
@@ -77,7 +79,7 @@ export class BuilderMode {
         State.builderState.builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
         this.addPlatformTileOptions(State.builderState.builderMenu);
         RenderingUtilities.appendNodeToBody(State.builderState.builderMenu);
-        this.addSaveButton();
+        State.builderState.builderMenu.appendChild(this.addMenuButtons());
     }
 
     static removeBuilderMenu() {
@@ -85,7 +87,6 @@ export class BuilderMode {
         if (State.builderState.builderMenu) {
             State.builderState.builderMenu.remove();
             State.builderState.builderMenu = null;
-            this.removeSaveButton();
         }
     }
 
@@ -95,7 +96,6 @@ export class BuilderMode {
         } else {
             this.showBuilderMenu();
         }
-        this.toggleSaveButton();
     }
 
     static hideBuilderMenu() {
@@ -108,27 +108,24 @@ export class BuilderMode {
         State.builderState.builderMenu.classList.remove('hidden');
     }
 
-    static addSaveButton() {
-        State.builderState.saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
-        State.builderState.saveBtn.addEventListener('click', async () => await this.saveStage());
-        RenderingUtilities.appendNodeToBody(State.builderState.saveBtn);
-    }
+    static addMenuButtons(): HTMLElement {
+        const menuButtonWrapper = RenderingUtilities.nodeBuilder('div', '', ['builder--button-wrapper']);
+        RenderingUtilities.appendNodeToBody(menuButtonWrapper);
 
-    static removeSaveButton() {
-        State.builderState.saveBtn.remove();
-    }
+        const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
+        saveBtn.addEventListener('click', async () => await this.saveStage());
+        menuButtonWrapper.appendChild(saveBtn);
 
-    static toggleSaveButton() {
-        if (State.builderState.builderMenuOpen) {
-            State.builderState.saveBtn.classList.remove('hidden');
-        } else {
-            State.builderState.saveBtn.classList.add('hidden');
-        }
+        const publishBtn = RenderingUtilities.nodeBuilder('button', 'Publish', ['button', 'builder--publishBtn']);
+        publishBtn.addEventListener('click', async () => await this.publishStage());
+        menuButtonWrapper.appendChild(publishBtn);
+
+        return menuButtonWrapper;
     }
 
     static async saveStage(): Promise<void> {
         console.clear();
-        console.log('SavingStage');
+        console.log('Saving Stage');
 
         const requests: Promise<RegionDto>[] = [];
 
@@ -139,6 +136,15 @@ export class BuilderMode {
             requests.push(RegionApiHelpers.postRegion(regionRow, regionColumn));
         });
         Promise.all(requests);
+    }
+
+    static async publishStage(): Promise<void> {
+        console.clear();
+        console.log('publishing Stage');
+
+        // await this.saveStage();
+
+        // TODO: Publish
     }
 
     static addPlatformTileOptions(builder: HTMLElement): void {
@@ -152,17 +158,23 @@ export class BuilderMode {
         State.builderState.removingTilesCheckbox = checkbox2 as HTMLInputElement;
         this.addDeleteTileCheckboxHandling(checkbox2);
 
-        const [option3, button] = this.addButton('Clear Stage');
-        this.addClearStageClickHandling(button);
+        const [option3, clearButton] = this.addButton('Clear Stage');
+        this.addClearStageClickHandling(clearButton);
 
-        RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3]);
+        // TODO:
+        const [option4, button1, button2] = this.addButtons('Zoom');
+        this.addZoomInClickHandling(button1);
+        this.addZoomOutClickHandling(button2);
+
+        RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3, option4]);
     }
 
-    static addWrapper(parentNode: HTMLElement, category: string): HTMLElement {
+    static addWrapper(parentNode: HTMLElement, category: string = ''): HTMLElement {
         const wrapper = RenderingUtilities.nodeBuilder('div', '', ['wrapper']);
-        const title = RenderingUtilities.nodeBuilder('h3', category);
-
-        wrapper.appendChild(title);
+        if (category) {
+            const title = RenderingUtilities.nodeBuilder('h3', category);
+            wrapper.appendChild(title);
+        }
         parentNode.appendChild(wrapper);
 
         return wrapper;
@@ -183,6 +195,18 @@ export class BuilderMode {
         label.appendChild(button);
 
         return [label, button];
+    }
+
+    static addButtons(name: string): HTMLElement[] {
+        const label = RenderingUtilities.nodeBuilder('label', `${name}`);
+        const button1 = RenderingUtilities.nodeBuilder('button', `+`);
+        const button2 = RenderingUtilities.nodeBuilder('button', `-`);
+        const btnWrapper = RenderingUtilities.nodeBuilder('span', '');
+        btnWrapper.appendChild(button1);
+        btnWrapper.appendChild(button2);
+        label.appendChild(btnWrapper);
+
+        return [label, button1, button2];
     }
 
     static addTileCheckboxHandling(checkbox: HTMLElement) {
@@ -206,6 +230,20 @@ export class BuilderMode {
             State.stageState.tiles.forEach((tile: StageTile) => {
                 tile.lookupValue = '00';
             });
+        });
+    }
+
+    static addZoomInClickHandling(button: HTMLElement) {
+        button.addEventListener('click', () => {
+            const { w, h } = State.gameState.currentGridDimensions;
+            RenderingUtilities.setDimensions({ w: w - 1, h: h - 1 });
+        });
+    }
+
+    static addZoomOutClickHandling(button: HTMLElement) {
+        button.addEventListener('click', () => {
+            const { w, h } = State.gameState.currentGridDimensions;
+            RenderingUtilities.setDimensions({ w: w + 1, h: h + 1 });
         });
     }
 

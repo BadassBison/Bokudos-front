@@ -8,8 +8,10 @@ import { GridArea } from '../interfaces/gridArea';
  */
 export class RenderingUtilities {
 
-    static setDimensions(minGameDimensions: Dimensions = { w: 12, h: 12 }) {
+    static setDimensions(minGameDimensions: Dimensions = State.gameState.defaultGridDimensions) {
         // when we set the dimensions of the game, determine the pixelsPerUnit conversion for later use
+        State.gameState.currentGridDimensions = minGameDimensions;
+
         const dx = innerWidth / minGameDimensions.w;
         const dy = innerHeight / minGameDimensions.h;
         State.gameState.pixelsPerUnit = Math.min(dx, dy);
@@ -21,6 +23,21 @@ export class RenderingUtilities {
             w: innerWidth,
             h: innerHeight
         };
+    }
+
+    static panDimensionsInOrOut(newSize: number) {
+        const adjustmentValue = 0.025;
+        const panDelay = 10;
+        const curDim = State.gameState.currentGridDimensions;
+        if (Math.abs(curDim.h - newSize) <= adjustmentValue) {
+            this.setDimensions({ w: newSize, h: newSize });
+        } else if (curDim.h - newSize > 0) {
+            this.setDimensions({ w: curDim.w - adjustmentValue, h: curDim.h - adjustmentValue });
+            setTimeout(() => this.panDimensionsInOrOut(newSize), panDelay);
+        } else {
+            this.setDimensions({ w: curDim.w + adjustmentValue, h: curDim.h + adjustmentValue });
+            setTimeout(() => this.panDimensionsInOrOut(newSize), panDelay);
+        }
     }
 
     static toScreenCoordinates(gameCoords: Point): Point {
