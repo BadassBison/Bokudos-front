@@ -28,6 +28,6 @@ export class State {
         // await this.ninjaState.loadAssets();
         this.stageState = new StageState();
         this.enemyState = new EnemyState();
-        RegionApiHelpers.getRegionForStage(this.gameState.defaultStageId, 0, 0);
+        RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
     }
 }

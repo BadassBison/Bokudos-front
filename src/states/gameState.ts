@@ -27,12 +27,12 @@ export class GameState {
     paused: boolean;
     defaultColor: string;
     defaultLineWidth: number;
+    timeoutId: NodeJS.Timeout;
 
-    // Testing Properties
-    defaultGameId: number;
-    defaultStageId: number;
-    defaultStageName: string;
-    defaultUserId: number;
+    stageId: number;
+    stageName: string;
+    gameId: number;
+    userId: number;
 
     constructor() {
         this.keys = {
@@ -56,9 +56,8 @@ export class GameState {
         this.paused = false;
         this.defaultColor = 'black';
         this.defaultLineWidth = 1;
-        this.defaultGameId = 1;
-        this.defaultStageId = 1;
-        this.defaultStageName = 'Default Stage';
-        this.defaultUserId = 1;
+        this.gameId = 1;
+        this.stageId = 1;
+        this.userId = 1;
     }
 }

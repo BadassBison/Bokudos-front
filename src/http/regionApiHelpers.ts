@@ -70,7 +70,7 @@ export class RegionApiHelpers {
     const url = this.baseUrl;
 
     const requestRegion: RegionDto = {
-      stageId: State.gameState.defaultStageId,
+      stageId: State.gameState.stageId,
       row,
       column,
       data: this.encodeRegionData(row, column)
