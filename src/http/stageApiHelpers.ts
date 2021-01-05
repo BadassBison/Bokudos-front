@@ -63,10 +63,11 @@ export class StageApiHelpers {
 
   static async updateStage(stage: StageDto): Promise<StageDto> {
     if (!stage) { return; }
-
+    console.log('stage', stage);
     const url = this.baseUrl + stage.stageId;
-    APIUtilities.put<StageDto>(url, stage);
-    return stage;
+    const updatedStage = await APIUtilities.put<StageDto>(url, stage);
+    console.log('updatedStage', updatedStage);
+    return updatedStage;
   }
 
 }

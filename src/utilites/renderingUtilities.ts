@@ -175,4 +175,21 @@ export class RenderingUtilities {
         });
     }
 
+    static async resizeScreenDimensions() {
+        State.gameState.canvas.canvasElement.height = innerHeight;
+        State.gameState.canvas.canvasElement.width = innerWidth;
+        State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
+        State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
+        RenderingUtilities.setDimensions(State.gameState.currentGridDimensions);
+        if (State.gameState.paused && !State.builderState.builderMode) {
+            State.gameState.renderingEngine.run();
+        }
+    }
+
+    static debounce(method: any, scope: any) {
+        clearTimeout(method._tId);
+        method._tId = setTimeout(() => {
+            method.call(scope);
+        }, 400);
+    }
 }

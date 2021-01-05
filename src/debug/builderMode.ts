@@ -132,7 +132,6 @@ export class BuilderMode {
     }
 
     static async saveStage(): Promise<void> {
-        console.clear();
         console.log('Saving Stage');
 
         const requests: Promise<RegionDto>[] = [];
@@ -147,13 +146,12 @@ export class BuilderMode {
     }
 
     static async publishStage(): Promise<void> {
-        console.clear();
         console.log('publishing Stage');
 
         await this.saveStage();
 
         const stage: StageDto = {
-            name: State.gameState.defaultStageName,
+            name: 'Testing stage for publishing',
             stageId: State.gameState.defaultStageId,
             gameId: State.gameState.defaultGameId,
             userId: State.gameState.defaultUserId,
@@ -368,7 +366,7 @@ export class BuilderMode {
     }
 
     static cleanup() {
-        this.removeBuilderButton();
         if (State.builderState.builderMode) { this.closeBuilderMode(); }
+        this.removeBuilderButton();
     }
 }

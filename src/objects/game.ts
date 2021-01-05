@@ -95,16 +95,7 @@ export class Game {
     canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
     canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
 
-    window.addEventListener('resize', (ev => {
-      State.gameState.canvas.canvasElement.height = innerHeight;
-      State.gameState.canvas.canvasElement.width = innerWidth;
-      State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
-      State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
-      RenderingUtilities.setDimensions();
-      if (this.state.paused) {
-        this.state.renderingEngine.run();
-      }
-    }));
+    window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
   }
 
   setupWindowDebugObject(): void {
@@ -149,9 +140,9 @@ export class Game {
 
     // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
     setTimeout(() => {
-      // Waiting 200 ms so the images in the Ninja can load, then setting properties that depend on image data
+      // Waiting 300 ms so the images in the Ninja can load, then setting properties that depend on image data
       State.gameState.renderingEngine.prepare();
       game.run();
-    }, 200);
+    }, 300);
   }
 }

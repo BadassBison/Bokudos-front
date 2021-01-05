@@ -158,7 +158,7 @@ export class DebugMenu {
     }
 
     static cleanup() {
-        this.removeMenuButton();
         if (State.debugState.menuOpen) { this.closeMenu(); }
+        this.removeMenuButton();
     }
 }
