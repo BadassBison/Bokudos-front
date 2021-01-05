@@ -23,10 +23,6 @@ export class AnimationTypes {
     public static readonly JUMP_THROW_RIGHT = 'JUMP_THROW_RIGHT';
     public static readonly JUMP_THROW_LEFT = 'JUMP_THROW_LEFT';
 
-    public static readonly AIR_ANIMATIONS = [
-        AnimationTypes.GLIDE_LEFT, AnimationTypes.GLIDE_RIGHT,
-        AnimationTypes.JUMP_LEFT, AnimationTypes.JUMP_RIGHT,
-        AnimationTypes.JUMP_ATTACK_LEFT, AnimationTypes.JUMP_ATTACK_RIGHT,
-        AnimationTypes.JUMP_THROW_LEFT, AnimationTypes.JUMP_THROW_RIGHT,
-    ];
+    public static readonly WALK_LEFT = 'WALK_LEFT';
+    public static readonly WALK_RIGHT = 'WALK_RIGHT';
 }

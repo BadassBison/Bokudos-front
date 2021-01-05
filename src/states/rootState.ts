@@ -6,6 +6,7 @@ import { BackgroundState } from './backgroundState';
 import { TileSetState } from './tileSetState';
 import { BuilderState } from './builderState';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { EnemyState } from './EnemyState';
 
 export class State {
     static backgroundState: BackgroundState;
@@ -15,6 +16,7 @@ export class State {
     static ninjaState: NinjaState;
     static stageState: StageState;
     static tileSetState: TileSetState;
+    static enemyState: EnemyState;
 
     static async BuildState() {
         this.backgroundState = new BackgroundState();
@@ -25,6 +27,7 @@ export class State {
         this.ninjaState = new NinjaState();
         // await this.ninjaState.loadAssets();
         this.stageState = new StageState();
+        this.enemyState = new EnemyState();
         RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
     }
 }
