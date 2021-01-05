@@ -192,4 +192,13 @@ export class RenderingUtilities {
             method.call(scope);
         }, 400);
     }
+
+    /**
+     * Center the screen horizontally and 5 units up from the bottom.
+     * @param point
+     */
+    static setScreenPositionFromCenter(point: Point) {
+        State.gameState.position = { x: point.x - State.gameState.gameUnitDimensions.w / 2, y: point.y - 5 };
+    }
+
 }

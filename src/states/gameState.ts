@@ -40,8 +40,8 @@ export class GameState {
             down: false,
             left: false,
             right: false,
-            space: false,
-            shift: false
+            shift: false,
+            attack: false
         };
         this.gameUnit = 1;
         this.screenWidth = innerWidth;
