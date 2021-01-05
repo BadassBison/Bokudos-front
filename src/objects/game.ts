@@ -6,13 +6,19 @@ import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
 import { BuilderMode } from '../debug/builderMode';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
+import { Dimensions } from '../interfaces/dimensions';
 
 export class Game {
 
   state: GameState;
 
-  constructor() {
+  constructor() { }
+
+  async buildState(): Promise<void> {
+    await State.BuildState();
     this.state = State.gameState;
     this.state.assets = [new Ninja()];
     this.state.renderingEngine = new RenderingEngine();
@@ -79,45 +85,64 @@ export class Game {
     }
   }
 
-  getCanvas(): { [key: string]: HTMLCanvasElement } {
-    return { canvas: State.gameState.canvas.canvasElement, bgCanvas: State.backgroundState.bgCanvas.canvasElement };
+  setupEventListeners(): void {
+    document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
+    document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
+
+    const canvas = State.gameState.canvas.canvasElement;
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
+    canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
+    canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
+
+    window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
+  }
+
+  setupWindowDebugObject(): void {
+    (window as any).bokudos = {
+      cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
+      pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
+      setDimensions: (dimensions: Dimensions) => RenderingUtilities.setDimensions(dimensions),
+      zoom: (newSize: number) => RenderingUtilities.zoomDimensionsInOrOut(newSize),
+      api: {
+        getPublishedStages: () => StageApiHelpers.getPublishedStages(),
+        getUserStages: (userId: number) => StageApiHelpers.getStagesByUser(userId),
+        getStageById: (stageId: number) => StageApiHelpers.getStageById(stageId),
+        searchStageByName: (searchTerm: string) => StageApiHelpers.searchStagesByName(searchTerm),
+        getRegions: () => RegionApiHelpers.getRegions(),
+        getAllRegionsForStage: (stageId: number) => RegionApiHelpers.getAllRegionsForStage(stageId),
+        getRegionForStage: (stageId: number, row: number, column: number) => RegionApiHelpers.getRegionForStage(stageId, row, column)
+      }
+    };
+  }
+
+  setCanvas(): void {
+    document.body.prepend(State.backgroundState.bgCanvas.canvasElement, State.gameState.canvas.canvasElement);
   }
 
   run(): void {
-    // TODO: Division is costly, better we calculate this only when the fps changes
-    const delay = this.state.framesPerSecond > 0 ? 1000 / this.state.framesPerSecond : 0;
-    this.state.paused = delay <= 0;
+
     setTimeout(() => {
       if (!this.state.paused) {
         this.state.renderingEngine.run();
         this.state.physicsEngine.run();
       }
       this.run();
-    }, delay);
+    }, this.state.defaultFrameDelay);
   }
 
-  start(): void {
-    document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
-    document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
+  static async start(): Promise<void> {
+    const game = new Game();
+    await game.buildState();
+    game.setupEventListeners();
+    game.setupWindowDebugObject();
+    game.setCanvas();
 
-    const canvas = State.gameState.canvas.canvasElement;
-    canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    canvas.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
-
-    window.addEventListener('resize', (ev => {
-      State.gameState.canvas.canvasElement.height = innerHeight;
-      State.gameState.canvas.canvasElement.width = innerWidth;
-      State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
-      State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
-      RenderingUtilities.setDimensions();
-      if (this.state.paused) {
-        this.state.renderingEngine.run();
-      }
-    }));
-
-    (window as any).cycleFrames = (n: number) => RenderingUtilities.cycleFrames(n);
-    (window as any).pauseGame = (pause: boolean) => RenderingUtilities.pauseGame(pause);
-
-    this.run();
+    // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
+    setTimeout(() => {
+      // Waiting 300 ms so the images in the Ninja can load, then setting properties that depend on image data
+      State.gameState.renderingEngine.prepare();
+      game.run();
+    }, 300);
   }
 }

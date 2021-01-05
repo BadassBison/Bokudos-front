@@ -28,15 +28,14 @@ export class NinjaState {
     velocity: Velocity;
     terminalVelocity: number;
     jumpSpeed: number;
+    SPRITE_SIZER: number;
 
     readonly HEIGHT_IN_UNITS: number = 2;
-    readonly SPRITE_SIZER: number;
 
     constructor() {
         this.animations = new NinjaAnimations();
         this.attacking = false;
         this.currentFrame = 0;
-        this.currentImage = this.animations.getAnimation(this.currentState).getImages()[this.currentFrame];
         this.currentState = AnimationTypes.IDLE_RIGHT;
         this.falling = false;
         this.frameCount = 0;
@@ -44,9 +43,8 @@ export class NinjaState {
         this.framesPerAnimation = 10;
         this.jumping = false;
         this.movingRight = true;
-        this.position = { x: 12, y: 6 };
+        this.position = { x: 18, y: 7 };
         this.movementSpeed = .25;
-        this.SPRITE_SIZER = this.currentImage.height / this.HEIGHT_IN_UNITS;
         this.gravity = .05;
         this.velocity = { dx: 0, dy: 0 };
         this.terminalVelocity = .75;
@@ -55,24 +53,6 @@ export class NinjaState {
         this.hitboxOffset = {
             w: .25,
             h: .25
-        };
-        this.hitbox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y - this.hitboxOffset.h
-            },
-            dimensions: {
-                w: this.currentImage.width / this.SPRITE_SIZER + this.hitboxOffset.w,
-                h: this.currentImage.height / this.SPRITE_SIZER - this.hitboxOffset.h
-            }
-        };
-
-        this.collisionDetectionBox = {
-            position: { x: this.position.x - 2, y: this.position.y + 2 },
-            dimensions: {
-                w: this.currentImage.width / this.SPRITE_SIZER + 4,
-                h: this.currentImage.height / this.SPRITE_SIZER + 4
-            }
         };
     }
 }

@@ -36,6 +36,8 @@ label {
     font-size: large;
     font-weight: 500;
     outline: none;
+    width: 100px;
+    height: 50px;
 }
 
 .active {
@@ -56,32 +58,43 @@ label {
     position: absolute;
     top: 790px;
     left: 50px;
-    width: 100px;
-    height: 50px;
+}
+
+.builder--saveBtn {
+    background: rgb(34, 228, 95);
+    color: white;
+}
+
+.builder--publishBtn {
+    background: rgb(228, 34, 212);
+    color: white;
+}
+
+.builder--button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 300px;
+    left: 0;
+    width: 225px;
 }
 
 .menuBtn {
     position: absolute;
     top: 50px;
     left: 50px;
-    width: 100px;
-    height: 50px;
 }
 
 .propertiesBtn {
     position: absolute;
     top: 50px;
     left: 175px;
-    width: 100px;
-    height: 50px;
 }
 
 .builderBtn {
     position: absolute;
     top: 50px;
     left: 300px;
-    width: 100px;
-    height: 50px;
 }
 
 .menu {

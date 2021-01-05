@@ -13,6 +13,9 @@ export class GameState {
     physicsEngine: PhysicsEngine;
     keys: Keys;
     defaultFramesPerSecond: number;
+    defaultFrameDelay: number;
+    defaultGridDimensions: Dimensions;
+    currentGridDimensions: Dimensions;
     framesPerSecond: number;
     gameUnit: number;
     screenHeight: number;
@@ -24,7 +27,12 @@ export class GameState {
     paused: boolean;
     defaultColor: string;
     defaultLineWidth: number;
+    timeoutId: NodeJS.Timeout;
 
+    stageId: number;
+    stageName: string;
+    gameId: number;
+    userId: number;
 
     constructor() {
         this.keys = {
@@ -41,9 +49,15 @@ export class GameState {
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
         this.position = { x: 0, y: 0 };
         this.defaultFramesPerSecond = 60;
+        this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
+        this.defaultGridDimensions = { w: 12, h: 12 };
+        this.currentGridDimensions = this.defaultGridDimensions;
         this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;
         this.defaultColor = 'black';
         this.defaultLineWidth = 1;
+        this.gameId = 1;
+        this.stageId = 1;
+        this.userId = 1;
     }
 }

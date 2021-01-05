@@ -93,8 +93,8 @@ export class PropertiesMenu {
   }
 
   static cleanup() {
-    this.removePropertiesButton();
     if (State.debugState.propertiesOpen) { this.closePropertyMenu(); }
+    this.removePropertiesButton();
   }
 
 }

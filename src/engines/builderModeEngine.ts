@@ -4,15 +4,19 @@ import { Background } from '../objects/background';
 import { DebugMode } from '../debug/debugMode';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { Keys } from '../interfaces/keys';
+import { MenuOptions } from '../constants/menuOptions';
 
 export class BuilderModeEngine {
 
   running: boolean;
+  coordsEnabled: boolean;
 
   constructor() { }
 
   start() {
     RenderingUtilities.pauseGame(true);
+    this.coordsEnabled = State.debugState.menuOptions[MenuOptions.COORDINATES].enabled;
+    State.debugState.menuOptions[MenuOptions.COORDINATES].enabled = false;
     this.running = true;
     this.run();
   }
@@ -34,6 +38,7 @@ export class BuilderModeEngine {
 
   stop() {
     RenderingUtilities.pauseGame(false);
+    State.debugState.menuOptions[MenuOptions.COORDINATES].enabled = this.coordsEnabled;
     this.running = false;
   }
 

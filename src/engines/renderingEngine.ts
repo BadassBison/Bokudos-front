@@ -20,4 +20,11 @@ export class RenderingEngine {
 
         DebugMode.draw();
     }
+
+    // This is a method needed to invoke property updates after images are loaded
+    prepare() {
+        for (const asset of State.gameState.assets) {
+            asset.updateStateAfterImagesLoad();
+        }
+    }
 }

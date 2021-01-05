@@ -8,8 +8,12 @@ import { GridArea } from '../interfaces/gridArea';
  */
 export class RenderingUtilities {
 
-    static setDimensions(minGameDimensions: Dimensions = { w: 12, h: 12 }) {
+    static setDimensions(minGameDimensions: Dimensions = State.gameState.defaultGridDimensions) {
+        this.stopCurrentZoom();
+
         // when we set the dimensions of the game, determine the pixelsPerUnit conversion for later use
+        State.gameState.currentGridDimensions = minGameDimensions;
+
         const dx = innerWidth / minGameDimensions.w;
         const dy = innerHeight / minGameDimensions.h;
         State.gameState.pixelsPerUnit = Math.min(dx, dy);
@@ -21,6 +25,31 @@ export class RenderingUtilities {
             w: innerWidth,
             h: innerHeight
         };
+    }
+
+    // TODO: Toggling between the builder and the debug mode will continue the pan
+    static zoomDimensionsInOrOut(newSize: number) {
+        this.stopCurrentZoom();
+        const adjustmentValue = 0.025;
+        const zoomDelay = 10;
+        const curDim = State.gameState.currentGridDimensions;
+        if (Math.abs(curDim.h - newSize) <= adjustmentValue) {
+            this.setDimensions({ w: newSize, h: newSize });
+            State.gameState.timeoutId = null;
+        } else if (curDim.h - newSize > 0) {
+            this.setDimensions({ w: curDim.w - adjustmentValue, h: curDim.h - adjustmentValue });
+            State.gameState.timeoutId = setTimeout(() => this.zoomDimensionsInOrOut(newSize), zoomDelay);
+        } else {
+            this.setDimensions({ w: curDim.w + adjustmentValue, h: curDim.h + adjustmentValue });
+            State.gameState.timeoutId = setTimeout(() => this.zoomDimensionsInOrOut(newSize), zoomDelay);
+        }
+    }
+
+    static stopCurrentZoom() {
+        if (State.gameState.timeoutId) {
+            clearTimeout(State.gameState.timeoutId);
+            State.gameState.timeoutId = null;
+        }
     }
 
     static toScreenCoordinates(gameCoords: Point): Point {
@@ -107,12 +136,16 @@ export class RenderingUtilities {
         State.backgroundState.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
     }
 
-    static nodeBuilder(type: string, content: string, classList: string[] = []): HTMLElement {
+    static nodeBuilder(type: string, content: string = '', classList: string[] = []): HTMLElement {
         const node = document.createElement(type);
         node.innerHTML = content;
         node.classList.add(...classList);
 
         return node;
+    }
+
+    static destroyNodes(nodes: HTMLElement[]) {
+        nodes.forEach((node: HTMLElement) => { node.remove(); });
     }
 
     static appendNodeToBody(node: HTMLElement): void {
@@ -145,4 +178,30 @@ export class RenderingUtilities {
         return viewableGridArea;
     }
 
+    static async loadImages(images: HTMLImageElement[]) {
+        return new Promise((resolve, reject) => {
+            for (const img of images) {
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+            }
+        });
+    }
+
+    static async resizeScreenDimensions() {
+        State.gameState.canvas.canvasElement.height = innerHeight;
+        State.gameState.canvas.canvasElement.width = innerWidth;
+        State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
+        State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
+        RenderingUtilities.setDimensions(State.gameState.currentGridDimensions);
+        if (State.gameState.paused && !State.builderState.builderMode) {
+            State.gameState.renderingEngine.run();
+        }
+    }
+
+    static debounce(method: any, scope: any) {
+        clearTimeout(method._tId);
+        method._tId = setTimeout(() => {
+            method.call(scope);
+        }, 400);
+    }
 }

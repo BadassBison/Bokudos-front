@@ -5,21 +5,29 @@ export class BuilderState {
 
     builderMode: boolean;
     builderEngine: BuilderModeEngine;
+    handleMouseClick: boolean;
+    isClicked: boolean;
+    clickedPosition: Point;
+    clickedGridCoords: Point;
+
+    builderBtn: HTMLElement;
+
+    builderMenuOpen: boolean;
+    builderMenu: HTMLElement;
+    menuButtons: HTMLElement; // TODO: are these needed?
+
+    tileSelectorOpen: boolean;
     tileSelector?: HTMLElement;
     tileSelectorCheckbox: HTMLInputElement;
-    tileSelectorOpen: boolean;
     selectedTile: HTMLElement;
 
     removingTiles: boolean;
     removingTilesCheckbox: HTMLInputElement;
 
-    handleMouseClick: boolean;
-    clickedPosition: Point;
-    clickedGridCoords: Point;
-
     constructor() {
         this.builderMode = false;
         this.builderEngine = new BuilderModeEngine();
+        this.builderMenuOpen = false;
         this.tileSelectorOpen = false;
         this.handleMouseClick = false;
         this.removingTiles = false;

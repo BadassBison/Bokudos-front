@@ -3,6 +3,8 @@ node_modules
 /.sass_cache
 .DS_Store
 .vscode
+dist
+!dist/index.html
 
 #Ignore IntelliJ IDEA files
 .idea
