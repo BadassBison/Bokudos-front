@@ -80,14 +80,14 @@ export class Game {
   setupEventListeners(): void {
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
-    document.addEventListener('mousedown', (evt: MouseEvent) => this.parseKey(evt.type, true));
-    document.addEventListener('mouseup', (evt: MouseEvent) => this.parseKey(evt.type, false));
 
     const canvas = State.gameState.canvas.canvasElement;
     canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
     canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
     canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
     canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
+      canvas.addEventListener('mousedown', (evt: MouseEvent) => this.parseKey(evt.type, true));
+      canvas.addEventListener('mouseup', (evt: MouseEvent) => this.parseKey(evt.type, false));
 
     window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
   }
