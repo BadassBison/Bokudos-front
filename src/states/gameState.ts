@@ -31,6 +31,7 @@ export class GameState {
     // Testing Properties
     defaultGameId: number;
     defaultStageId: number;
+    defaultStageName: string;
     defaultUserId: number;
 
     constructor() {
@@ -47,7 +48,6 @@ export class GameState {
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
         this.position = { x: 0, y: 0 };
-        this.defaultStageId = 1;
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
         this.defaultGridDimensions = { w: 12, h: 12 };
@@ -56,5 +56,9 @@ export class GameState {
         this.paused = false;
         this.defaultColor = 'black';
         this.defaultLineWidth = 1;
+        this.defaultGameId = 1;
+        this.defaultStageId = 1;
+        this.defaultStageName = 'Default Stage';
+        this.defaultUserId = 1;
     }
 }

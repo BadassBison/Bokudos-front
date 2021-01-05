@@ -91,7 +91,9 @@ export class Game {
 
     const canvas = State.gameState.canvas.canvasElement;
     canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    canvas.addEventListener('click', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt));
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
+    canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
+    canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
 
     window.addEventListener('resize', (ev => {
       State.gameState.canvas.canvasElement.height = innerHeight;

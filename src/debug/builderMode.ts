@@ -4,11 +4,19 @@ import { StageTile } from '../objects/stageTile';
 import { DebugMode } from './debugMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { RegionDto } from '../interfaces/regionDto';
+import { StageApiHelpers } from '../http/stageApiHelpers';
+import { StageDto } from '../interfaces/stageDto';
+import { MenuOptions } from '../constants/menuOptions';
 
 export class BuilderMode {
 
-    static handleMouseClick(evt: MouseEvent) {
-        if (State.builderState.handleMouseClick) {
+    static handleMouseMove(evt: MouseEvent) {
+        this.handleMouseClick(evt, State.builderState.isClicked);
+    }
+
+    static handleMouseClick(evt: MouseEvent, isClicked: boolean) {
+        State.builderState.isClicked = isClicked;
+        if (State.builderState.handleMouseClick && isClicked) {
             State.builderState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
             State.builderState.clickedGridCoords = RenderingUtilities.toGameCoordsImgRoot(State.builderState.clickedPosition);
             if (State.builderState.removingTiles) {
@@ -142,31 +150,40 @@ export class BuilderMode {
         console.clear();
         console.log('publishing Stage');
 
-        // await this.saveStage();
+        await this.saveStage();
 
-        // TODO: Publish
+        const stage: StageDto = {
+            name: State.gameState.defaultStageName,
+            stageId: State.gameState.defaultStageId,
+            gameId: State.gameState.defaultGameId,
+            userId: State.gameState.defaultUserId,
+            published: true
+        };
+        await StageApiHelpers.updateStage(stage);
     }
 
     static addPlatformTileOptions(builder: HTMLElement): void {
         const wrapper = this.addWrapper(builder, 'Platform Tiles');
 
-        const [option1, checkbox1] = this.addCheckbox('Toggle Tile Selector');
-        State.builderState.tileSelectorCheckbox = checkbox1 as HTMLInputElement;
-        this.addTileCheckboxHandling(checkbox1);
+        const [option1, checkbox1] = this.addCheckbox('Show Grid');
+        this.addShowGridCheckboxHandling(checkbox1 as HTMLInputElement);
 
-        const [option2, checkbox2] = this.addCheckbox('Remove Tiles');
-        State.builderState.removingTilesCheckbox = checkbox2 as HTMLInputElement;
-        this.addDeleteTileCheckboxHandling(checkbox2);
+        const [option2, checkbox2] = this.addCheckbox('Toggle Tile Selector');
+        State.builderState.tileSelectorCheckbox = checkbox2 as HTMLInputElement;
+        this.addTileCheckboxHandling(checkbox2);
 
-        const [option3, clearButton] = this.addButton('Clear Stage');
+        const [option3, checkbox3] = this.addCheckbox('Remove Tiles');
+        State.builderState.removingTilesCheckbox = checkbox3 as HTMLInputElement;
+        this.addDeleteTileCheckboxHandling(checkbox3);
+
+        const [option4, clearButton] = this.addButton('Clear Stage');
         this.addClearStageClickHandling(clearButton);
 
-        // TODO:
-        const [option4, button1, button2] = this.addButtons('Zoom');
+        const [option5, button1, button2] = this.addButtons('Zoom');
         this.addZoomInClickHandling(button1);
         this.addZoomOutClickHandling(button2);
 
-        RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3, option4]);
+        RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3, option4, option5]);
     }
 
     static addWrapper(parentNode: HTMLElement, category: string = ''): HTMLElement {
@@ -244,6 +261,14 @@ export class BuilderMode {
         button.addEventListener('click', () => {
             const { w, h } = State.gameState.currentGridDimensions;
             RenderingUtilities.setDimensions({ w: w + 1, h: h + 1 });
+        });
+    }
+
+    static addShowGridCheckboxHandling(checkbox: HTMLInputElement) {
+        checkbox.checked = State.debugState.menuOptions[MenuOptions.GRID].enabled;
+
+        checkbox.addEventListener('change', () => {
+            State.debugState.menuOptions[MenuOptions.GRID].enabled = checkbox.checked;
         });
     }
 

@@ -25,6 +25,7 @@ export class RenderingUtilities {
         };
     }
 
+    // TODO: Toggling between the builder and the debug mode will continue the pan
     static panDimensionsInOrOut(newSize: number) {
         const adjustmentValue = 0.025;
         const panDelay = 10;

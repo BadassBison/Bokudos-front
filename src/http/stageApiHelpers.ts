@@ -69,9 +69,4 @@ export class StageApiHelpers {
     return stage;
   }
 
-  static async publishStage(stage: StageDto): Promise<StageDto> {
-
-    return stage;
-  }
-
 }

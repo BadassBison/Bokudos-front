@@ -27,6 +27,7 @@ export class DebugMode {
 
         for (let row = startingRow; row <= endingRow; row++) {
           for (let col = startingCol; col <= endingCol; col++) {
+            // TODO: change color for regions
             this.drawGrid(row, col);
             this.drawGridCoords(row, col);
           }

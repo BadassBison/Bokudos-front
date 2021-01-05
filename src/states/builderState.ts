@@ -17,6 +17,7 @@ export class BuilderState {
     removingTilesCheckbox: HTMLInputElement;
 
     handleMouseClick: boolean;
+    isClicked: boolean;
     clickedPosition: Point;
     clickedGridCoords: Point;
 
