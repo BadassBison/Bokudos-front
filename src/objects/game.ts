@@ -103,7 +103,7 @@ export class Game {
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
       setDimensions: (dimensions: Dimensions) => RenderingUtilities.setDimensions(dimensions),
-      panDimensions: (newSize: number) => RenderingUtilities.panDimensionsInOrOut(newSize),
+      zoom: (newSize: number) => RenderingUtilities.zoomDimensionsInOrOut(newSize),
       api: {
         getPublishedStages: () => StageApiHelpers.getPublishedStages(),
         getUserStages: (userId: number) => StageApiHelpers.getStagesByUser(userId),

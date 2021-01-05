@@ -25,6 +25,6 @@ export class State {
         this.ninjaState = new NinjaState();
         // await this.ninjaState.loadAssets();
         this.stageState = new StageState();
-        RegionApiHelpers.getRegionForStage(this.gameState.defaultStageId, 0, 0);
+        RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
     }
 }
