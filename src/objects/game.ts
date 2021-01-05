@@ -10,6 +10,7 @@ import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
+import { Enemy } from './enemy';
 
 export class Game {
 
@@ -20,7 +21,7 @@ export class Game {
   async buildState(): Promise<void> {
     await State.BuildState();
     this.state = State.gameState;
-    this.state.assets = [new Ninja()];
+    this.state.assets = [new Ninja(), new Enemy()];
     this.state.renderingEngine = new RenderingEngine();
     this.state.physicsEngine = new PhysicsEngine();
     RenderingUtilities.setDimensions();
