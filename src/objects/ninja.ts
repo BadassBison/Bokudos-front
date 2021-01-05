@@ -57,8 +57,7 @@ export class Ninja implements UpdateObject {
         // To remove repetitive jumping when key is held
         this.state.jumpUsed = up;
 
-        // TODO: may want to reconsider how this is being done... This is to center the view on the ninja
-        State.gameState.position = { x: this.state.position.x - State.gameState.gameUnitDimensions.w / 2, y: this.state.position.y - 5 };
+        RenderingUtilities.setScreenPositionFromCenter(this.state.position);
         this.updateHitboxAndCollisionDetectionBoxPositions();
     }
 
