@@ -100,6 +100,9 @@ export class Game {
 
   setupWindowDebugObject(): void {
     (window as any).bokudos = {
+      avgFrameTime: () => State.performanceState.calculateAverageFrameTime(),
+      watchFrameTimes: () => State.performanceState.watchAvgFrameTime(),
+      stopWatchingFrameTimes: () => State.performanceState.stopWatching(),
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
       setDimensions: (dimensions: Dimensions) => RenderingUtilities.setDimensions(dimensions),
@@ -129,6 +132,8 @@ export class Game {
       }
       this.run();
     }, this.state.defaultFrameDelay);
+
+    State.performanceState.addFrameTime(performance.now());
   }
 
   static async start(): Promise<void> {
