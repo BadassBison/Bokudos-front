@@ -48,7 +48,7 @@ export class NinjaState {
         this.movingRight = true;
         this.position = { x: 18, y: 7 };
         this.movementSpeed = .25;
-        this.movementAcceleration = .01;
+        this.movementAcceleration = .02;
         this.gravity = .05;
         this.velocity = { dx: 0, dy: 0 };
         this.terminalVelocity = .75;

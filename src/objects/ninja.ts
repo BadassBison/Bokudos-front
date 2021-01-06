@@ -70,7 +70,8 @@ export class Ninja implements UpdateObject {
             velocity.dy += this.state.jumpSpeed;
         }
         if (right !== left) {
-            const speed = this.state.velocity.dx + (right ? this.state.movementAcceleration : -this.state.movementAcceleration);
+            const movingRight = this.state.velocity.dx > 0;
+            const speed = right != movingRight && this.state.velocity.dx !== 0 ? 0 : this.state.velocity.dx + (right ? this.state.movementAcceleration : -this.state.movementAcceleration);
             velocity.dx = speed < 0 ? Math.max(speed, -this.state.movementSpeed) : Math.min(speed, this.state.movementSpeed);
         }
         if (velocity.dy > -this.state.terminalVelocity) {
