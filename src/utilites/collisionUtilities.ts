@@ -20,7 +20,8 @@ export class CollisionUtilities {
             x: hitbox.position.x + hitbox.dimensions.w,
             y: hitbox.position.y - hitbox.dimensions.h
         };
-        const tiles = this.getTilesInDetectionArea(State.ninjaState.collisionDetectionBox);
+        const detectionBox = this.getDetectionArea(hitbox, initialVelocity);
+        const tiles = this.getTilesInDetectionArea(detectionBox);
         let modification: number;
 
         for (const tile of tiles) {
@@ -71,6 +72,19 @@ export class CollisionUtilities {
         }
 
         return velocity;
+    }
+
+    static getDetectionArea(hitbox: Box, movement: Velocity) : Box {
+        return {
+            position: {
+                x: hitbox.position.x + (movement.dx > 0 ? 0 : movement.dx),
+                y: hitbox.position.y + (movement.dy > 0 ? movement.dy : 0)
+            },
+            dimensions: {
+                w: hitbox.dimensions.w + (Math.abs(movement.dx)),
+                h: hitbox.dimensions.h + (Math.abs(movement.dy))
+            }
+        }
     }
 
     /**

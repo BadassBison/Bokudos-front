@@ -3,6 +3,6 @@ export interface Keys {
   down: boolean;
   left: boolean;
   right: boolean;
-  space: boolean;
   shift: boolean;
+  attack: boolean;
 }

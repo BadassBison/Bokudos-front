@@ -10,6 +10,7 @@ import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
+import { Enemy } from './enemy';
 
 export class Game {
 
@@ -20,7 +21,7 @@ export class Game {
   async buildState(): Promise<void> {
     await State.BuildState();
     this.state = State.gameState;
-    this.state.assets = [new Ninja()];
+    this.state.assets = [new Ninja(), new Enemy()];
     this.state.renderingEngine = new RenderingEngine();
     this.state.physicsEngine = new PhysicsEngine();
     RenderingUtilities.setDimensions();
@@ -31,39 +32,31 @@ export class Game {
       case 'ArrowUp':
       case 'w':
       case 'W':
-        if (pressed && !this.state.keys.up || !pressed && this.state.keys.up) {
-          this.state.keys.up = pressed;
-        }
+      case ' ':
+        this.state.keys.up = pressed;
         break;
 
       case 'ArrowDown':
       case 's':
       case 'S':
-        if (pressed && !this.state.keys.down || !pressed && this.state.keys.down) {
-          this.state.keys.down = pressed;
-        }
+        this.state.keys.down = pressed;
         break;
 
       case 'ArrowLeft':
       case 'a':
       case 'A':
-        if (pressed && !this.state.keys.left || !pressed && this.state.keys.left) {
-          this.state.keys.left = pressed;
-        }
+        this.state.keys.left = pressed;
         break;
 
       case 'ArrowRight':
       case 'd':
       case 'D':
-        if (pressed && !this.state.keys.right || !pressed && this.state.keys.right) {
-          this.state.keys.right = pressed;
-        }
+        this.state.keys.right = pressed;
         break;
 
-      case ' ':
-        if (pressed && !this.state.keys.space || !pressed && this.state.keys.space) {
-          this.state.keys.space = pressed;
-        }
+      case 'mousedown':
+      case 'mouseup':
+        this.state.keys.attack = pressed;
         break;
 
       case 'Shift':
@@ -94,6 +87,8 @@ export class Game {
     canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
     canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
     canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
+      canvas.addEventListener('mousedown', (evt: MouseEvent) => this.parseKey(evt.type, true));
+      canvas.addEventListener('mouseup', (evt: MouseEvent) => this.parseKey(evt.type, false));
 
     window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
   }

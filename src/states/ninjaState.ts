@@ -8,6 +8,7 @@ import { Velocity } from '../interfaces/velocity';
 export class NinjaState {
     animations: NinjaAnimations;
     attacking: boolean;
+    attackUsed: boolean;
     collisionDetectionBox: Box;
     currentFrame: number;
     currentImage: HTMLImageElement;
@@ -35,6 +36,7 @@ export class NinjaState {
     constructor() {
         this.animations = new NinjaAnimations();
         this.attacking = false;
+        this.attackUsed = false;
         this.currentFrame = 0;
         this.currentState = AnimationTypes.IDLE_RIGHT;
         this.falling = false;
