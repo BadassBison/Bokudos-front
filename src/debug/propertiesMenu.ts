@@ -64,8 +64,14 @@ export class PropertiesMenu {
       State.ninjaState.movementSpeed = Number((evt.target as HTMLInputElement).value);
     });
 
-    const input3 = this.addProperty(menu, 'Jump Speed', State.ninjaState.jumpSpeed);
+    const input3 = this.addProperty(menu, 'Movement Acceleration', State.ninjaState.movementAcceleration);
     input3.addEventListener('input', (evt) => {
+      console.log((evt.target as HTMLInputElement).value);
+      State.ninjaState.movementAcceleration = Number((evt.target as HTMLInputElement).value);
+    });
+
+    const input4 = this.addProperty(menu, 'Jump Speed', State.ninjaState.jumpSpeed);
+    input4.addEventListener('input', (evt) => {
       console.log((evt.target as HTMLInputElement).value);
       State.ninjaState.jumpSpeed = Number((evt.target as HTMLInputElement).value);
     });

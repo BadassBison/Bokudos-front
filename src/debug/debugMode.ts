@@ -46,13 +46,13 @@ export class DebugMode {
   }
 
   static drawDebugGraphics() {
-    this.drawScreenEdge();
-    this.drawDetectedTileOutlines();
-    this.drawCollisionDetectionBox();
+    // this.drawScreenEdge();
+    // this.drawDetectedTileOutlines();
+    // this.drawCollisionDetectionBox();
     this.drawHitbox();
     this.drawAttackHitbox();
     this.drawEnemyHitbox();
-    this.drawCollisionsOutlines();
+    // this.drawCollisionsOutlines();
     this.resetCtx();
   }
 

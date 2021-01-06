@@ -6,8 +6,6 @@ import { RenderingUtilities } from '../utilites/renderingUtilities';
 
 export class RenderingEngine {
 
-    constructor() { }
-
     run() {
         RenderingUtilities.refreshCanvas();
 
