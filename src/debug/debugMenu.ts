@@ -76,6 +76,8 @@ export class DebugMenu {
         this.addMenuOption(menu, MenuOptions.GRID);
         this.addMenuOption(menu, MenuOptions.COORDINATES);
         this.addMenuOption(menu, MenuOptions.HITBOX);
+        this.addMenuOption(menu, MenuOptions.ATTACK_HITBOX);
+        this.addMenuOption(menu, MenuOptions.ENEMY_HITBOX);
         this.addMenuOption(menu, MenuOptions.DETECTION_BOX);
         this.addMenuOption(menu, MenuOptions.DETECTED_TILES);
         this.addMenuOption(menu, MenuOptions.COLLISION_TILES);

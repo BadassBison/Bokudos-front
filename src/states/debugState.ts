@@ -22,11 +22,14 @@ export class DebugState {
             this.menuOptions = JSON.parse(menuOptionsJson);
         } else {
             this.menuOptions = {};
-            MenuOptions.getOptionList().forEach((optionName: string) => {
+        }
+
+        MenuOptions.getOptionList().forEach((optionName: string) => {
+            if(!this.menuOptions[optionName]) {
                 const option = new MenuOption(optionName);
                 this.menuOptions[optionName] = option;
-            });
-            this.menuOptions[MenuOptions.COORDINATES].lineWidth = null;
-        }
+            }
+        });
+        this.menuOptions[MenuOptions.COORDINATES].lineWidth = null;
     }
 }
