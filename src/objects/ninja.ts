@@ -79,10 +79,13 @@ export class Ninja implements UpdateObject {
         }
 
         const updatedVelocity = CollisionUtilities.collideWithTiles(this.state.hitbox, velocity);
-        this.state.velocity = updatedVelocity;
 
         this.state.position.x += updatedVelocity.dx;
         this.state.position.y += updatedVelocity.dy;
+        this.state.position = CollisionUtilities.roundPosition(this.state.position);
+
+        this.state.velocity.dx = velocity.dx != updatedVelocity.dx ? 0 : updatedVelocity.dx;
+        this.state.velocity.dy = velocity.dy != updatedVelocity.dy ? 0 : updatedVelocity.dy;
 
         // To remove repetitive jumping when key is held
         this.state.jumpUsed = up;
@@ -130,6 +133,8 @@ export class Ninja implements UpdateObject {
             x: this.state.position.x - this.state.hitbox.dimensions.w/2,
             y: this.state.position.y - this.state.hitboxOffset.h
         };
+        this.state.hitbox.position = CollisionUtilities.roundPosition(this.state.hitbox.position);
+
         this.state.collisionDetectionBox.position = {
             x: this.state.position.x - 2 - this.state.hitbox.dimensions.w/2,
             y: this.state.position.y + 2

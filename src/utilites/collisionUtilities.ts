@@ -127,4 +127,16 @@ export class CollisionUtilities {
         return detectionTiles;
     }
 
+    /**
+     * Round to 2 decimal places. This is a utility helper method that can be used to help resolve some of the precision issues with hitbox detection.
+     * @param x
+     * @param y
+     */
+    static roundPosition({x, y}: Point): Point {
+        return {
+            x: Math.round((x + Number.EPSILON) * 100) / 100,
+            y: Math.round((y + Number.EPSILON) * 100) / 100
+        }
+    }
+
 }
