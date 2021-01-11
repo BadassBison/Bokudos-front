@@ -54,9 +54,9 @@ export class Ninja implements UpdateObject {
         this.draw();
     }
 
-    updateAttackState({attack}: Keys): void {
+    updateAttackState({ attack }: Keys): void {
         // indicate that we are starting the attack animation
-        if(attack && !this.state.attacking && !this.state.attackUsed) {
+        if (attack && !this.state.attacking && !this.state.attackUsed) {
             this.state.attacking = true;
             this.state.currentFrame = -1;
         }
@@ -95,7 +95,7 @@ export class Ninja implements UpdateObject {
     }
 
     setCurrentAnimationState() {
-        if(this.state.attacking && this.state.currentFrame === this.state.framesPerAnimation-1) {
+        if (this.state.attacking && this.state.currentFrame === this.state.framesPerAnimation - 1) {
             this.state.attacking = false;
         }
 
@@ -107,7 +107,7 @@ export class Ninja implements UpdateObject {
             this.state.jumping = false;
         } else if (!this.state.jumping) {
             this.state.jumping = true;
-            if(this.state.attacking) {
+            if (this.state.attacking) {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_ATTACK_RIGHT : AnimationTypes.JUMP_ATTACK_LEFT;
             } else {
                 this.state.currentFrame = -1;
@@ -116,27 +116,27 @@ export class Ninja implements UpdateObject {
         }
 
         if (!this.state.jumping) {
-            if(this.state.attacking) {
+            if (this.state.attacking) {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.ATTACK_RIGHT : AnimationTypes.ATTACK_LEFT;
             } else if (this.state.velocity.dx === 0) {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.IDLE_RIGHT : AnimationTypes.IDLE_LEFT;
             } else {
                 this.state.currentState = this.state.movingRight ? AnimationTypes.RUN_RIGHT : AnimationTypes.RUN_LEFT;
             }
-        } else if(this.state.attacking) {
+        } else if (this.state.attacking) {
             this.state.currentState = this.state.movingRight ? AnimationTypes.JUMP_ATTACK_RIGHT : AnimationTypes.JUMP_ATTACK_LEFT;
         }
     }
 
     updateHitboxAndCollisionDetectionBoxPositions() {
         this.state.hitbox.position = {
-            x: this.state.position.x - this.state.hitbox.dimensions.w/2,
+            x: this.state.position.x - this.state.hitbox.dimensions.w / 2,
             y: this.state.position.y - this.state.hitboxOffset.h
         };
         this.state.hitbox.position = CollisionUtilities.roundPosition(this.state.hitbox.position);
 
         this.state.collisionDetectionBox.position = {
-            x: this.state.position.x - 2 - this.state.hitbox.dimensions.w/2,
+            x: this.state.position.x - 2 - this.state.hitbox.dimensions.w / 2,
             y: this.state.position.y + 2
         };
     }
@@ -147,7 +147,7 @@ export class Ninja implements UpdateObject {
 
         if (this.state.frameCount === 0) {
             // when jumping, we don't want to cycle through the animations, and instead just stay on the last frame (may want a separate falling animation later)
-            if(!this.state.jumping || this.state.currentFrame + 1 < this.state.framesPerAnimation) {
+            if (!this.state.jumping || this.state.currentFrame + 1 < this.state.framesPerAnimation) {
                 this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
             }
             this.state.currentImage = this.state.animations.getAnimation(this.state.currentState).getImages()[this.state.currentFrame];
@@ -159,7 +159,7 @@ export class Ninja implements UpdateObject {
         const { w, h } = RenderingUtilities.toScreenDimensions(this.getSize());
 
         State.gameState.canvas.ctx.drawImage(
-            State.ninjaState.currentImage, x - w/2, y, w, h
+            State.ninjaState.currentImage, x - w / 2, y, w, h
         );
     }
 

@@ -24,7 +24,7 @@ export class State {
         this.debugState = new DebugState();
         this.gameState = new GameState();
         this.tileSetState = new TileSetState();
-        this.ninjaState = new NinjaState();
+        // this.ninjaState = new NinjaState();
         // await this.ninjaState.loadAssets();
         this.stageState = new StageState();
         this.enemyState = new EnemyState();

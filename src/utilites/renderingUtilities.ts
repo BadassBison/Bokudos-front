@@ -178,7 +178,7 @@ export class RenderingUtilities {
         return viewableGridArea;
     }
 
-    static async loadImages(images: HTMLImageElement[]) {
+    static async loadImages(images: HTMLImageElement[]): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
             for (const img of images) {
                 img.onload = () => resolve(img);
