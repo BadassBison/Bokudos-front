@@ -5,6 +5,8 @@ import { StageTile } from '../objects/stageTile';
 import { MenuOptions } from '../constants/menuOptions';
 import { BuilderMode } from './builderMode';
 import { PropertiesMenu } from './propertiesMenu';
+import { Point } from '../interfaces/point';
+import { Dimensions } from '../interfaces/dimensions';
 
 export class DebugMode {
 
@@ -44,11 +46,13 @@ export class DebugMode {
   }
 
   static drawDebugGraphics() {
-    this.drawScreenEdge();
-    this.drawDetectedTileOutlines();
-    this.drawCollisionDetectionBox();
+    // this.drawScreenEdge();
+    // this.drawDetectedTileOutlines();
+    // this.drawCollisionDetectionBox();
     this.drawHitbox();
-    this.drawCollisionsOutlines();
+    this.drawAttackHitbox();
+    this.drawEnemyHitbox();
+    // this.drawCollisionsOutlines();
     this.resetCtx();
   }
 
@@ -120,6 +124,38 @@ export class DebugMode {
       State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.HITBOX].lineWidth;
 
       const box = State.ninjaState.hitbox;
+      const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
+      const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
+      State.gameState.canvas.ctx.strokeRect(x, y, w, h);
+    }
+  }
+
+  static drawAttackHitbox() {
+    if (State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].enabled) {
+      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].color;
+      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].lineWidth;
+
+      const box = State.ninjaState.hitbox;
+      if(State.ninjaState.attacking) {
+          let point: Point, dimensions: Dimensions;
+          if(State.ninjaState.movingRight) {
+              point = RenderingUtilities.toScreenCoordinates({x: box.position.x + box.dimensions.w - .5, y: box.position.y});
+              dimensions = RenderingUtilities.toScreenDimensions({w: 1, h: box.dimensions.h});
+          } else {
+              dimensions = RenderingUtilities.toScreenDimensions({w: 1, h: box.dimensions.h});
+              point = RenderingUtilities.toScreenCoordinates({x: box.position.x - .5, y: box.position.y});
+          }
+          State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
+      }
+    }
+  }
+
+  static drawEnemyHitbox() {
+    if (State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].enabled) {
+      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].color;
+      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].lineWidth;
+
+      const box = State.enemyState.hitbox;
       const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
       const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
       State.gameState.canvas.ctx.strokeRect(x, y, w, h);

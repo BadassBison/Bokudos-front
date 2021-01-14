@@ -24,6 +24,7 @@ export class NinjaState {
     movingRight: boolean;
     position: Point;
     movementSpeed: number;
+    movementAcceleration: number;
     // TODO: Gravity should be in the gameState, and it should effect a characters mass
     gravity: number;
     velocity: Velocity;
@@ -47,6 +48,7 @@ export class NinjaState {
         this.movingRight = true;
         this.position = { x: 18, y: 7 };
         this.movementSpeed = .25;
+        this.movementAcceleration = .02;
         this.gravity = .05;
         this.velocity = { dx: 0, dy: 0 };
         this.terminalVelocity = .75;

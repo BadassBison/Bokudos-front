@@ -74,6 +74,11 @@ export class CollisionUtilities {
         return velocity;
     }
 
+    /**
+     * Get a box that is the original box combined with the given velocity.
+     * @param hitbox
+     * @param movement
+     */
     static getDetectionArea(hitbox: Box, movement: Velocity) : Box {
         return {
             position: {
@@ -90,7 +95,7 @@ export class CollisionUtilities {
     /**
      * Check to see if two ranges overlap
      * Requires range a to follow: a1 < a2
-     * and range b to follow and b1 < b2
+     * and range b to follow: b1 < b2
      */
     static hasOverlap(a1: number, a2: number, b1: number, b2: number): boolean {
         return Math.max(a1, b1) < Math.min(a2, b2);
@@ -120,6 +125,18 @@ export class CollisionUtilities {
             }
         }
         return detectionTiles;
+    }
+
+    /**
+     * Round to 2 decimal places. This is a utility helper method that can be used to help resolve some of the precision issues with hitbox detection.
+     * @param x
+     * @param y
+     */
+    static roundPosition({x, y}: Point): Point {
+        return {
+            x: Math.round((x + Number.EPSILON) * 100) / 100,
+            y: Math.round((y + Number.EPSILON) * 100) / 100
+        }
     }
 
 }
