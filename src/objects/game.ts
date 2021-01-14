@@ -11,10 +11,12 @@ import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
 import { Enemy } from './enemy';
+import { GameSocket } from '../sockets/gameSocket';
 
 export class Game {
 
   state: GameState;
+  server: GameSocket;
 
   constructor() { }
 
@@ -76,6 +78,7 @@ export class Game {
         }
         break;
     }
+    this.server.sendKeys(this.state.keys);
   }
 
   setupEventListeners(): void {
@@ -137,6 +140,9 @@ export class Game {
     game.setupEventListeners();
     game.setupWindowDebugObject();
     game.setCanvas();
+
+    game.server = new GameSocket();
+    game.server.connect();
 
     // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
     setTimeout(() => {
