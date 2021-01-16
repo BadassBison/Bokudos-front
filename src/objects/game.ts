@@ -12,6 +12,11 @@ import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
 import { Enemy } from './enemy';
 
+// TODO:
+import ComponentUtilities from '../utilites/componentUtilities';
+import ComponentRegistry from '../components/componentRegistry';
+import StartScreenComponent from '../components/startScreen';
+
 export class Game {
 
   state: GameState;
@@ -87,8 +92,8 @@ export class Game {
     canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
     canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
     canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
-    canvas.addEventListener('mousedown', (evt: MouseEvent) => {if(evt.button === 0 ) this.parseKey(evt.type, true)});
-    canvas.addEventListener('mouseup', (evt: MouseEvent) => {if(evt.button === 0 ) this.parseKey(evt.type, false)});
+    canvas.addEventListener('mousedown', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, true); } });
+    canvas.addEventListener('mouseup', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, false); } });
 
     window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
   }
@@ -118,31 +123,40 @@ export class Game {
     document.body.prepend(State.backgroundState.bgCanvas.canvasElement, State.gameState.canvas.canvasElement);
   }
 
+  setStartScreen(): void {
+    const component = StartScreenComponent.buildComponent();
+    ComponentUtilities.appendNodeToBody(component);
+    component.startButtonHandler(this.run);
+  }
+
   run(): void {
 
-    setTimeout(() => {
-      if (!this.state.paused) {
-        this.state.renderingEngine.run();
-        this.state.physicsEngine.run();
-      }
-      this.run();
-    }, this.state.defaultFrameDelay);
+    console.log('running');
+    // setTimeout(() => {
+    //   if (!this.state.paused) {
+    //     this.state.renderingEngine.run();
+    //     this.state.physicsEngine.run();
+    //   }
+    //   this.run();
+    // }, this.state.defaultFrameDelay);
 
-    State.performanceState.addFrameTime(performance.now());
+    // State.performanceState.addFrameTime(performance.now());
   }
 
   static async start(): Promise<void> {
     const game = new Game();
     await game.buildState();
-    game.setupEventListeners();
-    game.setupWindowDebugObject();
-    game.setCanvas();
+    ComponentRegistry.registerComponents();
+    game.setStartScreen();
+    // game.setupEventListeners();
+    // game.setupWindowDebugObject();
+    // game.setCanvas();
 
     // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
-    setTimeout(() => {
-      // Waiting 300 ms so the images in the Ninja can load, then setting properties that depend on image data
-      State.gameState.renderingEngine.prepare();
-      game.run();
-    }, 300);
+    // setTimeout(() => {
+    //   // Waiting 300 ms so the images in the Ninja can load, then setting properties that depend on image data
+    //   State.gameState.renderingEngine.prepare();
+    //   game.run();
+    // }, 300);
   }
 }

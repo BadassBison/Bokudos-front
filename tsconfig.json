@@ -8,6 +8,7 @@
     "module": "esNext",
     "target": "esNext",
     "allowJs": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true
   }
 }
