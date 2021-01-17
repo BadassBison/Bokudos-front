@@ -3,7 +3,6 @@ import { DebugMenu } from './debugMenu';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { StageTile } from '../objects/stageTile';
 import { MenuOptions } from '../constants/menuOptions';
-import { BuilderMode } from './builderMode';
 import { PropertiesMenu } from './propertiesMenu';
 import { Point } from '../interfaces/point';
 import { Dimensions } from '../interfaces/dimensions';
@@ -16,7 +15,6 @@ export class DebugMode {
         State.debugState.hasButtons = true;
         DebugMenu.addMenuButton();
         PropertiesMenu.addPropertiesButton();
-        BuilderMode.addBuilderButton();
       }
       const position = State.gameState.position;
       const gameUnitDimensions = State.gameState.gameUnitDimensions;
@@ -136,16 +134,18 @@ export class DebugMode {
       State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].lineWidth;
 
       const box = State.ninjaState.hitbox;
-      if(State.ninjaState.attacking) {
-          let point: Point, dimensions: Dimensions;
-          if(State.ninjaState.movingRight) {
-              point = RenderingUtilities.toScreenCoordinates({x: box.position.x + box.dimensions.w - .5, y: box.position.y});
-              dimensions = RenderingUtilities.toScreenDimensions({w: 1, h: box.dimensions.h});
-          } else {
-              dimensions = RenderingUtilities.toScreenDimensions({w: 1, h: box.dimensions.h});
-              point = RenderingUtilities.toScreenCoordinates({x: box.position.x - .5, y: box.position.y});
-          }
-          State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
+      if (State.ninjaState.attacking) {
+
+        let point: Point;
+        let dimensions: Dimensions;
+        if (State.ninjaState.movingRight) {
+          point = RenderingUtilities.toScreenCoordinates({ x: box.position.x + box.dimensions.w - .5, y: box.position.y });
+          dimensions = RenderingUtilities.toScreenDimensions({ w: 1, h: box.dimensions.h });
+        } else {
+          dimensions = RenderingUtilities.toScreenDimensions({ w: 1, h: box.dimensions.h });
+          point = RenderingUtilities.toScreenCoordinates({ x: box.position.x - .5, y: box.position.y });
+        }
+        State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
       }
     }
   }
@@ -213,13 +213,11 @@ export class DebugMode {
   static resetState() {
     DebugMenu.closeMenu();
     PropertiesMenu.closePropertyMenu();
-    BuilderMode.closeBuilderMode();
   }
 
   static debugModeCleanUp() {
     State.debugState.hasButtons = false;
     DebugMenu.cleanup();
     PropertiesMenu.cleanup();
-    BuilderMode.cleanup();
   }
 }

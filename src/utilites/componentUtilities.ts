@@ -24,6 +24,11 @@ export default class ComponentUtilities {
     nodes.forEach((node: HTMLElement) => { node.remove(); });
   }
 
+  static prependNodeToBody(node: HTMLElement): void {
+    const body = document.querySelector('body');
+    body.prepend(node);
+  }
+
   static appendNodeToBody(node: HTMLElement): void {
     const body = document.querySelector('body');
     body.appendChild(node);

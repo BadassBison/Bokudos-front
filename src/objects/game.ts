@@ -5,7 +5,7 @@ import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
-import { BuilderMode } from '../debug/builderMode';
+import { BuilderMode } from '../components/builder/builderMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
@@ -16,6 +16,7 @@ import { Enemy } from './enemy';
 import ComponentUtilities from '../utilites/componentUtilities';
 import ComponentRegistry from '../components/componentRegistry';
 import StartScreenComponent from '../components/startScreen';
+import { Background } from './background';
 
 export class Game {
 
@@ -121,42 +122,40 @@ export class Game {
 
   setCanvas(): void {
     document.body.prepend(State.backgroundState.bgCanvas.canvasElement, State.gameState.canvas.canvasElement);
+    Background.draw();
   }
 
   setStartScreen(): void {
-    const component = StartScreenComponent.buildComponent();
-    ComponentUtilities.appendNodeToBody(component);
-    component.startButtonHandler(this.run);
+    StartScreenComponent.buildComponent();
+    ComponentUtilities.appendNodeToBody(State.domState.startScreen);
+    State.domState.startScreen.startButtonHandler(() => { this.beginRun(); });
+  }
+
+  beginRun() {
+    State.gameState.renderingEngine.prepare();
+    this.run();
   }
 
   run(): void {
 
-    console.log('running');
-    // setTimeout(() => {
-    //   if (!this.state.paused) {
-    //     this.state.renderingEngine.run();
-    //     this.state.physicsEngine.run();
-    //   }
-    //   this.run();
-    // }, this.state.defaultFrameDelay);
+    setTimeout(() => {
+      if (!this.state.paused) {
+        this.state.renderingEngine.run();
+        this.state.physicsEngine.run();
+      }
+      this.run();
+    }, this.state.defaultFrameDelay);
 
-    // State.performanceState.addFrameTime(performance.now());
+    State.performanceState.addFrameTime(performance.now());
   }
 
   static async start(): Promise<void> {
     const game = new Game();
     await game.buildState();
     ComponentRegistry.registerComponents();
+    game.setupEventListeners();
+    game.setupWindowDebugObject();
+    game.setCanvas();
     game.setStartScreen();
-    // game.setupEventListeners();
-    // game.setupWindowDebugObject();
-    // game.setCanvas();
-
-    // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
-    // setTimeout(() => {
-    //   // Waiting 300 ms so the images in the Ninja can load, then setting properties that depend on image data
-    //   State.gameState.renderingEngine.prepare();
-    //   game.run();
-    // }, 300);
   }
 }
