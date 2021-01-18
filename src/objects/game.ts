@@ -12,6 +12,11 @@ import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
 import { Enemy } from './enemy';
 import { GameSocket } from '../sockets/gameSocket';
+import { GameApiHelpers } from '../http/gameApiHelpers';
+import { GameDto } from '../interfaces/gameDto';
+import { v4 as uuidv4 } from 'uuid';
+import { PlayerApiHelpers } from '../http/playerApiHelpers';
+import { PlayerDto } from '../interfaces/playerDto';
 
 export class Game {
 
@@ -141,8 +146,13 @@ export class Game {
     game.setupWindowDebugObject();
     game.setCanvas();
 
-    game.server = new GameSocket();
-    game.server.connect();
+    GameApiHelpers.findGame().then((gameDto: GameDto) => {
+      PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
+          game.server = new GameSocket();
+          game.server.connect(gameDto, playerDto);
+        }
+      );
+    });
 
     // FIXME: Hack to fix the rendering issue with the ninja on initial load before images have cached in the browser
     setTimeout(() => {

@@ -1,13 +1,20 @@
 import { APIUtilities } from '../utilites/apiUtilities';
 import { PlayerDto } from '../interfaces/playerDto';
+import { GameDto } from '../interfaces/gameDto';
+import { v4 as uuidv4 } from 'uuid';
 
 export class PlayerApiHelpers {
 
     static readonly PLAYER_API_VERSION = 'v1';
-    static readonly PLAYER_API_ENDPOINT = `${APIUtilities.GAME_SERVER_URL}/${PlayerApiHelpers.PLAYER_API_VERSION}/games`;
+    static readonly PLAYER_API_ENDPOINT = `${APIUtilities.GAME_SERVER_URL}${PlayerApiHelpers.PLAYER_API_VERSION}/games`;
 
     private static getEndpoint(gameId: string, playerId?: string) {
         return this.PLAYER_API_ENDPOINT + '/' + gameId + '/players' + (playerId ? '/' + playerId : '');
+    }
+
+    static async joinGame(gameId: string, name: string): Promise<PlayerDto> {
+        const player: PlayerDto = {playerId: uuidv4(), name: name};
+        return this.postPlayer(gameId, player);
     }
 
     static async getPlayers(gameId: string): Promise<PlayerDto[]> {

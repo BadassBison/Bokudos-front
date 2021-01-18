@@ -1,21 +1,24 @@
-import { v4 as uuidv4 } from 'uuid';
 import { OutPacket } from './outPacket';
 import { Keys } from '../interfaces/keys';
+import { GameDto } from '../interfaces/gameDto';
+import { PlayerDto } from '../interfaces/playerDto';
 
 export class GameSocket {
 
     connected: boolean;
-    userId: string;
     webSocket: WebSocket;
 
     lastPacket: string;
+    gameDto: GameDto;
+    playerDto: PlayerDto;
 
-    connect() {
-        if(this.connected) {
+    connect(gameDto: GameDto, playerDto: PlayerDto) {
+        if(this.connected || (this.gameDto && this.gameDto.gameId !== gameDto.gameId)) {
             this.disconnect();
         }
-        this.userId = uuidv4();
-        this.webSocket = new WebSocket('ws://localhost:8082/api/play/');
+        this.gameDto = gameDto;
+        this.playerDto = playerDto;
+        this.webSocket = new WebSocket(`ws://localhost:8082/api/play/${this.gameDto.gameId}`);
         this.webSocket.onopen = (event) => {
             this.setConnected(true);
             console.log('Open: ', event);
@@ -45,7 +48,7 @@ export class GameSocket {
 
     sendKeys(keys: Keys): void {
         const packet = new OutPacket();
-        packet.from = this.userId;
+        packet.from = this.playerDto.playerId;
         packet.keys = keys;
 
         const packetString = JSON.stringify(packet);

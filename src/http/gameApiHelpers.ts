@@ -1,10 +1,23 @@
 import { APIUtilities } from '../utilites/apiUtilities';
 import { GameDto } from '../interfaces/gameDto';
+import { v4 as uuidv4 } from 'uuid';
 
 export class GameApiHelpers {
 
     static readonly GAME_API_VERSION = 'v1';
-    static readonly GAME_API_ENDPOINT = `${APIUtilities.GAME_SERVER_URL}/${GameApiHelpers.GAME_API_VERSION}/games`;
+    static readonly GAME_API_ENDPOINT = `${APIUtilities.GAME_SERVER_URL}${GameApiHelpers.GAME_API_VERSION}/games`;
+
+    static async findGame(): Promise<GameDto> {
+        return this.getGames().then((games: GameDto[]) => {
+            if(games.length > 0) {
+                return games[0];
+            } else {
+                const gameId = uuidv4();
+                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN'};
+                return this.postGame(newGame);
+            }
+        })
+    }
 
     static async getGames(): Promise<GameDto[]> {
         const url = this.GAME_API_ENDPOINT;
