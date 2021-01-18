@@ -6,7 +6,7 @@ import { GridArea } from '../interfaces/gridArea';
 /*
  * These utilities are to be used within the rendering engine only
  */
-export class RenderingUtilities {
+export default class RenderingUtilities {
 
     static setDimensions(minGameDimensions: Dimensions = State.gameState.defaultGridDimensions) {
         this.stopCurrentZoom();
@@ -136,31 +136,6 @@ export class RenderingUtilities {
         State.backgroundState.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
     }
 
-    static nodeBuilder(type: string, content: string = '', classList: string[] = []): HTMLElement {
-        const node = document.createElement(type);
-        node.innerHTML = content;
-        node.classList.add(...classList);
-
-        return node;
-    }
-
-    static destroyNodes(nodes: HTMLElement[]) {
-        nodes.forEach((node: HTMLElement) => { node.remove(); });
-    }
-
-    static appendNodeToBody(node: HTMLElement): void {
-        const body = document.querySelector('body');
-        body.appendChild(node);
-    }
-
-    static appendChildNodes(parent: HTMLElement, children: HTMLElement[]): HTMLElement {
-        for (const child of children) {
-            parent.appendChild(child);
-        }
-
-        return parent;
-    }
-
     static viewableStageGridArea(): GridArea {
         const { x, y } = State.gameState.position;
         const { w, h } = State.gameState.gameUnitDimensions;
@@ -193,7 +168,7 @@ export class RenderingUtilities {
         State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
         State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
         RenderingUtilities.setDimensions(State.gameState.currentGridDimensions);
-        if (State.gameState.paused && !State.builderState.builderMode) {
+        if (State.gameState.paused && !State.builderState.builderModeOn) {
             State.gameState.renderingEngine.run();
         }
     }

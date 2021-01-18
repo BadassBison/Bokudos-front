@@ -2,10 +2,9 @@ import { State } from '../states/rootState';
 import { GameState } from '../states/gameState';
 import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
+import RenderingUtilities from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
 import { Ninja } from './ninja';
-import { BuilderMode } from '../components/builder/builderMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
@@ -90,9 +89,9 @@ export class Game {
 
     const canvas = State.gameState.canvas.canvasElement;
     canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
-    canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
-    canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
+    canvas.addEventListener('mousemove', (evt: MouseEvent) => State.builderState.builderModeInstance.handleMouseMove(evt));
+    canvas.addEventListener('mousedown', (evt: MouseEvent) => State.builderState.builderModeInstance.handleMouseClick(evt, true));
+    canvas.addEventListener('mouseup', (evt: MouseEvent) => State.builderState.builderModeInstance.handleMouseClick(evt, false));
     canvas.addEventListener('mousedown', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, true); } });
     canvas.addEventListener('mouseup', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, false); } });
 

@@ -1,8 +1,8 @@
 export default class ComponentUtilities {
 
-  static parentInit<T extends HTMLElement>(context: T): HTMLElement {
+  static parentInit<T extends HTMLElement>(context: T, type: string = 'div'): HTMLElement {
     context.attachShadow({ mode: 'open' });
-    const wrapper = this.nodeBuilder('div');
+    const wrapper = this.nodeBuilder(type);
     context.shadowRoot.appendChild(wrapper);
     return wrapper;
   }

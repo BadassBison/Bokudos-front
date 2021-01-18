@@ -1,7 +1,7 @@
 import component from '../decorators/component';
 import { State } from '../states/rootState';
 import ComponentUtilities from '../utilites/componentUtilities';
-import { BuilderMode } from './builder/builderMode';
+import BuilderMode from './builder/builderMode';
 import GameButton from './gameButton';
 
 @component()
@@ -79,7 +79,7 @@ export default class StartScreenComponent extends HTMLElement {
     button.addText('Builder');
     element.appendChild(button.elementRef);
     button.elementRef.addEventListener('click', () => {
-      BuilderMode.openBuilderMode();
+      BuilderMode.buildComponent();
       this.removeStartScreen();
     });
   }

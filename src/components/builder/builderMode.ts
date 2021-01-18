@@ -1,17 +1,56 @@
-import { RenderingUtilities } from '../../utilites/renderingUtilities';
+import RenderingUtilities from '../../utilites/renderingUtilities';
 import { State } from '../../states/rootState';
-import { DebugMode } from '../../debug/debugMode';
 import { BuilderMenu } from './builderMenu';
 import { TileBuilder } from './tileBuilder';
 import { StageTile } from '../../objects/stageTile';
 
-export class BuilderMode {
+import component from '../../decorators/component';
+import ComponentUtilities from '../../utilites/componentUtilities';
 
-    static handleMouseMove(evt: MouseEvent) {
+@component()
+export default class BuilderMode extends HTMLElement {
+
+    static selector = 'bokudos-builder-mode';
+    elementRef: HTMLElement;
+
+    static register() {
+        customElements.define(this.selector, this);
+    }
+
+    static buildComponent() {
+        State.builderState.builderModeInstance = ComponentUtilities.ComponentBuilder<BuilderMode>(this.selector);
+    }
+
+    constructor() {
+        super();
+        this.elementRef = ComponentUtilities.parentInit(this);
+        this.startBuilderMode();
+        this.addTemplate(this.elementRef);
+        this.addStyles(this.elementRef);
+    }
+
+    startBuilderMode() {
+        State.builderState.builderModeOn = true;
+        State.builderState.handleMouseClick = true;
+        State.builderState.builderEngine.start();
+        RenderingUtilities.zoomDimensionsInOrOut(18);
+    }
+
+    addTemplate(element: HTMLElement) {
+        // TODO: make menu a component
+        BuilderMenu.buildComponent();
+
+        // TODO: make tileBuilder a component
+        TileBuilder.openTileSelector();
+    }
+
+    addStyles(element: HTMLElement) {}
+
+    handleMouseMove(evt: MouseEvent) {
         this.handleMouseClick(evt, State.builderState.isClicked);
     }
 
-    static handleMouseClick(evt: MouseEvent, isClicked: boolean) {
+    handleMouseClick(evt: MouseEvent, isClicked: boolean) {
         State.builderState.isClicked = isClicked;
         if (State.builderState.handleMouseClick && isClicked) {
             State.builderState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
@@ -24,39 +63,12 @@ export class BuilderMode {
         }
     }
 
-    static openBuilderMode() {
-        DebugMode.resetState();
-
-        State.builderState.builderMode = true;
-        State.builderState.handleMouseClick = true;
-        State.builderState.builderEngine.start();
-
-        RenderingUtilities.zoomDimensionsInOrOut(18);
-        BuilderMenu.addBuilderMenu();
-        TileBuilder.openTileSelector();
-    }
-
-    static closeBuilderMode() {
-        if (State.builderState.builderMode) {
-
-            State.builderState.builderMode = false;
-            State.builderState.handleMouseClick = false;
-            State.builderState.builderEngine.stop();
-
-            BuilderMenu.removeBuilderMenu();
-            BuilderMenu.deleteTileMode(false);
-            TileBuilder.removeTileSelector();
-
-            RenderingUtilities.setDimensions();
-        }
-    }
-
-    static getSelectedTileLookUpValue(): string {
-        const tileId = State.builderState.selectedTile.id;
+    getSelectedTileLookUpValue(): string {
+        const tileId = State.domState.builder.selectedTile.id;
         return tileId.split('-')[1];
     }
 
-    static addTileToStage() {
+    addTileToStage() {
         const col = State.builderState.clickedGridCoords.x;
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = this.getSelectedTileLookUpValue();
@@ -66,7 +78,7 @@ export class BuilderMode {
         State.stageState.tiles.set(gridId, stageTile);
     }
 
-    static deleteTileFromStage() {
+    deleteTileFromStage() {
         const col = State.builderState.clickedGridCoords.x;
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = '00';
@@ -76,7 +88,22 @@ export class BuilderMode {
         State.stageState.tiles.set(gridId, stageTile);
     }
 
+    static closeBuilderMode() {
+        if (State.builderState.builderModeOn) {
+
+            State.builderState.builderModeOn = false;
+            State.builderState.handleMouseClick = false;
+            State.builderState.builderEngine.stop();
+
+            // BuilderMenu.removeBuilderMenu();
+            // BuilderMenu.deleteTileMode(false);
+            TileBuilder.removeTileSelector();
+
+            RenderingUtilities.setDimensions();
+        }
+    }
+
     static cleanup() {
-        if (State.builderState.builderMode) { this.closeBuilderMode(); }
+        if (State.builderState.builderModeOn) { this.closeBuilderMode(); }
     }
 }

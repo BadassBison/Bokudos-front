@@ -1,9 +1,11 @@
+import BuilderMode from '../components/builder/builderMode';
 import { BuilderModeEngine } from '../engines/builderModeEngine';
 import { Point } from '../interfaces/point';
 
 export class BuilderState {
 
-    builderMode: boolean;
+    builderModeOn: boolean;
+    builderModeInstance: BuilderMode;
     builderEngine: BuilderModeEngine;
     handleMouseClick: boolean;
     isClicked: boolean;
@@ -11,17 +13,12 @@ export class BuilderState {
     clickedGridCoords: Point;
 
     builderMenuOpen: boolean;
-
     tileSelectorOpen: boolean;
-    tileSelector?: HTMLElement;
-    tileSelectorCheckbox: HTMLInputElement;
-    selectedTile: HTMLElement;
 
     removingTiles: boolean;
-    removingTilesCheckbox: HTMLInputElement;
 
     constructor() {
-        this.builderMode = false;
+        this.builderModeOn = false;
         this.builderEngine = new BuilderModeEngine();
         this.builderMenuOpen = false;
         this.tileSelectorOpen = false;

@@ -1,35 +1,35 @@
-import { RenderingUtilities } from '../../utilites/renderingUtilities';
 import { State } from '../../states/rootState';
+import ComponentUtilities from '../../utilites/componentUtilities';
 
 export class TileBuilder {
 
   static openTileSelector(): void {
     State.builderState.tileSelectorOpen = true;
-    State.builderState.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
-    State.builderState.tileSelector = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Tile Selector</h1>', ['builder--tile-selector']);
-    this.addTiles(State.builderState.tileSelector);
+    State.domState.builder.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
+    State.domState.builder.tileSelector = ComponentUtilities.nodeBuilder('content', '<h1 class="title">Tile Selector</h1>', ['builder--tile-selector']);
+    this.addTiles(State.domState.builder.tileSelector);
 
-    RenderingUtilities.appendNodeToBody(State.builderState.tileSelector);
+    ComponentUtilities.appendNodeToBody(State.domState.builder.tileSelector);
   }
 
   static removeTileSelector() {
-    if (State.builderState.tileSelector) {
-      State.builderState.tileSelector.remove();
-      State.builderState.tileSelector = null;
+    if (State.domState.builder.tileSelector) {
+      State.domState.builder.tileSelector.remove();
+      State.domState.builder.tileSelector = null;
       State.builderState.tileSelectorOpen = false;
-      State.builderState.tileSelectorCheckbox = null;
+      State.domState.builder.tileSelectorCheckbox = null;
     }
   }
 
   static toggleTileSelector(): void {
     if (State.builderState.tileSelectorOpen) {
-      State.builderState.tileSelector.classList.add('hidden');
+      State.domState.builder.tileSelector.classList.add('hidden');
       State.builderState.tileSelectorOpen = false;
     } else {
-      State.builderState.tileSelector.classList.remove('hidden');
+      State.domState.builder.tileSelector.classList.remove('hidden');
       State.builderState.tileSelectorOpen = true;
     }
-    State.builderState.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
+    State.domState.builder.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
   }
 
   static addTiles(tileSelector: HTMLElement) {
@@ -56,11 +56,11 @@ export class TileBuilder {
   }
 
   static setActiveTile(tile: HTMLElement): void {
-    if (State.builderState.selectedTile) {
-      State.builderState.selectedTile.classList.remove('active');
+    if (State.domState.builder.selectedTile) {
+      State.domState.builder.selectedTile.classList.remove('active');
     }
     tile.classList.add('active');
-    State.builderState.selectedTile = tile;
+    State.domState.builder.selectedTile = tile;
   }
 
 }

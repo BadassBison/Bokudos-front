@@ -2,8 +2,14 @@ import StartScreenComponent from '../components/startScreen';
 
 export default class DomState {
   startScreen: StartScreenComponent;
-  builderMenu: HTMLElement;
-  menuButtons: HTMLElement;
+  builder: {
+    builderMenu: HTMLElement;
+    builderMenuButtons: HTMLElement;
+    removingTilesCheckbox: HTMLInputElement;
+    selectedTile: HTMLElement;
+    tileSelector: HTMLElement;
+    tileSelectorCheckbox: HTMLInputElement;
+  };
 
   constructor() { }
 }
