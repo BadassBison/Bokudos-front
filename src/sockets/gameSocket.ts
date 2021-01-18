@@ -15,7 +15,7 @@ export class GameSocket {
             this.disconnect();
         }
         this.userId = uuidv4();
-        this.webSocket = new WebSocket('ws://localhost:8082/api/chat');
+        this.webSocket = new WebSocket('ws://localhost:8082/api/play/');
         this.webSocket.onopen = (event) => {
             this.setConnected(true);
             console.log('Open: ', event);

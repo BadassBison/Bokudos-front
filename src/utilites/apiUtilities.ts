@@ -4,7 +4,8 @@ export class APIUtilities {
 
   // TODO: Adapt for Web Workers
   // https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
-  static readonly devUrl = 'http://localhost:8081/';
+  static readonly STAGE_BUILDER_URL = 'http://localhost:8081/';
+  static readonly GAME_SERVER_URL = 'http://localhost:8082/api/';
 
   static async get<T>(url: string): Promise<T> {
     const response: T = await this.httpRequest<T>('GET', url);

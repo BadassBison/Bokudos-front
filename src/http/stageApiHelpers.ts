@@ -1,10 +1,9 @@
-import { RegionDto } from '../interfaces/regionDto';
 import { StageDto } from '../interfaces/stageDto';
 import { APIUtilities } from '../utilites/apiUtilities';
 
 export class StageApiHelpers {
 
-  static readonly baseUrl = `${APIUtilities.devUrl}stage/`;
+  static readonly baseUrl = `${APIUtilities.STAGE_BUILDER_URL}stage/`;
   static readonly userEndpoint = 'user/';
   static readonly searchEndpoint = 'search?';
 
