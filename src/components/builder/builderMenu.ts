@@ -1,11 +1,11 @@
-import { RenderingUtilities } from '../../../utilites/renderingUtilities';
-import { State } from '../../../states/rootState';
-import { MenuOptions } from '../../../constants/menuOptions';
-import { StageTile } from '../../../objects/stageTile';
-import { RegionApiHelpers } from '../../../http/regionApiHelpers';
-import { StageDto } from '../../../interfaces/stageDto';
-import { StageApiHelpers } from '../../../http/stageApiHelpers';
-import { RegionDto } from '../../../interfaces/regionDto';
+import { RenderingUtilities } from '../../utilites/renderingUtilities';
+import { State } from '../../states/rootState';
+import { MenuOptions } from '../../constants/menuOptions';
+import { StageTile } from '../../objects/stageTile';
+import { RegionApiHelpers } from '../../http/regionApiHelpers';
+import { StageDto } from '../../interfaces/stageDto';
+import { StageApiHelpers } from '../../http/stageApiHelpers';
+import { RegionDto } from '../../interfaces/regionDto';
 
 // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Node
 export class BuilderMenu {
@@ -16,20 +16,20 @@ export class BuilderMenu {
 
   static addBuilderMenu() {
     State.builderState.builderMenuOpen = true;
-    State.builderState.builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
+    State.domState.builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
 
     this.addStageNameInput();
-    this.addPlatformTileOptions(State.builderState.builderMenu);
+    this.addPlatformTileOptions(State.domState.builderMenu);
 
-    RenderingUtilities.appendNodeToBody(State.builderState.builderMenu);
-    State.builderState.builderMenu.appendChild(this.addMenuButtons());
+    RenderingUtilities.appendNodeToBody(State.domState.builderMenu);
+    State.domState.builderMenu.appendChild(this.addMenuButtons());
   }
 
   static removeBuilderMenu() {
     State.builderState.builderMenuOpen = false;
-    if (State.builderState.builderMenu) {
-      State.builderState.builderMenu.remove();
-      State.builderState.builderMenu = null;
+    if (State.domState.builderMenu) {
+      State.domState.builderMenu.remove();
+      State.domState.builderMenu = null;
     }
   }
 
@@ -43,12 +43,12 @@ export class BuilderMenu {
 
   static hideBuilderMenu() {
     State.builderState.builderMenuOpen = false;
-    State.builderState.builderMenu.classList.add('hidden');
+    State.domState.builderMenu.classList.add('hidden');
   }
 
   static showBuilderMenu() {
     State.builderState.builderMenuOpen = true;
-    State.builderState.builderMenu.classList.remove('hidden');
+    State.domState.builderMenu.classList.remove('hidden');
   }
 
   static addStageNameInput() {
@@ -58,7 +58,7 @@ export class BuilderMenu {
     input.value = State.gameState.stageName;
 
     label.appendChild(input);
-    State.builderState.builderMenu.appendChild(label);
+    State.domState.builderMenu.appendChild(label);
   }
 
   static addPlatformTileOptions(builder: HTMLElement): void {

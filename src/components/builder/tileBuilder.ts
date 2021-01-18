@@ -1,5 +1,5 @@
-import { RenderingUtilities } from '../../../utilites/renderingUtilities';
-import { State } from '../../../states/rootState';
+import { RenderingUtilities } from '../../utilites/renderingUtilities';
+import { State } from '../../states/rootState';
 
 export class TileBuilder {
 
