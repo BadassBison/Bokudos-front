@@ -21,6 +21,7 @@ export class RegionApiHelpers {
     const url = this.baseUrl + stageId;
 
     const regions = await APIUtilities.get<RegionDto[]>(url);
+
     if (regions.length > 0) {
       regions.forEach((region: RegionDto) => {
         this.addRegionToState(region, region.row, region.column);
@@ -77,7 +78,7 @@ export class RegionApiHelpers {
       stageId: State.gameState.stageId,
       row,
       column,
-      data: this.encodeRegionData(row, column)
+      data: this.encodeRegionData(row * State.stageState.regionSize, column * State.stageState.regionSize)
     };
 
     return await APIUtilities.post<RegionDto>(url, requestRegion);
@@ -91,11 +92,16 @@ export class RegionApiHelpers {
   private static async reduceRegionDtoIntoTiles(regionDto: RegionDto, regionRow: number, regionColumn: number): Promise<void> {
 
     const regionData = this.decodeRegionData(regionDto);
+    const regionX = regionColumn * State.stageState.regionSize;
+    const regionY = regionRow * State.stageState.regionSize;
 
-    for (let row = regionRow; row < regionRow + State.stageState.regionSize; row++) {
-      for (let col = regionColumn; col < regionRow + State.stageState.regionSize; col++) {
-        const gridRow = (regionRow + State.stageState.regionSize) - row;
-        State.stageState.tiles.set(`${col}${State.stageState.colRowSeparator}${gridRow}`, new StageTile(gridRow, col, regionData[row][col] || '0'));
+    for (let row = 0; row < State.stageState.regionSize; row++) {
+      const gridY = regionY + State.stageState.regionSize - row;
+      
+      for (let col = 0; col < State.stageState.regionSize; col++) {
+        const gridX = regionX + col;
+        
+        State.stageState.tiles.set(`${gridX}${State.stageState.colRowSeparator}${gridY}`, new StageTile(gridY, gridX, regionData[row][col] || '0'));
       }
     }
   }
@@ -111,10 +117,11 @@ export class RegionApiHelpers {
 
     for (let row = regionRow; row < regionRow + State.stageState.regionSize; row++) {
       if (data.length !== 0) { data += 'n'; }
+      const gridRow = (regionRow + State.stageState.regionSize) - (row - regionRow);
 
       for (let col = regionColumn; col < regionColumn + State.stageState.regionSize; col++) {
         if (data[data.length - 1] !== 'n' && data.length !== 0) { data += ','; }
-        const gridRow = (regionRow + State.stageState.regionSize) - row;
+
         const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${gridRow}`);
         data += tile ? tile.lookupValue : '0';
       }

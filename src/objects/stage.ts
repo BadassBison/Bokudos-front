@@ -18,9 +18,9 @@ export class Stage {
         for (let row = min.y; row <= max.y; row++) {
             for (let col = min.x; col <= max.x; col++) {
                 const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${row}`);
-                if (tile && tile.lookupValue !== '00') {
+                if (tile && tile.lookupValue !== '0' && tile.lookupValue !== '00') {
                     const { x, y } = RenderingUtilities.toScreenCoordinates({ x: tile.col, y: tile.row });
-                    try {
+
                     State.gameState.canvas.ctx.drawImage(
                         State.tileSetState.imageMap.get(Number(tile.lookupValue)),
                         x,
@@ -28,9 +28,7 @@ export class Stage {
                         RenderingUtilities.toPixels(1),
                         RenderingUtilities.toPixels(1)
                     );
-                    } catch (ex) {
-                        console.warn(ex, State.tileSetState.imageMap);
-                    }
+
                 }
             }
         }

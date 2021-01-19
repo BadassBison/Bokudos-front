@@ -62,7 +62,7 @@ export class BuilderMode {
 
     static getSelectedTileLookUpValue(): string {
         const tileId = State.builderState.selectedTile.id;
-        return tileId.split(State.stageState.colRowSeparator)[1];
+        return tileId.split('-')[1];
     }
 
     static addTileToStage() {

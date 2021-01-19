@@ -21,6 +21,6 @@ export class StageState {
         this.regionSize = 100;
         this.defaultStageName = 'Default';
         this.defaultStageId = 1;
-        this.colRowSeparator = '-';
+        this.colRowSeparator = '|';
     }
 }

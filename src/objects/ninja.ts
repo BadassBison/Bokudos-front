@@ -71,7 +71,7 @@ export class Ninja implements UpdateObject {
         }
         if (right !== left) {
             const movingRight = this.state.velocity.dx > 0;
-            const speed = right != movingRight && this.state.velocity.dx !== 0 ? 0 : this.state.velocity.dx + (right ? this.state.movementAcceleration : -this.state.movementAcceleration);
+            const speed = right !== movingRight && this.state.velocity.dx !== 0 ? 0 : this.state.velocity.dx + (right ? this.state.movementAcceleration : -this.state.movementAcceleration);
             velocity.dx = speed < 0 ? Math.max(speed, -this.state.movementSpeed) : Math.min(speed, this.state.movementSpeed);
         }
         if (velocity.dy > -this.state.terminalVelocity) {
@@ -84,8 +84,8 @@ export class Ninja implements UpdateObject {
         this.state.position.y += updatedVelocity.dy;
         this.state.position = CollisionUtilities.roundPosition(this.state.position);
 
-        this.state.velocity.dx = velocity.dx != updatedVelocity.dx ? 0 : updatedVelocity.dx;
-        this.state.velocity.dy = velocity.dy != updatedVelocity.dy ? 0 : updatedVelocity.dy;
+        this.state.velocity.dx = velocity.dx !== updatedVelocity.dx ? 0 : updatedVelocity.dx;
+        this.state.velocity.dy = velocity.dy !== updatedVelocity.dy ? 0 : updatedVelocity.dy;
 
         // To remove repetitive jumping when key is held
         this.state.jumpUsed = up;
