@@ -25,7 +25,7 @@ export class Game {
   constructor() { }
 
   async buildState(): Promise<void> {
-    await State.BuildState();
+    await State.buildState();
     this.state = State.gameState;
     this.state.assets = [new Ninja(), new Enemy()];
     this.state.renderingEngine = new RenderingEngine();
@@ -107,6 +107,7 @@ export class Game {
       cycleFrames: (n: number) => RenderingUtilities.cycleFrames(n),
       pauseGame: (pause: boolean) => RenderingUtilities.pauseGame(pause),
       setDimensions: (dimensions: Dimensions) => RenderingUtilities.setDimensions(dimensions),
+      state: State.allStates(),
       zoom: (newSize: number) => RenderingUtilities.zoomDimensionsInOrOut(newSize),
       api: {
         getPublishedStages: () => StageApiHelpers.getPublishedStages(),
@@ -157,5 +158,6 @@ export class Game {
     game.setupWindowDebugObject();
     game.setCanvas();
     game.setStartScreen();
+    Background.loadImage();
   }
 }

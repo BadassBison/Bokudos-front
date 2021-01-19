@@ -22,7 +22,7 @@ export class State {
     static tileSetState: TileSetState;
     static enemyState: EnemyState;
 
-    static async BuildState() {
+    static async buildState() {
         this.backgroundState = new BackgroundState();
         this.builderState = new BuilderState();
         this.debugState = new DebugState();
@@ -32,13 +32,22 @@ export class State {
         this.ninjaState = new NinjaState();
         this.stageState = new StageState();
         this.performanceState = new PerformanceState();
-
-        await this.fetchData();
-    }
-
-    static async fetchData() {
-        await RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
         this.enemyState = new EnemyState();
-        RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
     }
+
+    static allStates() {
+        return {
+            backgroundState: this.backgroundState,
+            builderState: this.builderState,
+            debugState: this.debugState,
+            domState: this.domState,
+            gameState: this.gameState,
+            tileSetState: this.tileSetState,
+            ninjaState: this.ninjaState,
+            stageState: this.stageState,
+            performanceState: this.performanceState,
+            enemyState: this.enemyState
+        };
+    }
+
 }

@@ -4,6 +4,7 @@ import { DebugMode } from '../../debug/debugMode';
 import { BuilderMenu } from './builderMenu';
 import { TileBuilder } from './tileBuilder';
 import { StageTile } from '../../objects/stageTile';
+import { Point } from '../../interfaces/point';
 
 export class BuilderMode {
 
@@ -16,11 +17,19 @@ export class BuilderMode {
         if (State.builderState.handleMouseClick && isClicked) {
             State.builderState.clickedPosition = RenderingUtilities.toGameCoordinates({ x: evt.clientX, y: evt.clientY });
             State.builderState.clickedGridCoords = RenderingUtilities.toGameCoordsImgRoot(State.builderState.clickedPosition);
+            this.checkRegion(State.builderState.clickedGridCoords);
             if (State.builderState.removingTiles) {
                 this.deleteTileFromStage();
             } else {
                 this.addTileToStage();
             }
+        }
+    }
+
+    static checkRegion(coords: Point): void {
+        const regionIdx = RenderingUtilities.getRegion(coords);
+        if (!State.stageState.regions.has(regionIdx)) {
+            State.stageState.regions.add(regionIdx);
         }
     }
 
@@ -61,7 +70,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = this.getSelectedTileLookUpValue();
 
-        const gridId = `${col}-${row}`;
+        const gridId = `${col}${State.stageState.colRowSeparator}${row}`;
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }
@@ -71,7 +80,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = '00';
 
-        const gridId = `${col}-${row}`;
+        const gridId = `${col}${State.stageState.colRowSeparator}${row}`;
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }

@@ -80,6 +80,12 @@ export class RenderingUtilities {
         };
     }
 
+    static getRegion({ x, y }: Point): string {
+        const regionColumn = Math.floor(x / State.stageState.regionSize);
+        const regionRow = Math.floor(y / State.stageState.regionSize);
+        return `${regionColumn}${State.stageState.colRowSeparator}${regionRow}`;
+    }
+
     static toScreenDimensions(gameDimensions: Dimensions): Dimensions {
         return {
             w: this.toPixels(gameDimensions.w),
