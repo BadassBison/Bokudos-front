@@ -48,11 +48,11 @@ export class GameSocket {
 
     sendKeys(keys: Keys): void {
         const packet = new OutPacket();
-        packet.from = this.playerDto.playerId;
+        packet.playerId = this.playerDto ? this.playerDto.playerId : null;
         packet.keys = keys;
 
         const packetString = JSON.stringify(packet);
-        if(this.connected && this.lastPacket !== packetString) {
+        if(this.connected && this.lastPacket !== packetString && packet.playerId) {
                 this.webSocket.send(packetString);
             this.lastPacket = packetString;
         }

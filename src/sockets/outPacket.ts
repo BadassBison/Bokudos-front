@@ -1,6 +1,6 @@
 import { Keys } from '../interfaces/keys';
 
 export class OutPacket {
-    from: string;
+    playerId: string;
     keys: Keys;
 }

@@ -146,9 +146,9 @@ export class Game {
     game.setupWindowDebugObject();
     game.setCanvas();
 
+    game.server = new GameSocket();
     GameApiHelpers.findGame().then((gameDto: GameDto) => {
       PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
-          game.server = new GameSocket();
           game.server.connect(gameDto, playerDto);
         }
       );
