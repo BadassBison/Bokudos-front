@@ -213,7 +213,7 @@ export class BuilderMenu {
     const requests: Promise<RegionDto>[] = [];
 
     State.stageState.regions.forEach((idx: string) => {
-      const pos = idx.split('-');
+      const pos = idx.split(State.stageState.colRowSeparator);
       const regionColumn = Number(pos[0]);
       const regionRow = Number(pos[1]);
       requests.push(RegionApiHelpers.postRegion(regionRow, regionColumn));

@@ -4,6 +4,7 @@ export default class DomState {
   startScreen: StartScreenComponent;
   builderMenu: HTMLElement;
   menuButtons: HTMLElement;
+  stageDropdown: HTMLSelectElement;
 
   constructor() { }
 }

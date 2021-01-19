@@ -157,5 +157,6 @@ export class Game {
     game.setupWindowDebugObject();
     game.setCanvas();
     game.setStartScreen();
+    Background.loadImage();
   }
 }

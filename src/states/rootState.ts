@@ -37,8 +37,7 @@ export class State {
     }
 
     static async fetchData() {
-        await RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
+        // await RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
         this.enemyState = new EnemyState();
-        RegionApiHelpers.getRegionForStage(this.gameState.stageId, 0, 0);
     }
 }

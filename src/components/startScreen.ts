@@ -1,4 +1,7 @@
 import component from '../decorators/component';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { StageApiHelpers } from '../http/stageApiHelpers';
+import { StageDto } from '../interfaces/stageDto';
 import { State } from '../states/rootState';
 import ComponentUtilities from '../utilites/componentUtilities';
 import { BuilderMode } from './builder/builderMode';
@@ -27,6 +30,7 @@ export default class StartScreenComponent extends HTMLElement {
 
   addTemplate(element: HTMLElement): void {
     this.addTitle(element);
+    this.addStageDropdown(element);
     this.addButtons(element);
   }
 
@@ -78,15 +82,36 @@ export default class StartScreenComponent extends HTMLElement {
     const button = GameButton.buildComponent();
     button.addText('Builder');
     element.appendChild(button.elementRef);
-    button.elementRef.addEventListener('click', () => {
+    button.elementRef.addEventListener('click', async () => {
+      await RegionApiHelpers.getAllRegionsForStage(State.stageState.defaultStageId);
       BuilderMode.openBuilderMode();
       this.removeStartScreen();
     });
   }
 
-  connectedCallback() {
-    console.log('Start Screen added to the DOM!');
-    // TODO: Fetch stage data for default state
+  addStageDropdown(element: HTMLElement) {
+    const label = ComponentUtilities.nodeBuilder('label', 'Stages ');
+    State.domState.stageDropdown = ComponentUtilities.nodeBuilder('select') as HTMLSelectElement;
+    const blankOption = ComponentUtilities.nodeBuilder('option', '-');
+    State.domState.stageDropdown.append(blankOption);
+    label.append(State.domState.stageDropdown);
+    State.domState.stageDropdown.style.width = '100px';
+    element.appendChild(label);
+    State.domState.stageDropdown.addEventListener('change', () => {
+      const [name, id] = State.domState.stageDropdown.value.split(' ');
+      State.stageState.selectedStage = name;
+      State.stageState.selectedStageId = Number(id);
+      RegionApiHelpers.getRegionForStage(Number(id), 0, 0);
+    });
+  }
+
+  async connectedCallback() {
+    State.stageState.stages = await StageApiHelpers.getStagesByUser(State.gameState.userId);
+    State.stageState.stages.forEach((opt: StageDto) => {
+      const stageItem = ComponentUtilities.nodeBuilder('option');
+      stageItem.innerText = opt.name + ' ' + opt.stageId;
+      State.domState.stageDropdown.append(stageItem);
+    });
   }
 
 }
