@@ -11,6 +11,12 @@ import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
 import { Enemy } from './enemy';
+import { GameSocket } from '../sockets/gameSocket';
+import { GameApiHelpers } from '../http/gameApiHelpers';
+import { GameDto } from '../interfaces/gameDto';
+import { v4 as uuidv4 } from 'uuid';
+import { PlayerApiHelpers } from '../http/playerApiHelpers';
+import { PlayerDto } from '../interfaces/playerDto';
 
 // TODO:
 import ComponentUtilities from '../utilites/componentUtilities';
@@ -21,6 +27,7 @@ import { Background } from './background';
 export class Game {
 
   state: GameState;
+  server: GameSocket;
 
   constructor() { }
 
@@ -82,6 +89,7 @@ export class Game {
         }
         break;
     }
+    this.server.sendKeys(this.state.keys);
   }
 
   setupEventListeners(): void {
@@ -157,6 +165,15 @@ export class Game {
     game.setupEventListeners();
     game.setupWindowDebugObject();
     game.setCanvas();
+
+    game.server = new GameSocket();
+    GameApiHelpers.findGame().then((gameDto: GameDto) => {
+      PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
+          game.server.connect(gameDto, playerDto);
+        }
+      );
+    });
+
     game.setStartScreen();
     Background.loadImage();
   }

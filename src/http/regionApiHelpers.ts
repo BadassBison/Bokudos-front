@@ -6,7 +6,7 @@ import { Neighbors } from '../interfaces/neighbors';
 
 export class RegionApiHelpers {
 
-  static readonly baseUrl = `${APIUtilities.devUrl}region/`;
+  static readonly baseUrl = `${APIUtilities.STAGE_BUILDER_URL}region/`;
   static readonly searchEndpoint = 'search?';
 
   static async getRegions(): Promise<RegionDto[]> {
