@@ -27,7 +27,10 @@ export class RenderingUtilities {
         };
     }
 
-    // TODO: Toggling between the builder and the debug mode will continue the pan
+    /**
+     * 
+     * @param newSize
+     */
     static zoomDimensionsInOrOut(newSize: number) {
         this.stopCurrentZoom();
         const adjustmentValue = 0.025;
@@ -139,7 +142,6 @@ export class RenderingUtilities {
 
     static refreshCanvas(): void {
         State.gameState.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
-        State.backgroundState.bgCanvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
     }
 
     static nodeBuilder(type: string, content: string = '', classList: string[] = []): HTMLElement {
