@@ -11,5 +11,6 @@ export class BackgroundState {
         this.ctx = this.bgCanvas.ctx;
         this.bgImage = new Image();
         this.bgImage.src = bgImageSrc;
+
     }
 }

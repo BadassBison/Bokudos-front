@@ -13,6 +13,10 @@ export class Background {
         }
     }
 
+    static loadImage() {
+        State.backgroundState.bgImage.onload = () => this.draw();
+    }
+
     static getSize(scale: number): Dimensions {
         return {
             w: State.backgroundState.bgImage.width / scale,

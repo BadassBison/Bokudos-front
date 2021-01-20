@@ -118,7 +118,7 @@ export class CollisionUtilities {
                 if (row < 0 || col < 0) {
                     continue;
                 }
-                const tile = State.stageState.tiles.get(`${col}-${row}`);
+                const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${row}`);
                 if (tile && tile.lookupValue !== '00') {
                     detectionTiles.push(tile);
                 }
@@ -136,7 +136,7 @@ export class CollisionUtilities {
         return {
             x: Math.round((x + Number.EPSILON) * 100) / 100,
             y: Math.round((y + Number.EPSILON) * 100) / 100
-        }
+        };
     }
 
 }

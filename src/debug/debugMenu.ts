@@ -148,7 +148,6 @@ export class DebugMenu {
 
             input.addEventListener('change', () => {
                 State.debugState.menuOptions[name].lineWidth = Number(input.value);
-                console.log('testing');
             });
 
             label.appendChild(input);

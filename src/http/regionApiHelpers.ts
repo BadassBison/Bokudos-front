@@ -14,7 +14,6 @@ export class RegionApiHelpers {
 
     const regions = await APIUtilities.get<RegionDto[]>(url);
 
-    console.log('All Regions: ', regions);
     return regions;
   }
 
@@ -23,13 +22,18 @@ export class RegionApiHelpers {
 
     const regions = await APIUtilities.get<RegionDto[]>(url);
 
-    console.log(`All Regions for StageId ${stageId}: `, regions);
+    if (regions.length > 0) {
+      regions.forEach((region: RegionDto) => {
+        this.addRegionToState(region, region.row, region.column);
+      });
+    }
+
     return regions;
   }
 
   static async getRegionForStage(stageId: number, row: number, column: number): Promise<RegionDto> {
-    const url = this.baseUrl + stageId + '/' + this.searchEndpoint;
 
+    const url = this.baseUrl + stageId + '/' + this.searchEndpoint;
     const queryString = `row=${row}&column=${column}`;
 
     const regionDto = await APIUtilities.get<RegionDto>(url + queryString);
@@ -67,31 +71,37 @@ export class RegionApiHelpers {
   }
 
   static async postRegion(row: number, column: number): Promise<RegionDto> {
+    console.log('postRegion', row, column);
     const url = this.baseUrl;
 
     const requestRegion: RegionDto = {
       stageId: State.gameState.stageId,
       row,
       column,
-      data: this.encodeRegionData(row, column)
+      data: this.encodeRegionData(row * State.stageState.regionSize, column * State.stageState.regionSize)
     };
 
     return await APIUtilities.post<RegionDto>(url, requestRegion);
   }
 
   private static addRegionToState(regionDto: RegionDto, row: number, column: number) {
-    State.stageState.regions.push(`${column}-${row}`);
+    State.stageState.regions.add(`${column}${State.stageState.colRowSeparator}${row}`);
     this.reduceRegionDtoIntoTiles(regionDto, row, column);
   }
 
   private static async reduceRegionDtoIntoTiles(regionDto: RegionDto, regionRow: number, regionColumn: number): Promise<void> {
 
     const regionData = this.decodeRegionData(regionDto);
+    const regionX = regionColumn * State.stageState.regionSize;
+    const regionY = regionRow * State.stageState.regionSize;
 
-    for (let row = regionRow; row < regionRow + State.stageState.regionSize; row++) {
-      for (let col = regionColumn; col < regionRow + State.stageState.regionSize; col++) {
-        const gridRow = (regionRow + State.stageState.regionSize) - row;
-        State.stageState.tiles.set(`${col}-${gridRow}`, new StageTile(gridRow, col, regionData[row][col] || '0'));
+    for (let row = 0; row < State.stageState.regionSize; row++) {
+      const gridY = regionY + State.stageState.regionSize - row;
+      
+      for (let col = 0; col < State.stageState.regionSize; col++) {
+        const gridX = regionX + col;
+        
+        State.stageState.tiles.set(`${gridX}${State.stageState.colRowSeparator}${gridY}`, new StageTile(gridY, gridX, regionData[row][col] || '0'));
       }
     }
   }
@@ -107,11 +117,12 @@ export class RegionApiHelpers {
 
     for (let row = regionRow; row < regionRow + State.stageState.regionSize; row++) {
       if (data.length !== 0) { data += 'n'; }
+      const gridRow = (regionRow + State.stageState.regionSize) - (row - regionRow);
 
       for (let col = regionColumn; col < regionColumn + State.stageState.regionSize; col++) {
         if (data[data.length - 1] !== 'n' && data.length !== 0) { data += ','; }
-        const gridRow = (regionRow + State.stageState.regionSize) - row;
-        const tile = State.stageState.tiles.get(`${col}-${gridRow}`);
+
+        const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${gridRow}`);
         data += tile ? tile.lookupValue : '0';
       }
     }

@@ -10,11 +10,7 @@ export class BuilderState {
     clickedPosition: Point;
     clickedGridCoords: Point;
 
-    builderBtn: HTMLElement;
-
     builderMenuOpen: boolean;
-    builderMenu: HTMLElement;
-    menuButtons: HTMLElement; // TODO: are these needed?
 
     tileSelectorOpen: boolean;
     tileSelector?: HTMLElement;
