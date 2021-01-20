@@ -13,7 +13,7 @@ export class GameApiHelpers {
                 return games[0];
             } else {
                 const gameId = uuidv4();
-                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN'};
+                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN', stageId: 1};
                 return this.postGame(newGame);
             }
         })
