@@ -9,6 +9,7 @@
     "target": "esNext",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "moduleResolution": "node"
   }
 }
