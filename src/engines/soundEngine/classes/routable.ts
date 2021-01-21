@@ -12,8 +12,8 @@ export class Routable {
   }
 
   /**
-   * Route an audio source into this channel
-   * @param destination AudioNode where audio gets routed to
+   * Connect to destination
+   * @param destination Where audio gets routed to
    * @return Destination to allow for chaining
    */
   connect(destination: Routable | AudioNode): AudioNode {
@@ -23,6 +23,18 @@ export class Routable {
     } else if (destination instanceof AudioNode) {
       this.gainNode.connect(destination);
       return destination;
+    }
+  }
+
+  /**
+   * Disconnect from destination
+   * @param destination Where audio is currently routed to
+   */
+  disconnect(destination: Routable | AudioNode): void {
+    if (destination instanceof Routable) {
+      this.gainNode.disconnect(destination.gainNode);
+    } else if (destination instanceof AudioNode) {
+      this.gainNode.disconnect(destination);
     }
   }
 
