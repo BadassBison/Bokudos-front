@@ -1,6 +1,7 @@
+import { Routable } from '../classes/routable';
 import { playOptions } from './playOptions';
 
-export interface SoundClip {
-  play(options: playOptions): Promise<any>;
+export interface SoundClip extends Routable {
+  play(options?: playOptions): Promise<any>;
   stop(): Promise<any>;
 }

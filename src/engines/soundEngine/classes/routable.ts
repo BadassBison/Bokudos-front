@@ -39,6 +39,27 @@ export class Routable {
   }
 
   /**
+   * Gets gainNode volume
+   * @return Volume
+   */
+  get volume(): number {
+    return this.gainNode.gain.value;
+  }
+
+  /**
+   * Sets the volume level
+   * @param volume Volume level between 0 and 1
+   */
+  set volume(volume: number) {
+    const { gain } = this.gainNode;
+
+    // clamp volume between 0 and 1
+    volume = Math.min(Math.max(volume, 0), 1);
+
+    gain.value = volume;
+  }
+
+  /**
    * Smooth fade to target volume
    * @param volume  Target volume between 0 and 1
    * @param seconds Duration of fade in seconds
@@ -52,18 +73,5 @@ export class Routable {
 
     gain.exponentialRampToValueAtTime(Math.max(volume, .001), currentTime + seconds);
     gain.setTargetAtTime(volume, currentTime + seconds, 0.5); // fade remaining amount
-  }
-
-  /**
-   * Sets the volume level
-   * @param volume Volume level between 0 and 1
-   */
-  setVolume(volume: number): void {
-    const { gain } = this.gainNode;
-
-    // clamp volume between 0 and 1
-    volume = Math.min(Math.max(volume, 0), 1);
-
-    gain.value = volume;
   }
 }
