@@ -1,9 +1,6 @@
 import { SoundClip } from '../interfaces/soundClip';
 import { Routable } from './routable';
-
-export interface playOptions {
-  volume: number;
-}
+import { playOptions } from '../interfaces/playOptions';
 
 export class SoundEffect extends Routable implements SoundClip {
   path: string;
@@ -22,7 +19,7 @@ export class SoundEffect extends Routable implements SoundClip {
     this.source.connect(this.gainNode);
   }
 
-  play(options?: playOptions): Promise<void> {
+  play(options: playOptions = {} as playOptions): Promise<void> {
     return new Promise(resolve => {
       this.audio.currentTime = 0;
       this.audio.play();

@@ -1,7 +1,7 @@
 import { SoundClip } from '../interfaces/soundClip';
 import { SoundEffect } from './soundEffect';
 import { Routable } from './routable';
-import { playOptions } from './soundEffect';
+import { playOptions } from '../interfaces/playOptions';
 
 export class PolyphonicSoundEffect extends Routable implements SoundClip {
   path: string;
