@@ -2,6 +2,7 @@ import { SoundClip } from '../interfaces/soundClip';
 import { SoundEffect } from './soundEffect';
 import { Routable } from './routable';
 import { playOptions } from '../interfaces/playOptions';
+import { SoundEngine } from '../soundEngine';
 
 export class PolyphonicSoundEffect extends Routable implements SoundClip {
   path: string;
@@ -12,13 +13,15 @@ export class PolyphonicSoundEffect extends Routable implements SoundClip {
     super(ctx);
 
     this.path = path;
+
+    SoundEngine.preloadSound(path);
   }
 
-  play(options?: playOptions): Promise<any> {
+  async play(options?: playOptions): Promise<any> {
     const sound = new SoundEffect(this.ctx, this.path);
     sound.connect(this);
 
-    // store sound instance so it can be stopped
+    // store instance so it can be stopped
     this.playedSounds.push(sound);
 
     return sound.play(options).then(e => {
@@ -28,6 +31,8 @@ export class PolyphonicSoundEffect extends Routable implements SoundClip {
   }
 
   stop(): Promise<any> {
-    return Promise.all(this.playedSounds.map(sound => sound.stop())).then();
+    return Promise.all(this.playedSounds.map(sound => sound.stop())).then(() => {
+      this.playedSounds = [];
+    });
   }
 }

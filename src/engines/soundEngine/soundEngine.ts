@@ -32,4 +32,12 @@ export class SoundEngine {
 
     return new SoundEffect(ctx, path);
   }
+
+  static preloadSound(path: string): Promise<Event> {
+    return new Promise(resolve => {
+      const audio = new Audio();
+      audio.addEventListener('canplaythrough', resolve);
+      audio.src = path;
+    });
+  }
 }
