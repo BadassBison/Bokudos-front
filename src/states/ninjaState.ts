@@ -1,4 +1,5 @@
 import { NinjaAnimations } from '../animations/ninjaAnimations';
+import { NinjaSounds } from '../sounds/ninjaSounds';
 import { AnimationTypes } from '../constants/animationTypes';
 import { Box } from '../interfaces/box';
 import { Dimensions } from '../interfaces/dimensions';
@@ -7,6 +8,7 @@ import { Velocity } from '../interfaces/velocity';
 
 export class NinjaState {
     animations: NinjaAnimations;
+    sounds: NinjaSounds;
     attacking: boolean;
     attackUsed: boolean;
     collisionDetectionBox: Box;
@@ -36,6 +38,7 @@ export class NinjaState {
 
     constructor() {
         this.animations = new NinjaAnimations();
+        this.sounds = new NinjaSounds();
         this.attacking = false;
         this.attackUsed = false;
         this.currentFrame = 0;

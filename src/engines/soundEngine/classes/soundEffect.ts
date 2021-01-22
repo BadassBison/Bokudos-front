@@ -21,11 +21,12 @@ export class SoundEffect extends Routable implements SoundClip {
 
   play(options: playOptions = {} as playOptions): Promise<void> {
     return new Promise(resolve => {
-      this.audio.currentTime = 0;
-      this.audio.play();
-      this.fadeTo(options.volume || 1); // fade to prevent clicks/pops
-
-      this.audio.addEventListener('ended', () => resolve());
+      setTimeout(() => {
+        this.audio.addEventListener('ended', () => resolve());
+        this.audio.currentTime = 0;
+        this.audio.play();
+        this.fadeTo(options.volume || 1); // fade to prevent clicks/pops
+      }, options.delay * 1000 || 0)
     });
   }
 

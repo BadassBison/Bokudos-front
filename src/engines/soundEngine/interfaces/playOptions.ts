@@ -1,3 +1,4 @@
 export interface playOptions {
-  volume: number;
+  volume?: number;
+  delay?: number;
 }
