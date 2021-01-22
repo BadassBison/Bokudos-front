@@ -30,7 +30,6 @@ export class GameState {
     defaultLineWidth: number;
     timeoutId: NodeJS.Timeout;
     soundEffectsChannel: AudioChannel;
-    musicChannel: AudioChannel;
 
     stageId: number;
     stageName: string;
