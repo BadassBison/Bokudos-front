@@ -7,7 +7,6 @@ import { Neighbors } from '../interfaces/neighbors';
 export class RegionApiHelpers {
 
   static readonly baseUrl = `${APIUtilities.STAGE_BUILDER_URL}region/`;
-  static readonly searchEndpoint = 'search?';
 
   static async getRegions(): Promise<RegionDto[]> {
     const url = this.baseUrl;
@@ -33,10 +32,9 @@ export class RegionApiHelpers {
 
   static async getRegionForStage(stageId: number, row: number, column: number): Promise<RegionDto> {
 
-    const url = this.baseUrl + stageId + '/' + this.searchEndpoint;
-    const queryString = `row=${row}&column=${column}`;
+    const url = `${this.baseUrl}${stageId}/${row}/${column}`;
 
-    const regionDto = await APIUtilities.get<RegionDto>(url + queryString);
+    const regionDto = await APIUtilities.get<RegionDto>(url);
     if (regionDto) {
       this.addRegionToState(regionDto, row, column);
     }
@@ -97,10 +95,10 @@ export class RegionApiHelpers {
 
     for (let row = 0; row < State.stageState.regionSize; row++) {
       const gridY = regionY + State.stageState.regionSize - row;
-      
+
       for (let col = 0; col < State.stageState.regionSize; col++) {
         const gridX = regionX + col;
-        
+
         State.stageState.tiles.set(`${gridX}${State.stageState.colRowSeparator}${gridY}`, new StageTile(gridY, gridX, regionData[row][col] || '0'));
       }
     }
