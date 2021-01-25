@@ -7,6 +7,7 @@ import { NinjaState } from '../states/ninjaState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { UpdateObject } from '../interfaces/updateObject';
 import { CollisionUtilities } from '../utilites/collisionUtilities';
+import { PositionData } from '../interfaces/positionData';
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -168,5 +169,15 @@ export class Ninja implements UpdateObject {
             w: State.ninjaState.currentImage.width / State.ninjaState.SPRITE_SIZER,
             h: State.ninjaState.currentImage.height / State.ninjaState.SPRITE_SIZER
         };
+    }
+
+    getId(): string {
+        return "";
+    }
+
+    render(): void {
+    }
+
+    setPositionData(state: PositionData): void {
     }
 }

@@ -49,7 +49,7 @@ export class DebugMode {
     // this.drawCollisionDetectionBox();
     this.drawHitbox();
     this.drawAttackHitbox();
-    this.drawEnemyHitbox();
+    // this.drawEnemyHitbox();
     // this.drawCollisionsOutlines();
     this.resetCtx();
   }
@@ -150,17 +150,17 @@ export class DebugMode {
     }
   }
 
-  static drawEnemyHitbox() {
-    if (State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].lineWidth;
-
-      const box = State.enemyState.hitbox;
-      const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
-      const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
-      State.gameState.canvas.ctx.strokeRect(x, y, w, h);
-    }
-  }
+  // static drawEnemyHitbox() {
+  //   if (State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].enabled) {
+  //     State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].color;
+  //     State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].lineWidth;
+  //
+  //     const box = State.enemyState.hitbox;
+  //     const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
+  //     const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
+  //     State.gameState.canvas.ctx.strokeRect(x, y, w, h);
+  //   }
+  // }
 
   static drawCollisionsOutlines() {
     if (State.debugState.menuOptions[MenuOptions.COLLISION_TILES].enabled) {

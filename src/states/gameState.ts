@@ -9,6 +9,7 @@ import { PhysicsEngine } from '../engines/physicsEngine';
 export class GameState {
     canvas: CanvasElement;
     assets: UpdateObject[];
+    assetMap: Map<string, UpdateObject>;
     renderingEngine: RenderingEngine;
     physicsEngine: PhysicsEngine;
     keys: Keys;
@@ -33,6 +34,7 @@ export class GameState {
     stageName: string;
     gameId: number;
     userId: number;
+
 
     constructor() {
         this.keys = {

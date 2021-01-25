@@ -15,6 +15,9 @@ export class RenderingEngine {
         for (const asset of State.gameState.assets) {
             asset.updateAnimation(State.gameState.keys);
         }
+        if(State.gameState.assetMap != null) {
+            State.gameState.assetMap.forEach(value => value.render());
+        }
 
         DebugMode.draw();
     }
