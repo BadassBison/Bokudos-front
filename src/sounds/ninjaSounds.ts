@@ -18,10 +18,6 @@ export class NinjaSounds {
   }
 
   getSound(soundName: string): SoundClip {
-    if (this.sounds[soundName]) {
-      return this.sounds[soundName];
-    }
-
-    return null;
+    return this.sounds[soundName] || null;
   }
 }
