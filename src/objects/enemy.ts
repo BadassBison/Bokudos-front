@@ -1,5 +1,3 @@
-import { Keys } from '../interfaces/keys';
-
 import { AnimationTypes } from '../constants/animationTypes';
 import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
@@ -28,18 +26,6 @@ export class Enemy implements UpdateObject {
         return this.state.enemyId;
     }
 
-    updateStateAfterImagesLoad(): void {
-        this.state.currentImage = this.state.animations
-            .getAnimation(this.state.currentAnimation)
-            .getImages()[this.state.currentFrame];
-    }
-
-    updateProperties(keys: Keys): void {
-    }
-
-    updateAnimation() {
-    }
-
     setCurrentAnimationState() {
         // if the velocity is 0, keep the direction that the character was last facing
         if (this.state.positionData.dx !== 0) {
@@ -55,6 +41,10 @@ export class Enemy implements UpdateObject {
         if (this.state.frameCount === 0) {
             this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
             this.state.currentImage = this.state.animations.getAnimation(this.state.currentAnimation).getImages()[this.state.currentFrame];
+        } else if(this.state.currentImage == null) {
+            this.state.currentImage = this.state.animations
+                .getAnimation(this.state.currentAnimation)
+                .getImages()[this.state.currentFrame];
         }
     }
 

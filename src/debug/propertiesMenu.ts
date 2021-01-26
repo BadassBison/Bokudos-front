@@ -52,29 +52,32 @@ export class PropertiesMenu {
   }
 
   static addProperties(menu: HTMLElement) {
-    const input1 = this.addProperty(menu, 'Gravity', State.ninjaState.gravity);
-    input1.addEventListener('input', (evt) => {
-      console.log((evt.target as HTMLInputElement).value);
-      State.ninjaState.gravity = Number((evt.target as HTMLInputElement).value);
-    });
-
-    const input2 = this.addProperty(menu, 'Movement Speed', State.ninjaState.movementSpeed);
-    input2.addEventListener('input', (evt) => {
-      console.log((evt.target as HTMLInputElement).value);
-      State.ninjaState.movementSpeed = Number((evt.target as HTMLInputElement).value);
-    });
-
-    const input3 = this.addProperty(menu, 'Movement Acceleration', State.ninjaState.movementAcceleration);
-    input3.addEventListener('input', (evt) => {
-      console.log((evt.target as HTMLInputElement).value);
-      State.ninjaState.movementAcceleration = Number((evt.target as HTMLInputElement).value);
-    });
-
-    const input4 = this.addProperty(menu, 'Jump Speed', State.ninjaState.jumpSpeed);
-    input4.addEventListener('input', (evt) => {
-      console.log((evt.target as HTMLInputElement).value);
-      State.ninjaState.jumpSpeed = Number((evt.target as HTMLInputElement).value);
-    });
+    /**
+     * These properties are all handled on server side now, so we need a different way to set these within the game.
+     */
+    // const input1 = this.addProperty(menu, 'Gravity', State.ninjaState.gravity);
+    // input1.addEventListener('input', (evt) => {
+    //   console.log((evt.target as HTMLInputElement).value);
+    //   State.ninjaState.gravity = Number((evt.target as HTMLInputElement).value);
+    // });
+    //
+    // const input2 = this.addProperty(menu, 'Movement Speed', State.ninjaState.movementSpeed);
+    // input2.addEventListener('input', (evt) => {
+    //   console.log((evt.target as HTMLInputElement).value);
+    //   State.ninjaState.movementSpeed = Number((evt.target as HTMLInputElement).value);
+    // });
+    //
+    // const input3 = this.addProperty(menu, 'Movement Acceleration', State.ninjaState.movementAcceleration);
+    // input3.addEventListener('input', (evt) => {
+    //   console.log((evt.target as HTMLInputElement).value);
+    //   State.ninjaState.movementAcceleration = Number((evt.target as HTMLInputElement).value);
+    // });
+    //
+    // const input4 = this.addProperty(menu, 'Jump Speed', State.ninjaState.jumpSpeed);
+    // input4.addEventListener('input', (evt) => {
+    //   console.log((evt.target as HTMLInputElement).value);
+    //   State.ninjaState.jumpSpeed = Number((evt.target as HTMLInputElement).value);
+    // });
   }
 
   static addProperty(menu: HTMLElement, name: string, value: number): HTMLElement {

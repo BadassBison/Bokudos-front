@@ -54,7 +54,6 @@ export class GameSocket {
             }
             if(!State.gameState.assetMap.has(key)) {
                 const asset = value.assetType === AssetType.ENEMY ? new Enemy(key) : new Player(key);
-                asset.updateStateAfterImagesLoad();
                 asset.setPositionData(value);
                 State.gameState.assetMap.set(key, asset);
             } else {

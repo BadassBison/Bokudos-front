@@ -1,4 +1,3 @@
-import { Keys } from '../interfaces/keys';
 import { Dimensions } from '../interfaces/dimensions';
 import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
@@ -25,26 +24,6 @@ export class Player implements UpdateObject {
 
     setPositionData(positionData: PositionData): void {
         this.state.positionData = positionData;
-    }
-
-    updateStateAfterImagesLoad(): void {
-    }
-
-    updateProperties(keys: Keys): void {
-        this.updateAttackState(keys);
-    }
-
-    updateAnimation() {
-    }
-
-    updateAttackState({attack}: Keys): void {
-        // indicate that we are starting the attack animation
-        if (attack && !this.state.attacking && !this.state.attackUsed) {
-            this.state.attacking = true;
-            this.state.currentFrame = -1;
-        }
-        // we may want to add some kind of timer to prevent the user from attacking too fast
-        this.state.attackUsed = attack;
     }
 
     getAnimationType(): string {

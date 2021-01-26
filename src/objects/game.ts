@@ -1,10 +1,8 @@
 import { State } from '../states/rootState';
 import { GameState } from '../states/gameState';
-import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
-import { Ninja } from './ninja';
 import { BuilderMode } from '../components/builder/builderMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
@@ -20,7 +18,6 @@ import ComponentUtilities from '../utilites/componentUtilities';
 import ComponentRegistry from '../components/componentRegistry';
 import StartScreenComponent from '../components/startScreen';
 import { Background } from './background';
-import { Enemy } from './enemy';
 
 export class Game {
 
@@ -32,9 +29,7 @@ export class Game {
   async buildState(): Promise<void> {
     await State.buildState();
     this.state = State.gameState;
-    this.state.assets = [new Ninja()];
     this.state.renderingEngine = new RenderingEngine();
-    this.state.physicsEngine = new PhysicsEngine();
     RenderingUtilities.setDimensions();
   }
 
@@ -139,8 +134,6 @@ export class Game {
   }
 
   beginRun() {
-    State.gameState.renderingEngine.prepare();
-
     GameApiHelpers.findGame().then((gameDto: GameDto) => {
       PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
             this.server.connect(gameDto, playerDto);
@@ -156,7 +149,6 @@ export class Game {
     setTimeout(() => {
       if (!this.state.paused) {
         this.state.renderingEngine.run();
-        this.state.physicsEngine.run();
       }
       this.run();
     }, this.state.defaultFrameDelay);
