@@ -3,9 +3,9 @@ import { Keys } from '../interfaces/keys';
 import { AnimationTypes } from '../constants/animationTypes';
 import { State } from '../states/rootState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { UpdateObject } from '../interfaces/updateObject';
 import { EnemyState } from '../states/EnemyState';
 import { PositionData } from '../interfaces/positionData';
+import { UpdateObject } from '../interfaces/updateObject';
 
 export class Enemy implements UpdateObject {
     state: EnemyState;
@@ -38,9 +38,6 @@ export class Enemy implements UpdateObject {
     }
 
     updateAnimation() {
-        this.setCurrentAnimationState();
-        this.updateSprite();
-        this.draw();
     }
 
     setCurrentAnimationState() {

@@ -91,7 +91,7 @@ export class Ninja implements UpdateObject {
         // To remove repetitive jumping when key is held
         this.state.jumpUsed = up;
 
-        RenderingUtilities.setScreenPositionFromCenter(this.state.position);
+        // RenderingUtilities.setScreenPositionFromCenter(this.state.position);
         this.updateHitboxAndCollisionDetectionBoxPositions();
     }
 

@@ -229,7 +229,11 @@ export class NinjaAnimations {
         this.animations[AnimationTypes.IDLE_RIGHT] = new ImageBuilder([idle0, idle1, idle2, idle3, idle4, idle5, idle6, idle7, idle8, idle9]);
         this.animations[AnimationTypes.IDLE_LEFT] = new ImageBuilder([idleL0, idleL1, idleL2, idleL3, idleL4, idleL5, idleL6, idleL7, idleL8, idleL9]);
         this.animations[AnimationTypes.ATTACK_RIGHT] = new ImageBuilder([attack0, attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9]);
+        this.animations[AnimationTypes.IDLE_ATTACK_RIGHT] = this.animations[AnimationTypes.ATTACK_RIGHT];
+        this.animations[AnimationTypes.RUN_ATTACK_RIGHT] = this.animations[AnimationTypes.ATTACK_RIGHT];
         this.animations[AnimationTypes.ATTACK_LEFT] = new ImageBuilder([attackL0, attackL1, attackL2, attackL3, attackL4, attackL5, attackL6, attackL7, attackL8, attackL9]);
+        this.animations[AnimationTypes.IDLE_ATTACK_LEFT] = this.animations[AnimationTypes.ATTACK_LEFT];
+        this.animations[AnimationTypes.RUN_ATTACK_LEFT] = this.animations[AnimationTypes.ATTACK_LEFT];
         this.animations[AnimationTypes.RUN_RIGHT] = new ImageBuilder([run0, run1, run2, run3, run4, run5, run6, run7, run8, run9]);
         this.animations[AnimationTypes.RUN_LEFT] = new ImageBuilder([runL0, runL1, runL2, runL3, runL4, runL5, runL6, runL7, runL8, runL9]);
         this.animations[AnimationTypes.CLIMB] = new ImageBuilder([climb0, climb1, climb2, climb3, climb4, climb5, climb6, climb7, climb8, climb9]);

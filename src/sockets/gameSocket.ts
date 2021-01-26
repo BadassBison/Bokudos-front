@@ -6,6 +6,10 @@ import { ServerUpdatePacket } from './serverUpdatePacket';
 import { State } from '../states/rootState';
 import { Enemy } from '../objects/enemy';
 import { UpdateObject } from '../interfaces/updateObject';
+import { PositionData } from '../interfaces/positionData';
+import { Player } from '../objects/player';
+import { AssetType } from '../enums/assetType';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
 
 export class GameSocket {
 
@@ -28,31 +32,38 @@ export class GameSocket {
             console.log('Open: ', event);
         };
         this.webSocket.onmessage = (event) => {
-            // console.log("Message: " + event.data);
             const serverUpdatePacket: ServerUpdatePacket = JSON.parse(event.data);
-            // console.log("Package Update Received: " + serverUpdatePacket.gameId);
-            // This should probably be somewhere else..
 
+            if(serverUpdatePacket.players != null) {
+                this.updateAssets(serverUpdatePacket.players);
+            }
             if (serverUpdatePacket.enemies != null) {
-                new Map(Object.entries(serverUpdatePacket.enemies)).forEach((value, key) => {
-                    if(State.gameState.assetMap == null) {
-                        State.gameState.assetMap = new Map<string, UpdateObject>();
-                    }
-                    if(!State.gameState.assetMap.has(key)) {
-                        const enemy = new Enemy(key);
-                        enemy.updateStateAfterImagesLoad();
-                        enemy.setPositionData(value);
-                        State.gameState.assetMap.set(key, enemy);
-                    } else {
-                        State.gameState.assetMap.get(key).setPositionData(value);
-                    }
-                });
+                this.updateAssets(serverUpdatePacket.enemies);
             }
         };
         this.webSocket.onclose = (event) => {
             this.setConnected(false);
             console.log('Close: ' + event);
         };
+    }
+
+    updateAssets(assets: Map<string, PositionData>): void {
+        new Map(Object.entries(assets)).forEach((value, key) => {
+            if(State.gameState.assetMap == null) {
+                State.gameState.assetMap = new Map<string, UpdateObject>();
+            }
+            if(!State.gameState.assetMap.has(key)) {
+                const asset = value.assetType === AssetType.ENEMY ? new Enemy(key) : new Player(key);
+                asset.updateStateAfterImagesLoad();
+                asset.setPositionData(value);
+                State.gameState.assetMap.set(key, asset);
+            } else {
+                State.gameState.assetMap.get(key).setPositionData(value);
+            }
+            if(key === this.playerDto.playerId) {
+                RenderingUtilities.setScreenPositionFromCenter({x: value.x, y: value.y});
+            }
+        });
     }
 
     setConnected(connected: boolean): void {
