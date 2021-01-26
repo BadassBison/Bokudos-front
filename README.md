@@ -1,7 +1,6 @@
 # Bokudos-front
-- *"The Way of the Wooden Sword"*
 
-# Parent for this module
+## Parent for this module
 [Bokudos](https://github.com/BadassBison/Bokudos.git)
 
 ## Description
