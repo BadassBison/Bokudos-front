@@ -15,14 +15,13 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpe?g|gif|cur)$/i,
+        test: /\.(png|jpe?g|gif|cur|wav|mp3)$/i,
         use: 'file-loader',
-
       },
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
-      }
+      },
     ],
   },
   resolve: {

@@ -7,6 +7,7 @@ import { NinjaState } from '../states/ninjaState';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { UpdateObject } from '../interfaces/updateObject';
 import { CollisionUtilities } from '../utilites/collisionUtilities';
+import { SoundTypes } from '../constants/soundTypes';
 
 export class Ninja implements UpdateObject {
     state: NinjaState;
@@ -55,10 +56,13 @@ export class Ninja implements UpdateObject {
     }
 
     updateAttackState({attack}: Keys): void {
+        const attackSound = this.state.sounds.getSound(SoundTypes.SWORD_SWING);
+
         // indicate that we are starting the attack animation
         if(attack && !this.state.attacking && !this.state.attackUsed) {
             this.state.attacking = true;
             this.state.currentFrame = -1;
+            attackSound.play({ delay: .1 });
         }
         // we may want to add some kind of timer to prevent the user from attacking too fast
         this.state.attackUsed = attack;
