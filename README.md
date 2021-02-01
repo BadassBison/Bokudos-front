@@ -1,5 +1,7 @@
-# Bokudos
-- *"The Way of the Wooden Sword"*
+# Bokudos-front
+
+## Parent for this module
+[Bokudos](https://github.com/BadassBison/Bokudos.git)
 
 ## Description
 Bokudos is a 2D battle royale where players fight as ninjas against eachother in realtime. 

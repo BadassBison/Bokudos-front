@@ -4,6 +4,7 @@ import { Keys } from '../interfaces/keys';
 import { Dimensions } from '../interfaces/dimensions';
 import { UpdateObject } from '../interfaces/updateObject';
 import { RenderingEngine } from '../engines/renderingEngine';
+import { AudioChannel, SoundEngine } from '../engines/soundEngine';
 
 export class GameState {
     canvas: CanvasElement;
@@ -26,6 +27,7 @@ export class GameState {
     defaultColor: string;
     defaultLineWidth: number;
     timeoutId: NodeJS.Timeout;
+    soundEffectsChannel: AudioChannel;
 
     stageId: number;
     stageName: string;
@@ -58,5 +60,9 @@ export class GameState {
         this.gameId = 1;
         this.stageId = 1;
         this.userId = 1;
+
+        const speakers = SoundEngine.getSpeakers();
+        this.soundEffectsChannel = SoundEngine.createChannel();
+        this.soundEffectsChannel.connect(speakers);
     }
 }
