@@ -1,23 +1,18 @@
 import { State } from '../states/rootState';
 import { GameState } from '../states/gameState';
-import { PhysicsEngine } from '../engines/physicsEngine';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
-import { Ninja } from './ninja';
 import { BuilderMode } from '../components/builder/builderMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
 import { Dimensions } from '../interfaces/dimensions';
-import { Enemy } from './enemy';
 import { GameSocket } from '../sockets/gameSocket';
 import { GameApiHelpers } from '../http/gameApiHelpers';
 import { GameDto } from '../interfaces/gameDto';
-import { v4 as uuidv4 } from 'uuid';
 import { PlayerApiHelpers } from '../http/playerApiHelpers';
 import { PlayerDto } from '../interfaces/playerDto';
-
 // TODO:
 import ComponentUtilities from '../utilites/componentUtilities';
 import ComponentRegistry from '../components/componentRegistry';
@@ -34,9 +29,7 @@ export class Game {
   async buildState(): Promise<void> {
     await State.buildState();
     this.state = State.gameState;
-    this.state.assets = [new Ninja(), new Enemy()];
     this.state.renderingEngine = new RenderingEngine();
-    this.state.physicsEngine = new PhysicsEngine();
     RenderingUtilities.setDimensions();
   }
 
@@ -141,7 +134,13 @@ export class Game {
   }
 
   beginRun() {
-    State.gameState.renderingEngine.prepare();
+    GameApiHelpers.findGame().then((gameDto: GameDto) => {
+      PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
+            this.server.connect(gameDto, playerDto);
+          }
+      );
+    });
+
     this.run();
   }
 
@@ -150,7 +149,6 @@ export class Game {
     setTimeout(() => {
       if (!this.state.paused) {
         this.state.renderingEngine.run();
-        this.state.physicsEngine.run();
       }
       this.run();
     }, this.state.defaultFrameDelay);
@@ -167,12 +165,6 @@ export class Game {
     game.setCanvas();
 
     game.server = new GameSocket();
-    GameApiHelpers.findGame().then((gameDto: GameDto) => {
-      PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
-          game.server.connect(gameDto, playerDto);
-        }
-      );
-    });
 
     game.setStartScreen();
     Background.loadImage();

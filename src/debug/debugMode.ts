@@ -44,13 +44,6 @@ export class DebugMode {
   }
 
   static drawDebugGraphics() {
-    // this.drawScreenEdge();
-    // this.drawDetectedTileOutlines();
-    // this.drawCollisionDetectionBox();
-    this.drawHitbox();
-    this.drawAttackHitbox();
-    this.drawEnemyHitbox();
-    // this.drawCollisionsOutlines();
     this.resetCtx();
   }
 
@@ -75,103 +68,6 @@ export class DebugMode {
       const { x, y } = RenderingUtilities.toScreenCoordinates({ x: col, y: row });
       const pixelOffset = 4;
       State.gameState.canvas.ctx.fillText(`(${col}, ${row})`, x + pixelOffset, y - pixelOffset);
-    }
-  }
-
-  static drawScreenEdge() {
-    if (State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.SCREEN_EDGE].lineWidth;
-
-      const view = State.gameState.screenPixelDimensions;
-      State.gameState.canvas.ctx.lineWidth = 2;
-      State.gameState.canvas.ctx.beginPath();
-      State.gameState.canvas.ctx.rect(0, 0, view.w, view.h);
-      State.gameState.canvas.ctx.stroke();
-    }
-  }
-
-  static drawDetectedTileOutlines() {
-    if (State.debugState.menuOptions[MenuOptions.DETECTED_TILES].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.DETECTED_TILES].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.DETECTED_TILES].lineWidth;
-
-      State.stageState.detectionTiles.forEach((tile: StageTile) => {
-        const dim = RenderingUtilities.toPixels(1);
-        const pos = RenderingUtilities.toScreenCoordinates({ x: tile.col, y: tile.row });
-        State.gameState.canvas.ctx.strokeRect(pos.x, pos.y, dim, dim);
-      });
-    }
-  }
-
-  static drawCollisionDetectionBox() {
-    if (State.debugState.menuOptions[MenuOptions.DETECTION_BOX].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.DETECTION_BOX].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.DETECTION_BOX].lineWidth;
-
-      const box = State.ninjaState.collisionDetectionBox;
-      const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
-      const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
-      State.gameState.canvas.ctx.strokeRect(x, y, w, h);
-    }
-  }
-
-  static drawHitbox() {
-    if (State.debugState.menuOptions[MenuOptions.HITBOX].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.HITBOX].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.HITBOX].lineWidth;
-
-      const box = State.ninjaState.hitbox;
-      const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
-      const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
-      State.gameState.canvas.ctx.strokeRect(x, y, w, h);
-    }
-  }
-
-  static drawAttackHitbox() {
-    if (State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ATTACK_HITBOX].lineWidth;
-
-      const box = State.ninjaState.hitbox;
-      if (State.ninjaState.attacking) {
-
-        let point: Point;
-        let dimensions: Dimensions;
-        if (State.ninjaState.movingRight) {
-          point = RenderingUtilities.toScreenCoordinates({ x: box.position.x + box.dimensions.w - .5, y: box.position.y });
-          dimensions = RenderingUtilities.toScreenDimensions({ w: 1, h: box.dimensions.h });
-        } else {
-          dimensions = RenderingUtilities.toScreenDimensions({ w: 1, h: box.dimensions.h });
-          point = RenderingUtilities.toScreenCoordinates({ x: box.position.x - .5, y: box.position.y });
-        }
-        State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
-      }
-    }
-  }
-
-  static drawEnemyHitbox() {
-    if (State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].lineWidth;
-
-      const box = State.enemyState.hitbox;
-      const { x, y } = RenderingUtilities.toScreenCoordinates(box.position);
-      const { w, h } = RenderingUtilities.toScreenDimensions(box.dimensions);
-      State.gameState.canvas.ctx.strokeRect(x, y, w, h);
-    }
-  }
-
-  static drawCollisionsOutlines() {
-    if (State.debugState.menuOptions[MenuOptions.COLLISION_TILES].enabled) {
-      State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.COLLISION_TILES].color;
-      State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.COLLISION_TILES].lineWidth;
-
-      const dim = RenderingUtilities.toPixels(1);
-      State.stageState.collisionTiles.forEach((tile: StageTile) => {
-        const tilePos = RenderingUtilities.toScreenCoordinates({ x: tile.col, y: tile.row });
-        State.gameState.canvas.ctx.strokeRect(tilePos.x, tilePos.y, dim, dim);
-      });
     }
   }
 

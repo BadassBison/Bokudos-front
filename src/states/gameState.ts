@@ -4,14 +4,12 @@ import { Keys } from '../interfaces/keys';
 import { Dimensions } from '../interfaces/dimensions';
 import { UpdateObject } from '../interfaces/updateObject';
 import { RenderingEngine } from '../engines/renderingEngine';
-import { PhysicsEngine } from '../engines/physicsEngine';
 import { AudioChannel, SoundEngine } from '../engines/soundEngine';
 
 export class GameState {
     canvas: CanvasElement;
-    assets: UpdateObject[];
+    assetMap: Map<string, UpdateObject>;
     renderingEngine: RenderingEngine;
-    physicsEngine: PhysicsEngine;
     keys: Keys;
     defaultFramesPerSecond: number;
     defaultFrameDelay: number;
@@ -35,6 +33,7 @@ export class GameState {
     stageName: string;
     gameId: number;
     userId: number;
+
 
     constructor() {
         this.keys = {

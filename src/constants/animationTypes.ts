@@ -1,10 +1,14 @@
 export class AnimationTypes {
     public static readonly IDLE_RIGHT = 'IDLE_RIGHT';
     public static readonly IDLE_LEFT = 'IDLE_LEFT';
+    public static readonly IDLE_ATTACK_RIGHT = 'IDLE_ATTACK_RIGHT';
+    public static readonly IDLE_ATTACK_LEFT = 'IDLE_ATTACK_LEFT';
     public static readonly ATTACK_RIGHT = 'ATTACK_RIGHT';
     public static readonly ATTACK_LEFT = 'ATTACK_LEFT';
     public static readonly RUN_RIGHT = 'RUN_RIGHT';
     public static readonly RUN_LEFT = 'RUN_LEFT';
+    public static readonly RUN_ATTACK_RIGHT = 'RUN_ATTACK_RIGHT';
+    public static readonly RUN_ATTACK_LEFT = 'RUN_ATTACK_LEFT';
     public static readonly CLIMB = 'CLIMB';
     public static readonly DEAD_RIGHT = 'DEAD_RIGHT';
     public static readonly DEAD_LEFT = 'DEAD_LEFT';
