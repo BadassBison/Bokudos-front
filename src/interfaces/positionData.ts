@@ -11,5 +11,5 @@ export interface PositionData {
 
     jumping: boolean;
     attacking: boolean;
-    animation: AnimationData
+    animation: AnimationData;
 }
