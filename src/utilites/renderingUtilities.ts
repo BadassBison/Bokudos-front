@@ -2,6 +2,7 @@ import { Point } from '../interfaces/point';
 import { Dimensions } from '../interfaces/dimensions';
 import { State } from '../states/rootState';
 import { GridArea } from '../interfaces/gridArea';
+import { Background } from '../objects/background';
 
 /*
  * These utilities are to be used within the rendering engine only
@@ -201,6 +202,7 @@ export class RenderingUtilities {
         State.backgroundState.bgCanvas.canvasElement.height = innerHeight;
         State.backgroundState.bgCanvas.canvasElement.width = innerWidth;
         RenderingUtilities.setDimensions(State.gameState.currentGridDimensions);
+        Background.draw();
         if (State.gameState.paused && !State.builderState.builderMode) {
             State.gameState.renderingEngine.run();
         }

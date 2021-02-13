@@ -18,6 +18,7 @@ import ComponentUtilities from '../utilites/componentUtilities';
 import ComponentRegistry from '../components/componentRegistry';
 import StartScreenComponent from '../components/startScreen';
 import { Background } from './background';
+import { InputUtilities } from '../utilites/inputUtilities';
 
 export class Game {
 
@@ -34,58 +35,13 @@ export class Game {
   }
 
   parseKey(key: string, pressed: boolean) {
-    switch (key) {
-      case 'ArrowUp':
-      case 'w':
-      case 'W':
-      case ' ':
-        this.state.keys.up = pressed;
-        break;
-
-      case 'ArrowDown':
-      case 's':
-      case 'S':
-        this.state.keys.down = pressed;
-        break;
-
-      case 'ArrowLeft':
-      case 'a':
-      case 'A':
-        this.state.keys.left = pressed;
-        break;
-
-      case 'ArrowRight':
-      case 'd':
-      case 'D':
-        this.state.keys.right = pressed;
-        break;
-
-      case 'mousedown':
-      case 'mouseup':
-        this.state.keys.attack = pressed;
-        break;
-
-      case 'Shift':
-        if (pressed && !this.state.keys.shift || !pressed && this.state.keys.shift) {
-          this.state.keys.shift = pressed;
-        }
-        break;
-
-      case 'F9':
-        if (pressed) { State.debugState.debugMode = !State.debugState.debugMode; }
-        break;
-
-      case 'Escape':
-        if (pressed) {
-          const paused = !State.gameState.paused;
-          RenderingUtilities.pauseGame(paused);
-        }
-        break;
-    }
+    InputUtilities.storeInput(key, pressed);
     this.server.sendKeys(this.state.keys);
   }
 
   setupEventListeners(): void {
+    window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
+    
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
 
@@ -97,7 +53,6 @@ export class Game {
     canvas.addEventListener('mousedown', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, true); } });
     canvas.addEventListener('mouseup', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, false); } });
 
-    window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
   }
 
   setupWindowDebugObject(): void {
