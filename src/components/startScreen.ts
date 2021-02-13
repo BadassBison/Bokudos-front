@@ -97,20 +97,23 @@ export default class StartScreenComponent extends HTMLElement {
     label.append(State.domState.stageDropdown);
     State.domState.stageDropdown.style.width = '100px';
     element.appendChild(label);
-    State.domState.stageDropdown.addEventListener('change', () => {
-      const [name, id] = State.domState.stageDropdown.value.split(' ');
-      State.stageState.selectedStage = name;
-      State.stageState.selectedStageId = Number(id);
-      RegionApiHelpers.getRegionForStage(Number(id), 0, 0);
+    
+    State.domState.stageDropdown.addEventListener('change', (evt) => {
+      
+      const id = Number(State.domState.stageDropdown.value);
+      console.log(State.domState.stageDropdown);
+      State.stageState.selectedStageId = id;
+      RegionApiHelpers.getRegionForStage(id, 0, 0);
     });
   }
 
   async connectedCallback() {
     State.stageState.stages = await StageApiHelpers.getStagesByUser(State.gameState.userId);
     State.stageState.stages.forEach((opt: StageDto) => {
-      const stageItem = ComponentUtilities.nodeBuilder('option');
-      stageItem.innerText = opt.name + ' ' + opt.stageId;
-      State.domState.stageDropdown.append(stageItem);
+      const stageItem: HTMLOptionElement = ComponentUtilities.nodeBuilder('option') as HTMLOptionElement;
+      stageItem.value = opt.stageId + '';
+      stageItem.innerText = `${opt.name}`;
+      State.domState.stageDropdown.append(stageItem as HTMLElement);
     });
   }
 
