@@ -1,11 +1,9 @@
 import { NinjaAnimations } from '../animations/ninjaAnimations';
 import { AnimationTypes } from '../constants/animationTypes';
 import { PositionData } from '../interfaces/positionData';
-import { NinjaSounds } from '../sounds/ninjaSounds';
 
 export class PlayerState {
     animations: NinjaAnimations;
-    sounds: NinjaSounds;
     attacking: boolean;
     attackUsed: boolean;
     currentFrame: number;
@@ -22,7 +20,6 @@ export class PlayerState {
 
     constructor(playerId: string) {
         this.animations = new NinjaAnimations();
-        this.sounds = new NinjaSounds();
         this.attacking = false;
         this.attackUsed = false;
         this.currentFrame = 0;

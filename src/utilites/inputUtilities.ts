@@ -1,33 +1,31 @@
 import { State } from '../states/rootState';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
+import { RenderingUtilities } from './renderingUtilities';
 
 export class InputUtilities {
-  static keys = State.gameState.keys;
-  
   static storeInput(key: string, pressed: boolean) {
     switch (key) {
-      case 'ArrowUp' || 'w' || 'W' || ' ':
-        this.keys.up = pressed;
+      case 'ArrowUp': case 'w': case 'W': case ' ':
+        State.gameState.keys.up = pressed;
         break;
 
-      case 'ArrowDown' || 's' || 'S':
-        this.keys.down = pressed;
+      case 'ArrowDown': case 's': case 'S':
+        State.gameState.keys.down = pressed;
         break;
 
-      case 'ArrowLeft' || 'a' || 'A':
-        this.keys.left = pressed;
+      case 'ArrowLeft': case 'a': case 'A':
+        State.gameState.keys.left = pressed;
         break;
 
-      case 'ArrowRight' || 'd' || 'D':
-        this.keys.right = pressed;
+      case 'ArrowRight': case 'd': case 'D':
+        State.gameState.keys.right = pressed;
         break;
 
-      case 'mousedown' || 'mouseup':
-        this.keys.attack = pressed;
+      case 'mousedown': case 'mouseup':
+        State.gameState.keys.attack = pressed;
         break;
 
       case 'Shift':
-        this.keys.shift = pressed;
+        State.gameState.keys.shift = pressed;
         break;
 
       case 'F9':
