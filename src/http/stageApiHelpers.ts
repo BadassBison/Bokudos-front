@@ -1,3 +1,4 @@
+import { State } from '../states/rootState';
 import { StageDto } from '../interfaces/stageDto';
 import { APIUtilities } from '../utilites/apiUtilities';
 
@@ -24,6 +25,7 @@ export class StageApiHelpers {
     const stages = await APIUtilities.get<StageDto[]>(url);
 
     console.log(`Stages for user with id ${userId}: `, stages);
+    this.addStagesToState(stages);
     return stages;
   }
 
@@ -35,6 +37,7 @@ export class StageApiHelpers {
     const stage = await APIUtilities.get<StageDto>(url);
 
     console.log(`Stage with id ${stageId}: `, stage);
+    this.addStagesToState([stage]);
     return stage;
   }
 
@@ -48,6 +51,7 @@ export class StageApiHelpers {
     const stages = await APIUtilities.get<StageDto[]>(url + queryString);
 
     console.log(`Stages with name similiar to ${searchTerm}: `, stages);
+    this.addStagesToState(stages);
     return stages;
   }
 
@@ -55,18 +59,24 @@ export class StageApiHelpers {
     if (!stage) { return; }
 
     const url = this.baseUrl;
-
     const postedStage = await APIUtilities.post<StageDto>(url, stage);
+
+    console.log(`${postedStage} was saved in the database`);
     return postedStage;
   }
 
   static async updateStage(stage: StageDto): Promise<StageDto> {
     if (!stage) { return; }
+    
     console.log('stage', stage);
     const url = this.baseUrl + stage.stageId;
     const updatedStage = await APIUtilities.put<StageDto>(url, stage);
     console.log('updatedStage', updatedStage);
     return updatedStage;
+  }
+
+  private static addStagesToState(stages: StageDto[]) {
+    State.stageState.stages = stages;
   }
 
 }

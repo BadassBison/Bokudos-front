@@ -16,6 +16,7 @@ export class BuilderState {
     tileSelector?: HTMLElement;
     tileSelectorCheckbox: HTMLInputElement;
     selectedTile: HTMLElement;
+    stageName: string;
 
     removingTiles: boolean;
     removingTilesCheckbox: HTMLInputElement;

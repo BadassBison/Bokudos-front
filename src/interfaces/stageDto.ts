@@ -1,5 +1,5 @@
 export interface StageDto {
-  stageId: number;
+  stageId?: number;
   name: string;
   userId: number;
   gameId: number;

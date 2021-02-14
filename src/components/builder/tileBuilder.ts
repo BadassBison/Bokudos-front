@@ -1,15 +1,16 @@
 import { RenderingUtilities } from '../../utilites/renderingUtilities';
 import { State } from '../../states/rootState';
+import ComponentUtilities from '../../utilites/componentUtilities';
 
 export class TileBuilder {
 
   static openTileSelector(): void {
     State.builderState.tileSelectorOpen = true;
     State.builderState.tileSelectorCheckbox.checked = State.builderState.tileSelectorOpen;
-    State.builderState.tileSelector = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Tile Selector</h1>', ['builder--tile-selector']);
+    State.builderState.tileSelector = ComponentUtilities.nodeBuilder('content', '<h1 class="title">Tile Selector</h1>', ['builder--tile-selector']);
     this.addTiles(State.builderState.tileSelector);
 
-    RenderingUtilities.appendNodeToBody(State.builderState.tileSelector);
+    ComponentUtilities.appendNodeToBody(State.builderState.tileSelector);
   }
 
   static removeTileSelector() {

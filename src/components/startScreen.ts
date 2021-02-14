@@ -73,6 +73,10 @@ export default class StartScreenComponent extends HTMLElement {
   startButtonHandler(cb: any): void {
     const button: HTMLElement = this.elementRef.querySelector('#start-btn');
     button.addEventListener('click', () => {
+      const id = State.stageState.selectedStageId;
+      // Must explicitly say no null or undefined because '0' and 0 are falsy values
+      if (id === null || id === undefined) { return; }
+      
       cb();
       this.removeStartScreen();
     });
@@ -83,7 +87,8 @@ export default class StartScreenComponent extends HTMLElement {
     button.addText('Builder');
     element.appendChild(button.elementRef);
     button.elementRef.addEventListener('click', async () => {
-      await RegionApiHelpers.getAllRegionsForStage(State.stageState.defaultStageId);
+      await RegionApiHelpers.getAllRegionsForDefaultStage();
+      await StageApiHelpers.getStagesByUser(State.gameState.userId);
       BuilderMode.openBuilderMode();
       this.removeStartScreen();
     });
@@ -97,9 +102,9 @@ export default class StartScreenComponent extends HTMLElement {
     label.append(State.domState.stageDropdown);
     State.domState.stageDropdown.style.width = '100px';
     element.appendChild(label);
-    
+
     State.domState.stageDropdown.addEventListener('change', (evt) => {
-      
+
       const id = Number(State.domState.stageDropdown.value);
       console.log(State.domState.stageDropdown);
       State.stageState.selectedStageId = id;
@@ -108,7 +113,7 @@ export default class StartScreenComponent extends HTMLElement {
   }
 
   async connectedCallback() {
-    State.stageState.stages = await StageApiHelpers.getStagesByUser(State.gameState.userId);
+    State.stageState.stages = await StageApiHelpers.getPublishedStages();
     State.stageState.stages.forEach((opt: StageDto) => {
       const stageItem: HTMLOptionElement = ComponentUtilities.nodeBuilder('option') as HTMLOptionElement;
       stageItem.value = opt.stageId + '';

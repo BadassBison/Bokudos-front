@@ -145,31 +145,6 @@ export class RenderingUtilities {
         State.gameState.canvas.ctx.clearRect(0, 0, innerWidth, innerHeight);
     }
 
-    static nodeBuilder(type: string, content: string = '', classList: string[] = []): HTMLElement {
-        const node = document.createElement(type);
-        node.innerHTML = content;
-        node.classList.add(...classList);
-
-        return node;
-    }
-
-    static destroyNodes(nodes: HTMLElement[]) {
-        nodes.forEach((node: HTMLElement) => { node.remove(); });
-    }
-
-    static appendNodeToBody(node: HTMLElement): void {
-        const body = document.querySelector('body');
-        body.appendChild(node);
-    }
-
-    static appendChildNodes(parent: HTMLElement, children: HTMLElement[]): HTMLElement {
-        for (const child of children) {
-            parent.appendChild(child);
-        }
-
-        return parent;
-    }
-
     static viewableStageGridArea(): GridArea {
         const { x, y } = State.gameState.position;
         const { w, h } = State.gameState.gameUnitDimensions;
