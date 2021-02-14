@@ -108,6 +108,8 @@ export default class StartScreenComponent extends HTMLElement {
       const id = Number(State.domState.stageDropdown.value);
       console.log(State.domState.stageDropdown);
       State.stageState.selectedStageId = id;
+      State.gameState.stageId = id;
+      console.log("StageId: " + State.gameState.stageId);
       RegionApiHelpers.getRegionForStage(id, 0, 0);
     });
   }

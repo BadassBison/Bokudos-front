@@ -32,7 +32,7 @@ export class GameSocket {
             this.setConnected(true);
             const packet = new OutPacket();
             packet.playerId = this.playerDto ? this.playerDto.playerId : null;
-            packet.keys = {left: false, attack: false, down: false, right: false, shift: false, up: false};
+            packet.keys = {left: false, attack: false, down: false, right: false, shift: false, up: false, glide: false};
 
             const packetString = JSON.stringify(packet);
             if (this.connected && this.lastPacket !== packetString && packet.playerId) {
@@ -44,6 +44,7 @@ export class GameSocket {
         this.webSocket.onmessage = (event) => {
             const serverUpdatePacket: ServerUpdatePacket = JSON.parse(event.data);
 
+            // console.log(event.data);
             if (serverUpdatePacket.players != null) {
                 this.updateAssets(serverUpdatePacket.players);
             }

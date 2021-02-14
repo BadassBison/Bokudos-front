@@ -5,4 +5,5 @@ export interface Keys {
   right: boolean;
   shift: boolean;
   attack: boolean;
+  glide: boolean;
 }

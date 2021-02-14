@@ -26,6 +26,7 @@ export class InputUtilities {
 
       case 'Shift':
         State.gameState.keys.shift = pressed;
+        State.gameState.keys.glide = pressed;
         break;
 
       case 'F9':
