@@ -13,7 +13,6 @@ import { GameApiHelpers } from '../http/gameApiHelpers';
 import { GameDto } from '../interfaces/gameDto';
 import { PlayerApiHelpers } from '../http/playerApiHelpers';
 import { PlayerDto } from '../interfaces/playerDto';
-// TODO:
 import ComponentUtilities from '../utilites/componentUtilities';
 import ComponentRegistry from '../components/componentRegistry';
 import StartScreenComponent from '../components/startScreen';
@@ -72,6 +71,7 @@ export class Game {
         searchStageByName: (searchTerm: string) => StageApiHelpers.searchStagesByName(searchTerm),
         getRegions: () => RegionApiHelpers.getRegions(),
         getAllRegionsForStage: (stageId: number) => RegionApiHelpers.getAllRegionsForStage(stageId),
+        getNeighboringRegionsForStage: (stageId: number, regionRow: number, regionColumn: number) => RegionApiHelpers.getNeighboringRegionsForStage(stageId, regionRow, regionColumn),
         getRegionForStage: (stageId: number, row: number, column: number) => RegionApiHelpers.getRegionForStage(stageId, row, column)
       }
     };

@@ -1,13 +1,14 @@
 import { State } from '../states/rootState';
+import ComponentUtilities from '../utilites/componentUtilities';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from './debugMode';
 
 export class PropertiesMenu {
 
   static addPropertiesButton() {
-    const propertiesBtn = RenderingUtilities.nodeBuilder('button', 'Properties', ['button', 'propertiesBtn']);
+    const propertiesBtn = ComponentUtilities.nodeBuilder('button', 'Properties', ['button', 'propertiesBtn']);
     propertiesBtn.addEventListener('click', () => this.toggleProperties());
-    RenderingUtilities.appendNodeToBody(propertiesBtn);
+    ComponentUtilities.appendNodeToBody(propertiesBtn);
   }
 
   static removePropertiesButton() {
@@ -37,9 +38,9 @@ export class PropertiesMenu {
     DebugMode.resetState();
     State.debugState.propertiesOpen = true;
     this.activatePropertiesButton();
-    const menu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Properties Menu</h1>', ['prop-menu']);
+    const menu = ComponentUtilities.nodeBuilder('content', '<h1 class="title">Properties Menu</h1>', ['prop-menu']);
     this.addProperties(menu);
-    RenderingUtilities.appendNodeToBody(menu);
+    ComponentUtilities.appendNodeToBody(menu);
   }
 
   static closePropertyMenu() {
@@ -81,7 +82,7 @@ export class PropertiesMenu {
   }
 
   static addProperty(menu: HTMLElement, name: string, value: number): HTMLElement {
-    const wrapper = RenderingUtilities.nodeBuilder('div', '', ['wrapper']);
+    const wrapper = ComponentUtilities.nodeBuilder('div', '', ['wrapper']);
     const input = this.addInput(name, value);
     wrapper.appendChild(input);
     menu.appendChild(wrapper);
@@ -90,7 +91,7 @@ export class PropertiesMenu {
   }
 
   static addInput(name: string, value: number): HTMLElement {
-    const label = RenderingUtilities.nodeBuilder('label', name);
+    const label = ComponentUtilities.nodeBuilder('label', name);
     const input = document.createElement('input');
     input.type = 'number';
     input.step = '0.01';

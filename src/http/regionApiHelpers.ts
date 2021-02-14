@@ -2,8 +2,6 @@ import { RegionDto } from '../interfaces/regionDto';
 import { APIUtilities } from '../utilites/apiUtilities';
 import { State } from '../states/rootState';
 import { StageTile } from '../objects/stageTile';
-import { Neighbors } from '../interfaces/neighbors';
-
 export class RegionApiHelpers {
 
   static readonly baseUrl = `${APIUtilities.STAGE_BUILDER_URL}region/`;
@@ -20,7 +18,36 @@ export class RegionApiHelpers {
     const url = this.baseUrl + stageId;
 
     const regions = await APIUtilities.get<RegionDto[]>(url);
+    
+    if (regions.length > 0) {
+      State.stageState.regions = new Set();
+      regions.forEach((region: RegionDto) => {
+        this.addRegionToState(region, region.row, region.column);
+      });
+    }
 
+    return regions;
+  }
+
+  static async getAllRegionsForDefaultStage(): Promise<RegionDto[]> {
+    const url = this.baseUrl + '1';
+
+    const regions = await APIUtilities.get<RegionDto[]>(url);
+    
+    if (regions.length > 0) {
+      State.stageState.regions = new Set();
+      regions.forEach((region: RegionDto) => {
+        this.addRegionToState(region, region.row, region.column);
+      });
+    }
+
+    return regions;
+  }
+
+  static async getNeighboringRegionsForStage(stageId: number, currentRow: number, currentColumn: number) {
+    const url = `${this.baseUrl}${stageId}/neighbors/${currentRow}/${currentColumn}`;
+    
+    const regions = await APIUtilities.get<RegionDto[]>(url);
     if (regions.length > 0) {
       regions.forEach((region: RegionDto) => {
         this.addRegionToState(region, region.row, region.column);
@@ -42,38 +69,12 @@ export class RegionApiHelpers {
     return regionDto;
   }
 
-  static async getNeighboringRegionsForStage(stageId: number, currentRow: number, currentColumn: number) {
-    const neighbors: Neighbors = {
-      top: {
-        x: currentColumn,
-        y: currentRow + State.stageState.regionSize
-      },
-      bottom: {
-        x: currentColumn,
-        y: currentRow - State.stageState.regionSize
-      },
-      left: {
-        x: currentColumn - State.stageState.regionSize,
-        y: currentRow
-      },
-      right: {
-        x: currentColumn + State.stageState.regionSize,
-        y: currentRow
-      }
-    };
-
-    const { top, bottom, left, right } = neighbors;
-    [top, bottom, left, right].forEach(neighbor => {
-
-    });
-  }
-
-  static async postRegion(row: number, column: number): Promise<RegionDto> {
-    console.log('postRegion', row, column);
+  static async postRegion(row: number, column: number, stageId?: number): Promise<RegionDto> {
     const url = this.baseUrl;
+    if (stageId === null || stageId === undefined) { stageId = State.gameState.stageId; }
 
     const requestRegion: RegionDto = {
-      stageId: State.gameState.stageId,
+      stageId,
       row,
       column,
       data: this.encodeRegionData(row * State.stageState.regionSize, column * State.stageState.regionSize)

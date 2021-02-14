@@ -6,6 +6,7 @@ import { RegionApiHelpers } from '../../http/regionApiHelpers';
 import { StageDto } from '../../interfaces/stageDto';
 import { StageApiHelpers } from '../../http/stageApiHelpers';
 import { RegionDto } from '../../interfaces/regionDto';
+import ComponentUtilities from '../../utilites/componentUtilities';
 
 // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Node
 export class BuilderMenu {
@@ -16,12 +17,12 @@ export class BuilderMenu {
 
   static addBuilderMenu() {
     State.builderState.builderMenuOpen = true;
-    State.domState.builderMenu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
+    State.domState.builderMenu = ComponentUtilities.nodeBuilder('content', '<h1 class="title">Builder Menu</h1>', ['builder-mode']);
 
-    this.addStageNameInput();
+    this.addStagesDropdown();
     this.addPlatformTileOptions(State.domState.builderMenu);
 
-    RenderingUtilities.appendNodeToBody(State.domState.builderMenu);
+    ComponentUtilities.appendNodeToBody(State.domState.builderMenu);
     State.domState.builderMenu.appendChild(this.addMenuButtons());
   }
 
@@ -51,14 +52,31 @@ export class BuilderMenu {
     State.domState.builderMenu.classList.remove('hidden');
   }
 
-  static addStageNameInput() {
-    const label = RenderingUtilities.nodeBuilder('label', 'Stage Name');
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = State.gameState.stageName;
+  static addStagesDropdown() {
+    State.domState.stageDropdown = ComponentUtilities.nodeBuilder('select') as HTMLSelectElement;
+    
+    const defaultOption = ComponentUtilities.nodeBuilder('option', 'Default Stage') as HTMLOptionElement;
+    defaultOption.value = '1';
+    State.domState.stageDropdown.append(defaultOption);
 
-    label.appendChild(input);
+    for (const stage of State.stageState.stages) {
+      const stageOption = ComponentUtilities.nodeBuilder('option', stage.name) as HTMLOptionElement;
+      stageOption.value = stage.stageId + '';
+      State.domState.stageDropdown.append(stageOption);
+    }
+    const label = ComponentUtilities.nodeBuilder('label', 'Stages ');
+    label.append(State.domState.stageDropdown);
+
     State.domState.builderMenu.appendChild(label);
+    State.domState.stageDropdown.style.width = '150px';
+
+    State.domState.stageDropdown.addEventListener('change', () => {
+      const id: string = State.domState.stageDropdown.value;
+      if (id === '-' || Number(id) === State.stageState.selectedStageId) { return; }
+      State.stageState.selectedStageId = Number(id);
+      State.gameState.stageId = Number(id);
+      RegionApiHelpers.getAllRegionsForStage(Number(id));
+    });
   }
 
   static addPlatformTileOptions(builder: HTMLElement): void {
@@ -82,13 +100,13 @@ export class BuilderMenu {
     this.addZoomInClickHandling(button1);
     this.addZoomOutClickHandling(button2);
 
-    RenderingUtilities.appendChildNodes(wrapper, [option1, option2, option3, option4, option5]);
+    ComponentUtilities.appendChildNodes(wrapper, [option1, option2, option3, option4, option5]);
   }
 
   static addWrapper(parentNode: HTMLElement, category: string = ''): HTMLElement {
-    const wrapper = RenderingUtilities.nodeBuilder('div', '', ['wrapper']);
+    const wrapper = ComponentUtilities.nodeBuilder('div', '', ['wrapper']);
     if (category) {
-      const title = RenderingUtilities.nodeBuilder('h3', category);
+      const title = ComponentUtilities.nodeBuilder('h3', category);
       wrapper.appendChild(title);
     }
     parentNode.appendChild(wrapper);
@@ -97,7 +115,7 @@ export class BuilderMenu {
   }
 
   static addCheckbox(name: string): HTMLElement[] {
-    const label = RenderingUtilities.nodeBuilder('label', `${name}`);
+    const label = ComponentUtilities.nodeBuilder('label', `${name}`);
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     label.appendChild(checkbox);
@@ -106,18 +124,18 @@ export class BuilderMenu {
   }
 
   static addButton(name: string): HTMLElement[] {
-    const label = RenderingUtilities.nodeBuilder('label', `${name}`);
-    const button = RenderingUtilities.nodeBuilder('button', `+`);
+    const label = ComponentUtilities.nodeBuilder('label', `${name}`);
+    const button = ComponentUtilities.nodeBuilder('button', `+`);
     label.appendChild(button);
 
     return [label, button];
   }
 
   static addButtons(name: string): HTMLElement[] {
-    const label = RenderingUtilities.nodeBuilder('label', `${name}`);
-    const button1 = RenderingUtilities.nodeBuilder('button', `+`);
-    const button2 = RenderingUtilities.nodeBuilder('button', `-`);
-    const btnWrapper = RenderingUtilities.nodeBuilder('span');
+    const label = ComponentUtilities.nodeBuilder('label', `${name}`);
+    const button1 = ComponentUtilities.nodeBuilder('button', `+`);
+    const button2 = ComponentUtilities.nodeBuilder('button', `-`);
+    const btnWrapper = ComponentUtilities.nodeBuilder('span');
     btnWrapper.appendChild(button1);
     btnWrapper.appendChild(button2);
     label.appendChild(btnWrapper);
@@ -193,22 +211,55 @@ export class BuilderMenu {
   }
 
   static addMenuButtons(): HTMLElement {
-    const menuButtonWrapper = RenderingUtilities.nodeBuilder('div', '', ['builder--button-wrapper']);
-    RenderingUtilities.appendNodeToBody(menuButtonWrapper);
+    const menuButtonWrapper = ComponentUtilities.nodeBuilder('div', '', ['builder--button-wrapper']);
+    ComponentUtilities.appendNodeToBody(menuButtonWrapper);
 
-    const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
-    saveBtn.addEventListener('click', async () => await this.saveStage());
+    const newStageBtn = ComponentUtilities.nodeBuilder('button', 'New', ['button', 'builder--newStageBtn']);
+    newStageBtn.addEventListener('click', async () => await this.newStage());
+    menuButtonWrapper.appendChild(newStageBtn);
+
+    const saveBtn = ComponentUtilities.nodeBuilder('button', 'Update', ['button', 'builder--updateBtn']);
+    saveBtn.addEventListener('click', async () => await this.updateStage());
     menuButtonWrapper.appendChild(saveBtn);
 
-    const publishBtn = RenderingUtilities.nodeBuilder('button', 'Publish', ['button', 'builder--publishBtn']);
+    const publishBtn = ComponentUtilities.nodeBuilder('button', 'Publish', ['button', 'builder--publishBtn']);
     publishBtn.addEventListener('click', async () => await this.publishStage());
     menuButtonWrapper.appendChild(publishBtn);
 
     return menuButtonWrapper;
   }
 
-  static async saveStage(): Promise<void> {
-    console.log('Saving Stage');
+  static async newStage(): Promise<void> {
+    console.log('Creating a new stage');
+
+    const newStageWrapper = ComponentUtilities.nodeBuilder('div', 'New Stage Name: ', ['builder--newStageDiv']);
+    const stageNameInput = ComponentUtilities.nodeBuilder('input') as HTMLInputElement;
+    const saveStageButton = ComponentUtilities.nodeBuilder('button', 'Save', ['button', 'builder--saveBtn']);
+    newStageWrapper.appendChild(stageNameInput);
+    newStageWrapper.appendChild(saveStageButton);
+    ComponentUtilities.appendNodeToBody(newStageWrapper);
+    
+    stageNameInput.addEventListener('keyup', () => {
+      State.builderState.stageName = stageNameInput.value;
+    });
+
+    saveStageButton.addEventListener('click', async () => {
+      console.log('Saving Stage');
+      const stage = {
+        name: State.builderState.stageName,
+        userId: State.gameState.userId,
+        gameId: State.gameState.gameId,
+        published: false
+      };
+      const stageResult = await StageApiHelpers.addStage(stage);
+      State.gameState.stageId = stageResult.stageId;
+      await this.updateStage();
+    });
+
+  }
+
+  static async updateStage(): Promise<void> {
+    console.log('Updating Stage');
 
     const requests: Promise<RegionDto>[] = [];
 
@@ -218,13 +269,13 @@ export class BuilderMenu {
       const regionRow = Number(pos[1]);
       requests.push(RegionApiHelpers.postRegion(regionRow, regionColumn));
     });
-    Promise.all(requests);
+    await Promise.all(requests);
   }
 
   static async publishStage(): Promise<void> {
     console.log('publishing Stage');
 
-    await this.saveStage();
+    await this.updateStage();
 
     const stage: StageDto = {
       name: State.gameState.stageName,

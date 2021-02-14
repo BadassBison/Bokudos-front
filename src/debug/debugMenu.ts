@@ -1,14 +1,15 @@
 import { MenuOptions } from '../constants/menuOptions';
 import { State } from '../states/rootState';
+import ComponentUtilities from '../utilites/componentUtilities';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from './debugMode';
 
 export class DebugMenu {
 
     static addMenuButton() {
-        const menuBtn = RenderingUtilities.nodeBuilder('button', 'Debug', ['button', 'menuBtn']);
+        const menuBtn = ComponentUtilities.nodeBuilder('button', 'Debug', ['button', 'menuBtn']);
         menuBtn.addEventListener('click', () => this.toggleMenu());
-        RenderingUtilities.appendNodeToBody(menuBtn);
+        ComponentUtilities.appendNodeToBody(menuBtn);
     }
 
     static removeMenuButton() {
@@ -38,9 +39,9 @@ export class DebugMenu {
         DebugMode.resetState();
         State.debugState.menuOpen = true;
         this.activateMenuButton();
-        const menu = RenderingUtilities.nodeBuilder('content', '<h1 class="title">Debug Menu</h1>', ['menu']);
+        const menu = ComponentUtilities.nodeBuilder('content', '<h1 class="title">Debug Menu</h1>', ['menu']);
         this.addMenuOptions(menu);
-        RenderingUtilities.appendNodeToBody(menu);
+        ComponentUtilities.appendNodeToBody(menu);
         this.addSaveButton();
     }
 
@@ -57,9 +58,9 @@ export class DebugMenu {
     }
 
     static addSaveButton() {
-        const saveBtn = RenderingUtilities.nodeBuilder('button', 'Save', ['button', 'saveBtn']);
+        const saveBtn = ComponentUtilities.nodeBuilder('button', 'Save', ['button', 'saveBtn']);
         saveBtn.addEventListener('click', () => this.saveMenuOptions());
-        RenderingUtilities.appendNodeToBody(saveBtn);
+        ComponentUtilities.appendNodeToBody(saveBtn);
     }
 
     static saveMenuOptions() {
@@ -108,7 +109,7 @@ export class DebugMenu {
     }
 
     static addEnabledCheckBox(name: string): HTMLElement {
-        const label = RenderingUtilities.nodeBuilder('label', 'Enabled');
+        const label = ComponentUtilities.nodeBuilder('label', 'Enabled');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = State.debugState.menuOptions[name].enabled;
@@ -123,7 +124,7 @@ export class DebugMenu {
     }
 
     static addColorInput(name: string): HTMLElement {
-        const label = RenderingUtilities.nodeBuilder('label', 'Color');
+        const label = ComponentUtilities.nodeBuilder('label', 'Color');
         const input = document.createElement('input');
         input.type = 'text';
         input.value = State.debugState.menuOptions[name].color;
@@ -139,7 +140,7 @@ export class DebugMenu {
 
     static addLineWidthRange(name: string): HTMLElement {
         if (State.debugState.menuOptions[name].lineWidth) {
-            const label = RenderingUtilities.nodeBuilder('label', 'Line Width');
+            const label = ComponentUtilities.nodeBuilder('label', 'Line Width');
             const input = document.createElement('input');
             input.type = 'range';
             input.min = '1';
