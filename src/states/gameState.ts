@@ -42,13 +42,14 @@ export class GameState {
             left: false,
             right: false,
             shift: false,
-            attack: false
+            attack: false,
+            glide: false
         };
         this.gameUnit = 1;
         this.screenWidth = innerWidth;
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
-        this.position = { x: 0, y: 0 };
+        this.position = { x: 0, y: 1000 };
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
         this.defaultGridDimensions = { w: 12, h: 12 };

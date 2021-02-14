@@ -1,6 +1,7 @@
 import { APIUtilities } from '../utilites/apiUtilities';
 import { GameDto } from '../interfaces/gameDto';
 import { v4 as uuidv4 } from 'uuid';
+import { State } from '../states/rootState';
 
 export class GameApiHelpers {
 
@@ -13,7 +14,8 @@ export class GameApiHelpers {
                 return games[0];
             } else {
                 const gameId = uuidv4();
-                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN', stageId: 1};
+                console.log("Starting a new game with stage: " + State.gameState.stageId);
+                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN', stageId: State.gameState.stageId};
                 return this.postGame(newGame);
             }
         })

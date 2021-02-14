@@ -28,7 +28,9 @@ export class Player implements UpdateObject {
 
     getAnimationType(): string {
         const {direction, movement, action} = this.state.positionData.animation;
-        return movement + (action != null ? '_' + action : '') + '_' + direction;
+        const test = movement + (action != null ? '_' + action : '') + '_' + direction;
+        // console.log(test);
+        return test;
     }
 
     updateSprite() {
