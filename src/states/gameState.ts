@@ -52,7 +52,7 @@ export class GameState {
         this.position = { x: 0, y: 0 };
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
-        this.minimumDimension = 5;
+        this.minimumDimension = 10;
         this.defaultGridDimensions = { w: 14, h: 14 };
         this.currentGridDimensions = this.defaultGridDimensions;
         this.framesPerSecond = this.defaultFramesPerSecond;

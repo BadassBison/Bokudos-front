@@ -39,7 +39,7 @@ export class BuilderState {
         this.showGrid = false;
         this.showRegions = false;
         this.wheelSpeedReducer = 6;
-        this.cameraSpeed = 0.2;
+        this.cameraSpeed = 0.3;
     }
 
 }
