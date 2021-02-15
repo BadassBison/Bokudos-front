@@ -29,7 +29,7 @@ export class RenderingUtilities {
     }
 
     /**
-     * 
+     *
      * @param newSize
      */
     static zoomDimensionsInOrOut(newSize: number) {
@@ -88,6 +88,10 @@ export class RenderingUtilities {
         const regionColumn = Math.floor(x / State.stageState.regionSize);
         const regionRow = Math.floor(y / State.stageState.regionSize);
         return `${regionColumn}${State.stageState.colRowSeparator}${regionRow}`;
+    }
+
+    static splitRegionString(region: string): string[] {
+        return region.split(State.stageState.colRowSeparator);
     }
 
     static toScreenDimensions(gameDimensions: Dimensions): Dimensions {
@@ -196,6 +200,10 @@ export class RenderingUtilities {
      */
     static setScreenPositionFromCenter(point: Point) {
         State.gameState.position = { x: point.x - State.gameState.gameUnitDimensions.w / 2, y: point.y - 5 };
+    }
+
+    static stringifyColAndRow(col: number, row: number): string {
+        return `${col}${State.stageState.colRowSeparator}${row}`;
     }
 
 }

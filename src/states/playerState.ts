@@ -14,6 +14,7 @@ export class PlayerState {
     frameDelay: number;
     framesPerAnimation: number;
     playerId: string;
+    currentRegion: string;
     positionData: PositionData;
     movingRight: boolean;
     SPRITE_SIZER: number;

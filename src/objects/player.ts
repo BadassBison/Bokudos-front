@@ -5,6 +5,7 @@ import { PositionData } from '../interfaces/positionData';
 import { PlayerState } from '../states/playerState';
 import { UpdateObject } from '../interfaces/updateObject';
 import { AnimationTypes } from '../constants/animationTypes';
+import { RegionApiHelpers } from '../http/regionApiHelpers';
 
 export class Player implements UpdateObject {
     state: PlayerState;
@@ -24,6 +25,12 @@ export class Player implements UpdateObject {
 
     setPositionData(positionData: PositionData): void {
         this.state.positionData = positionData;
+        const currentRegion = RenderingUtilities.getRegion({ x: positionData.x, y: positionData.y });
+        if (!this.state.currentRegion || this.state.currentRegion !== currentRegion) {
+            this.state.currentRegion = currentRegion;
+            const [ regionColumn, regionRow ] = RenderingUtilities.splitRegionString(currentRegion);
+            RegionApiHelpers.getNeighboringRegionsForStage(State.gameState.stageId, Number(regionRow), Number(regionColumn));
+        }
     }
 
     getAnimationType(): string {
@@ -39,10 +46,10 @@ export class Player implements UpdateObject {
     }
 
     draw() {
-        if (this.state.positionData == null) {
+        if (this.state.positionData === null) {
             return;
         }
-        if (this.state.SPRITE_SIZER == 0) {
+        if (this.state.SPRITE_SIZER === 0) {
             const image = this.state.animations.getAnimation(AnimationTypes.IDLE_RIGHT).getImages()[0];
             if (image && image.height > 0) {
                 this.state.SPRITE_SIZER = image.height / this.state.positionData.height;

@@ -4,6 +4,7 @@ import { StageApiHelpers } from '../http/stageApiHelpers';
 import { StageDto } from '../interfaces/stageDto';
 import { State } from '../states/rootState';
 import ComponentUtilities from '../utilites/componentUtilities';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { BuilderMode } from './builder/builderMode';
 import GameButton from './gameButton';
 
@@ -18,7 +19,7 @@ export default class StartScreenComponent extends HTMLElement {
   }
 
   static buildComponent(): void {
-    State.domState.startScreen = ComponentUtilities.ComponentBuilder<StartScreenComponent>(this.selector);
+    State.domState.startScreen.startScreenComponent = ComponentUtilities.ComponentBuilder<StartScreenComponent>(this.selector);
   }
 
   constructor() {
@@ -45,7 +46,7 @@ export default class StartScreenComponent extends HTMLElement {
   }
 
   removeStartScreen() {
-    State.domState.startScreen.remove();
+    State.domState.startScreen.startScreenComponent.remove();
   }
 
   addTitle(element: HTMLElement) {
@@ -76,7 +77,11 @@ export default class StartScreenComponent extends HTMLElement {
       const id = State.stageState.selectedStageId;
       // Must explicitly say no null or undefined because '0' and 0 are falsy values
       if (id === null || id === undefined) { return; }
-      
+
+      // TODO: Add starting position to RenderingUtilities
+      State.gameState.position = { x: 0, y: 1000 };
+      RenderingUtilities.setDimensions({ w: 24, h: 24 });
+      RenderingUtilities.zoomDimensionsInOrOut(14);
       cb();
       this.removeStartScreen();
     });
@@ -96,20 +101,18 @@ export default class StartScreenComponent extends HTMLElement {
 
   addStageDropdown(element: HTMLElement) {
     const label = ComponentUtilities.nodeBuilder('label', 'Stages ');
-    State.domState.stageDropdown = ComponentUtilities.nodeBuilder('select') as HTMLSelectElement;
+    State.domState.startScreen.stageDropdown = ComponentUtilities.nodeBuilder('select') as HTMLSelectElement;
     const blankOption = ComponentUtilities.nodeBuilder('option', '-');
-    State.domState.stageDropdown.append(blankOption);
-    label.append(State.domState.stageDropdown);
-    State.domState.stageDropdown.style.width = '100px';
+    State.domState.startScreen.stageDropdown.append(blankOption);
+    label.append(State.domState.startScreen.stageDropdown);
+    State.domState.startScreen.stageDropdown.style.width = '100px';
     element.appendChild(label);
 
-    State.domState.stageDropdown.addEventListener('change', (evt) => {
+    State.domState.startScreen.stageDropdown.addEventListener('change', (evt) => {
 
-      const id = Number(State.domState.stageDropdown.value);
-      console.log(State.domState.stageDropdown);
+      const id = Number(State.domState.startScreen.stageDropdown.value);
       State.stageState.selectedStageId = id;
       State.gameState.stageId = id;
-      console.log("StageId: " + State.gameState.stageId);
       RegionApiHelpers.getRegionForStage(id, 0, 0);
     });
   }
@@ -120,7 +123,7 @@ export default class StartScreenComponent extends HTMLElement {
       const stageItem: HTMLOptionElement = ComponentUtilities.nodeBuilder('option') as HTMLOptionElement;
       stageItem.value = opt.stageId + '';
       stageItem.innerText = `${opt.name}`;
-      State.domState.stageDropdown.append(stageItem as HTMLElement);
+      State.domState.startScreen.stageDropdown.append(stageItem as HTMLElement);
     });
   }
 

@@ -3,7 +3,6 @@ import { GameState } from '../states/gameState';
 import { RenderingEngine } from '../engines/renderingEngine';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from '../debug/debugMode';
-import { BuilderMode } from '../components/builder/builderMode';
 import { RegionApiHelpers } from '../http/regionApiHelpers';
 import { StageApiHelpers } from '../http/stageApiHelpers';
 import '../styles.css';
@@ -24,10 +23,7 @@ export class Game {
   state: GameState;
   server: GameSocket;
 
-  constructor() { }
-
-  async buildState(): Promise<void> {
-    await State.buildState();
+  constructor() {
     this.state = State.gameState;
     this.state.renderingEngine = new RenderingEngine();
     RenderingUtilities.setDimensions();
@@ -40,15 +36,12 @@ export class Game {
 
   setupEventListeners(): void {
     window.onresize = () => RenderingUtilities.debounce(RenderingUtilities.resizeScreenDimensions, window);
-    
+
     document.addEventListener('keydown', (evt: KeyboardEvent) => this.parseKey(evt.key, true));
     document.addEventListener('keyup', (evt: KeyboardEvent) => this.parseKey(evt.key, false));
 
     const canvas = State.gameState.canvas.canvasElement;
     canvas.addEventListener('mousemove', (evt: MouseEvent) => DebugMode.handleMouseMove(evt));
-    canvas.addEventListener('mousemove', (evt: MouseEvent) => BuilderMode.handleMouseMove(evt));
-    canvas.addEventListener('mousedown', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, true));
-    canvas.addEventListener('mouseup', (evt: MouseEvent) => BuilderMode.handleMouseClick(evt, false));
     canvas.addEventListener('mousedown', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, true); } });
     canvas.addEventListener('mouseup', (evt: MouseEvent) => { if (evt.button === 0) { this.parseKey(evt.type, false); } });
 
@@ -84,11 +77,12 @@ export class Game {
 
   setStartScreen(): void {
     StartScreenComponent.buildComponent();
-    ComponentUtilities.appendNodeToBody(State.domState.startScreen);
-    State.domState.startScreen.startButtonHandler(() => { this.beginRun(); });
+    ComponentUtilities.appendNodeToBody(State.domState.startScreen.startScreenComponent);
+    State.domState.startScreen.startScreenComponent.startButtonHandler(() => { this.beginRun(); });
   }
 
   beginRun() {
+
     GameApiHelpers.findGame().then((gameDto: GameDto) => {
       PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
             this.server.connect(gameDto, playerDto);
@@ -112,8 +106,8 @@ export class Game {
   }
 
   static async start(): Promise<void> {
+    await State.buildState();
     const game = new Game();
-    await game.buildState();
     ComponentRegistry.registerComponents();
     game.setupEventListeners();
     game.setupWindowDebugObject();
@@ -122,6 +116,9 @@ export class Game {
     game.server = new GameSocket();
 
     game.setStartScreen();
+    State.builderState.setStartScreen = () => game.setStartScreen();
+
+    // TODO: why are we loading this at the bottom?
     Background.loadImage();
   }
 }

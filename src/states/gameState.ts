@@ -13,6 +13,7 @@ export class GameState {
     keys: Keys;
     defaultFramesPerSecond: number;
     defaultFrameDelay: number;
+    minimumDimension: number;
     defaultGridDimensions: Dimensions;
     currentGridDimensions: Dimensions;
     framesPerSecond: number;
@@ -34,7 +35,6 @@ export class GameState {
     gameId: number;
     userId: number;
 
-
     constructor() {
         this.keys = {
             up: false,
@@ -49,10 +49,11 @@ export class GameState {
         this.screenWidth = innerWidth;
         this.screenHeight = innerHeight;
         this.canvas = new CanvasElement(innerWidth, innerHeight, 'canvas-fg');
-        this.position = { x: 0, y: 1000 };
+        this.position = { x: 0, y: 0 };
         this.defaultFramesPerSecond = 60;
         this.defaultFrameDelay = 1000 / this.defaultFramesPerSecond;
-        this.defaultGridDimensions = { w: 12, h: 12 };
+        this.minimumDimension = 10;
+        this.defaultGridDimensions = { w: 14, h: 14 };
         this.currentGridDimensions = this.defaultGridDimensions;
         this.framesPerSecond = this.defaultFramesPerSecond;
         this.paused = false;

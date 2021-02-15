@@ -1,11 +1,8 @@
 import { State } from '../states/rootState';
 import { DebugMenu } from './debugMenu';
 import { RenderingUtilities } from '../utilites/renderingUtilities';
-import { StageTile } from '../objects/stageTile';
 import { MenuOptions } from '../constants/menuOptions';
 import { PropertiesMenu } from './propertiesMenu';
-import { Point } from '../interfaces/point';
-import { Dimensions } from '../interfaces/dimensions';
 
 export class DebugMode {
 
@@ -27,7 +24,7 @@ export class DebugMode {
 
         for (let row = startingRow; row <= endingRow; row++) {
           for (let col = startingCol; col <= endingCol; col++) {
-            // TODO: change color for regions
+            // TODO: add regions. Ref: StageBuilderEngine
             this.drawGrid(row, col);
             this.drawGridCoords(row, col);
           }
