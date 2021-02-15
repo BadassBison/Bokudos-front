@@ -60,46 +60,6 @@ label {
     left: 50px;
 }
 
-.builder--newStageBtn {
-    background: rgb(33, 241, 99);
-    color: white;
-}
-
-.builder--updateBtn {
-    background: rgb(69, 153, 250);
-    color: white;
-}
-
-.builder--publishBtn {
-    background: rgb(228, 34, 212);
-    color: white;
-}
-
-.builder--saveBtn {
-    background: rgb(69, 153, 250);
-    color: white;
-    height: 30px;
-}
-
-.builder--button-wrapper {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    top: 325px;
-    left: 0;
-    width: 325px;
-}
-
-.builder--newStageDiv {
-    position: absolute;
-    top: 510px;
-    left: 50px;
-    width: 300px;
-    height: 60px;
-    color: white;
-    padding: 20px;
-}
-
 .menuBtn {
     position: absolute;
     top: 50px;
@@ -135,16 +95,76 @@ label {
     padding: 30px;
     top: 125px;
     left: 50px;
-    width: 350px; 
+    width: 350px;
 }
 
+
+/* ----- Builder mode ----- */
 .builder-mode {
-    background: rgb(211, 238, 247);
     position: absolute;
     padding: 30px;
-    top: 125px;
+    top: 50px;
     left: 50px;
     width: 350px;
+}
+
+.builder--builderMenu-content {
+    background: rgb(211, 238, 247);
+    padding: 26px;
+}
+
+.builder--button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    width: 100%;
+}
+
+.builder--newStageBtn {
+    background: rgb(33, 241, 99);
+    color: white;
+}
+
+.builder--updateBtn {
+    background: rgb(69, 153, 250);
+    color: white;
+}
+
+.builder--publishBtn {
+    background: rgb(248, 52, 166);
+    color: white;
+}
+
+.builder--playBtn {
+    background: rgb(245, 232, 57);
+    color: black;
+}
+
+.builder--newStageButtonsWrapper {
+    margin-top: 6px;
+}
+
+.builder--saveBtn {
+    background: rgb(69, 153, 250);
+    color: white;
+    height: 30px;
+}
+
+.builder--cancelBtn {
+    background: rgb(248, 52, 166);
+    color: white;
+    height: 30px;
+    margin-left: 6px;
+}
+
+.builder--newStageDiv {
+    /* position: absolute;
+    top: 510px;
+    left: 50px; */
+    width: 300px;
+    height: 60px;
+    color: white;
+    padding: 20px;
 }
 
 .builder--tile-selector {

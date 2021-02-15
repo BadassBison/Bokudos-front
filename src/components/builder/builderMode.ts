@@ -9,6 +9,7 @@ import { Point } from '../../interfaces/point';
 export class BuilderMode {
 
     static handleMouseMove(evt: MouseEvent) {
+        // TODO: add movement with a click and drag
         this.handleMouseClick(evt, State.builderState.isClicked);
     }
 
@@ -43,6 +44,26 @@ export class BuilderMode {
         RenderingUtilities.zoomDimensionsInOrOut(18);
         BuilderMenu.addBuilderMenu();
         TileBuilder.openTileSelector();
+
+        State.gameState.canvas.canvasElement.addEventListener('mousemove', (evt: MouseEvent) => this.handleMouseMove(evt));
+        State.gameState.canvas.canvasElement.addEventListener('mousedown', (evt: MouseEvent) => this.handleMouseClick(evt, true));
+        State.gameState.canvas.canvasElement.addEventListener('mouseup', (evt: MouseEvent) => this.handleMouseClick(evt, false));
+        State.gameState.canvas.canvasElement.addEventListener('wheel', (evt: WheelEvent) => {
+            const { w } = State.gameState.currentGridDimensions;
+            const newDimension = w + evt.deltaY / State.builderState.wheelSpeedReducer;
+            const adjustedDimension = Math.max(newDimension, State.gameState.minimumDimension);
+            this.updateCameraSpeed(adjustedDimension);
+            RenderingUtilities.setDimensions({
+                w: adjustedDimension,
+                h: adjustedDimension
+            });
+        });
+    }
+
+    static updateCameraSpeed(newDim: number): void {
+        const currentDim = State.gameState.currentGridDimensions.w;
+        const dimDelta = newDim - currentDim;
+        State.builderState.cameraSpeed += (dimDelta * 0.03);
     }
 
     static closeBuilderMode() {
@@ -51,6 +72,10 @@ export class BuilderMode {
             State.builderState.builderMode = false;
             State.builderState.handleMouseClick = false;
             State.builderState.builderEngine.stop();
+            State.gameState.canvas.canvasElement.removeEventListener('mousemove', () => console.log('Removing mousemove evt listener'));
+            State.gameState.canvas.canvasElement.removeEventListener('mousedown', () => console.log('Removing mousedown evt listener'));
+            State.gameState.canvas.canvasElement.removeEventListener('mouseup', () => console.log('Removing mouseup evt listener'));
+            State.gameState.canvas.canvasElement.removeEventListener('wheel', () => console.log('Removing wheel evt listener'));
 
             BuilderMenu.removeBuilderMenu();
             BuilderMenu.deleteTileMode(false);
@@ -70,7 +95,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = this.getSelectedTileLookUpValue();
 
-        const gridId = `${col}${State.stageState.colRowSeparator}${row}`;
+        const gridId = RenderingUtilities.stringifyColAndRow(col, row);
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }
@@ -80,7 +105,7 @@ export class BuilderMode {
         const row = State.builderState.clickedGridCoords.y;
         const lookUpValue = '00';
 
-        const gridId = `${col}${State.stageState.colRowSeparator}${row}`;
+        const gridId = RenderingUtilities.stringifyColAndRow(col, row);
         const stageTile = new StageTile(row, col, lookUpValue);
         State.stageState.tiles.set(gridId, stageTile);
     }

@@ -2,6 +2,7 @@ import { RegionDto } from '../interfaces/regionDto';
 import { APIUtilities } from '../utilites/apiUtilities';
 import { State } from '../states/rootState';
 import { StageTile } from '../objects/stageTile';
+import { RenderingUtilities } from '../utilites/renderingUtilities';
 export class RegionApiHelpers {
 
   static readonly baseUrl = `${APIUtilities.STAGE_BUILDER_URL}region/`;
@@ -18,7 +19,7 @@ export class RegionApiHelpers {
     const url = this.baseUrl + stageId;
 
     const regions = await APIUtilities.get<RegionDto[]>(url);
-    
+
     if (regions.length > 0) {
       State.stageState.regions = new Set();
       regions.forEach((region: RegionDto) => {
@@ -31,9 +32,9 @@ export class RegionApiHelpers {
 
   static async getAllRegionsForDefaultStage(): Promise<RegionDto[]> {
     const url = this.baseUrl + '1';
-
     const regions = await APIUtilities.get<RegionDto[]>(url);
-    
+    console.log('Fetching regions for default stage: ', regions);
+
     if (regions.length > 0) {
       State.stageState.regions = new Set();
       regions.forEach((region: RegionDto) => {
@@ -46,9 +47,10 @@ export class RegionApiHelpers {
 
   static async getNeighboringRegionsForStage(stageId: number, currentRow: number, currentColumn: number) {
     const url = `${this.baseUrl}${stageId}/neighbors/${currentRow}/${currentColumn}`;
-    
+
     const regions = await APIUtilities.get<RegionDto[]>(url);
     if (regions.length > 0) {
+      console.log('neighboring regions:', regions);
       regions.forEach((region: RegionDto) => {
         this.addRegionToState(region, region.row, region.column);
       });
@@ -121,7 +123,7 @@ export class RegionApiHelpers {
       for (let col = regionColumn; col < regionColumn + State.stageState.regionSize; col++) {
         if (data[data.length - 1] !== 'n' && data.length !== 0) { data += ','; }
 
-        const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${gridRow}`);
+        const tile = State.stageState.tiles.get(RenderingUtilities.stringifyColAndRow(col, gridRow));
         data += tile ? tile.lookupValue : '0';
       }
     }

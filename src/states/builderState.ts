@@ -1,3 +1,4 @@
+import { MenuOptions } from '../constants/menuOptions';
 import { BuilderModeEngine } from '../engines/builderModeEngine';
 import { Point } from '../interfaces/point';
 
@@ -9,6 +10,10 @@ export class BuilderState {
     isClicked: boolean;
     clickedPosition: Point;
     clickedGridCoords: Point;
+    saving: boolean;
+    wheelEvtHandler: any;
+    wheelSpeedReducer: number;
+    cameraSpeed: number;
 
     builderMenuOpen: boolean;
 
@@ -20,6 +25,9 @@ export class BuilderState {
 
     removingTiles: boolean;
     removingTilesCheckbox: HTMLInputElement;
+    setStartScreen: any;
+    showGrid: boolean;
+    showRegions: boolean;
 
     constructor() {
         this.builderMode = false;
@@ -28,6 +36,10 @@ export class BuilderState {
         this.tileSelectorOpen = false;
         this.handleMouseClick = false;
         this.removingTiles = false;
+        this.showGrid = false;
+        this.showRegions = false;
+        this.wheelSpeedReducer = 6;
+        this.cameraSpeed = 0.2;
     }
 
 }

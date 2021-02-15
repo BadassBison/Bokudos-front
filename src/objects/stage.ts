@@ -17,7 +17,7 @@ export class Stage {
 
         for (let row = min.y; row <= max.y; row++) {
             for (let col = min.x; col <= max.x; col++) {
-                const tile = State.stageState.tiles.get(`${col}${State.stageState.colRowSeparator}${row}`);
+                const tile = State.stageState.tiles.get(RenderingUtilities.stringifyColAndRow(col, row));
                 if (tile && tile.lookupValue !== '0' && tile.lookupValue !== '00') {
                     const { x, y } = RenderingUtilities.toScreenCoordinates({ x: tile.col, y: tile.row });
 
