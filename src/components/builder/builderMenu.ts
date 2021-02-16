@@ -77,6 +77,7 @@ export class BuilderMenu {
       if (id === '-' || Number(id) === State.stageState.selectedStageId) { return; }
       State.stageState.selectedStageId = Number(id);
       State.gameState.stageId = Number(id);
+      State.stageState.tiles = new Map();
       RegionApiHelpers.getAllRegionsForStage(Number(id));
       State.domState.builderMode.stageDropdown.blur();
     });
