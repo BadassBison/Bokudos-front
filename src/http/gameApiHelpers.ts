@@ -10,15 +10,15 @@ export class GameApiHelpers {
 
     static async findGame(): Promise<GameDto> {
         return this.getGames().then((games: GameDto[]) => {
-            if(games.length > 0) {
+            if (games.length > 0) {
                 return games[0];
             } else {
                 const gameId = uuidv4();
-                console.log("Starting a new game with stage: " + State.gameState.stageId);
-                const newGame: GameDto = {gameId: gameId, gameStatus: 'OPEN', stageId: State.gameState.stageId};
+                console.log('Starting a new game with stage: ' + State.gameState.stageId);
+                const newGame: GameDto = { gameId, gameStatus: 'OPEN', stageId: State.gameState.stageId };
                 return this.postGame(newGame);
             }
-        })
+        });
     }
 
     static async getGames(): Promise<GameDto[]> {

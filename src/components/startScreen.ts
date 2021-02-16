@@ -79,7 +79,7 @@ export default class StartScreenComponent extends HTMLElement {
       if (id === null || id === undefined) { return; }
 
       // TODO: Add starting position to RenderingUtilities
-      State.gameState.position = { x: 0, y: 1000 };
+      State.gameState.position = { x: 18, y: 280 };
       RenderingUtilities.setDimensions({ w: 24, h: 24 });
       RenderingUtilities.zoomDimensionsInOrOut(14);
       cb();
@@ -113,7 +113,9 @@ export default class StartScreenComponent extends HTMLElement {
       const id = Number(State.domState.startScreen.stageDropdown.value);
       State.stageState.selectedStageId = id;
       State.gameState.stageId = id;
-      RegionApiHelpers.getRegionForStage(id, 0, 0);
+      // FIXME: hardcoded for demo
+      // RegionApiHelpers.getRegionForStage(id, 2, 0);
+      RegionApiHelpers.getAllRegionsForStage(id);
     });
   }
 

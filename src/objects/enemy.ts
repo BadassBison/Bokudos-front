@@ -41,7 +41,7 @@ export class Enemy implements UpdateObject {
         if (this.state.frameCount === 0) {
             this.state.currentFrame = (this.state.currentFrame + 1) % this.state.framesPerAnimation;
             this.state.currentImage = this.state.animations.getAnimation(this.state.currentAnimation).getImages()[this.state.currentFrame];
-        } else if(this.state.currentImage == null) {
+        } else if (this.state.currentImage == null) {
             this.state.currentImage = this.state.animations
                 .getAnimation(this.state.currentAnimation)
                 .getImages()[this.state.currentFrame];
@@ -49,7 +49,7 @@ export class Enemy implements UpdateObject {
     }
 
     draw() {
-        if(this.state.positionData == null) {
+        if (this.state.positionData == null) {
             return;
         }
         const { x, y } = RenderingUtilities.toScreenCoordinates({x: this.state.positionData.x, y: this.state.positionData.y});
