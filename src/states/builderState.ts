@@ -1,4 +1,3 @@
-import { MenuOptions } from '../constants/menuOptions';
 import { BuilderModeEngine } from '../engines/builderModeEngine';
 import { Point } from '../interfaces/point';
 
@@ -8,6 +7,8 @@ export class BuilderState {
     builderEngine: BuilderModeEngine;
     handleMouseClick: boolean;
     isClicked: boolean;
+    shiftClicked: boolean;
+    dragging: boolean;
     clickedPosition: Point;
     clickedGridCoords: Point;
     saving: boolean;
@@ -28,14 +29,17 @@ export class BuilderState {
     setStartScreen: any;
     showGrid: boolean;
     showRegions: boolean;
+    keyListener: (evt: KeyboardEvent) => void;
 
     constructor() {
         this.builderMode = false;
         this.builderEngine = new BuilderModeEngine();
         this.builderMenuOpen = false;
+        this.dragging = false;
         this.tileSelectorOpen = false;
         this.handleMouseClick = false;
         this.removingTiles = false;
+        this.shiftClicked = false;
         this.showGrid = false;
         this.showRegions = false;
         this.wheelSpeedReducer = 6;
