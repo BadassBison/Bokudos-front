@@ -52,14 +52,6 @@ export class Player implements UpdateObject {
             return;
         }
 
-        if (this.state.SPRITE_SIZER === 0) {
-            const image = this.state.animations.getAnimation(AnimationTypes.IDLE_RIGHT).getImages()[0];
-            if (image && image.height > 0) {
-                this.state.SPRITE_SIZER = image.height / this.state.positionData.height;
-            } else {
-                return;
-            }
-        }
         const {x, y} = RenderingUtilities.toScreenCoordinates({
             x: this.state.positionData.x,
             y: this.state.positionData.y
@@ -72,7 +64,7 @@ export class Player implements UpdateObject {
 
         const {w, h} = RenderingUtilities.toScreenDimensions(this.getSize());
         if (!State.debugState.debugMode || State.debugState.menuOptions[MenuOptions.PLAYER_SPRITES].enabled) {
-            if (this.state.SPRITE_SIZER == 0) {
+            if (this.state.SPRITE_SIZER === 0) {
                 const image = this.state.animations.getAnimation(AnimationTypes.IDLE_RIGHT).getImages()[0];
                 if (image && image.height > 0) {
                     this.state.SPRITE_SIZER = image.height / this.state.positionData.height;
