@@ -83,11 +83,13 @@ export class Game {
 
   beginRun() {
 
-    GameApiHelpers.findGame().then((gameDto: GameDto) => {
-      PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User').then((playerDto: PlayerDto) => {
-            this.server.connect(gameDto, playerDto);
-          }
-      );
+    GameApiHelpers.findGame()
+      .then((gameDto: GameDto) => {
+        PlayerApiHelpers.joinGame(gameDto.gameId, 'Test User')
+          .then((playerDto: PlayerDto) => {
+                this.server.connect(gameDto, playerDto);
+              }
+          );
     });
 
     this.run();

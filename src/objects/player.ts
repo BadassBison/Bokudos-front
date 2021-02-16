@@ -28,8 +28,9 @@ export class Player implements UpdateObject {
         const currentRegion = RenderingUtilities.getRegion({ x: positionData.x, y: positionData.y });
         if (!this.state.currentRegion || this.state.currentRegion !== currentRegion) {
             this.state.currentRegion = currentRegion;
-            const [ regionColumn, regionRow ] = RenderingUtilities.splitRegionString(currentRegion);
-            RegionApiHelpers.getNeighboringRegionsForStage(State.gameState.stageId, Number(regionRow), Number(regionColumn));
+            // FIXME: Commented out for the pres
+            // const [ regionColumn, regionRow ] = RenderingUtilities.splitRegionString(currentRegion);
+            // RegionApiHelpers.getNeighboringRegionsForStage(State.gameState.stageId, Number(regionRow), Number(regionColumn));
         }
     }
 
