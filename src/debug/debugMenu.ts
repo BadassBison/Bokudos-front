@@ -1,7 +1,6 @@
 import { MenuOptions } from '../constants/menuOptions';
 import { State } from '../states/rootState';
 import ComponentUtilities from '../utilites/componentUtilities';
-import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { DebugMode } from './debugMode';
 
 export class DebugMenu {
@@ -74,15 +73,17 @@ export class DebugMenu {
     }
 
     static addMenuOptions(menu: HTMLElement): void {
+        this.addMenuOption(menu, MenuOptions.PLAYER_SPRITES);
+        this.addMenuOption(menu, MenuOptions.PLAYER_OUTLINE);
+        this.addMenuOption(menu, MenuOptions.ENEMY_SPRITES);
+        this.addMenuOption(menu, MenuOptions.ENEMY_OUTLINE);
         this.addMenuOption(menu, MenuOptions.GRID);
         this.addMenuOption(menu, MenuOptions.COORDINATES);
         this.addMenuOption(menu, MenuOptions.HITBOX);
         this.addMenuOption(menu, MenuOptions.ATTACK_HITBOX);
         this.addMenuOption(menu, MenuOptions.ENEMY_HITBOX);
-        this.addMenuOption(menu, MenuOptions.DETECTION_BOX);
         this.addMenuOption(menu, MenuOptions.DETECTED_TILES);
         this.addMenuOption(menu, MenuOptions.COLLISION_TILES);
-        this.addMenuOption(menu, MenuOptions.SCREEN_EDGE);
     }
 
     static addMenuOption(menu: HTMLElement, name: string): HTMLElement {
@@ -91,7 +92,7 @@ export class DebugMenu {
         const colorInput = this.addColorInput(name);
         const lineWidthRange = this.addLineWidthRange(name);
         wrapper.appendChild(checkBox);
-        wrapper.appendChild(colorInput);
+        if(colorInput) { wrapper.appendChild(colorInput); }
         if (lineWidthRange) { wrapper.appendChild(lineWidthRange); }
         menu.appendChild(wrapper);
 
@@ -129,13 +130,16 @@ export class DebugMenu {
         input.type = 'text';
         input.value = State.debugState.menuOptions[name].color;
 
-        input.addEventListener('keyup', () => {
-            State.debugState.menuOptions[name].color = input.value;
-        });
+        if (State.debugState.menuOptions[name].colorEnabled) {
+            input.addEventListener('keyup', () => {
+                State.debugState.menuOptions[name].color = input.value;
+            });
 
-        label.appendChild(input);
+            label.appendChild(input);
 
-        return label;
+            return label;
+        }
+        return null;
     }
 
     static addLineWidthRange(name: string): HTMLElement {

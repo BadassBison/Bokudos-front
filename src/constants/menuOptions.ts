@@ -1,4 +1,8 @@
 export class MenuOptions {
+    public static PLAYER_SPRITES = 'Player Sprite';
+    public static PLAYER_OUTLINE = 'Player Outline';
+    public static ENEMY_SPRITES = 'Enemy Sprites';
+    public static ENEMY_OUTLINE = 'Enemy Outline';
     public static GRID = 'Grid';
     public static COORDINATES = 'Coordinates';
     public static SCREEN_EDGE = 'Screen Edge';
@@ -11,6 +15,10 @@ export class MenuOptions {
 
     static getOptionList(): string[] {
         return [
+            this.PLAYER_SPRITES,
+            this.PLAYER_OUTLINE,
+            this.ENEMY_SPRITES,
+            this.ENEMY_OUTLINE,
             this.GRID,
             this.COORDINATES,
             this.SCREEN_EDGE,

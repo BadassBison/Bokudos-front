@@ -4,6 +4,9 @@ import { RenderingUtilities } from '../utilites/renderingUtilities';
 import { EnemyState } from '../states/EnemyState';
 import { PositionData } from '../interfaces/positionData';
 import { UpdateObject } from '../interfaces/updateObject';
+import { MenuOptions } from '../constants/menuOptions';
+import { Dimensions } from '../interfaces/dimensions';
+import { Point } from '../interfaces/point';
 
 export class Enemy implements UpdateObject {
     state: EnemyState;
@@ -54,6 +57,26 @@ export class Enemy implements UpdateObject {
         }
         const { x, y } = RenderingUtilities.toScreenCoordinates({x: this.state.positionData.x, y: this.state.positionData.y});
         const { w, h } = RenderingUtilities.toScreenDimensions({w: this.state.positionData.width, h: this.state.positionData.height});
-        State.gameState.canvas.ctx.drawImage(this.state.currentImage, x, y, w, h);
+        if (!State.debugState.debugMode || State.debugState.menuOptions[MenuOptions.ENEMY_SPRITES].enabled) {
+            State.gameState.canvas.ctx.drawImage(this.state.currentImage, x, y, w, h);
+        }
+        this.drawOutline({ x, y }, { w, h });
+        this.drawHitbox({ x, y }, { w, h });
+    }
+
+    drawOutline(point: Point, dimensions: Dimensions) {
+        if (State.debugState.debugMode && State.debugState.menuOptions[MenuOptions.ENEMY_OUTLINE].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_OUTLINE].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_OUTLINE].lineWidth;
+            State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
+        }
+    }
+
+    drawHitbox(point: Point, dimensions: Dimensions) {
+        if (State.debugState.debugMode && State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.ENEMY_HITBOX].lineWidth;
+            State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
+        }
     }
 }

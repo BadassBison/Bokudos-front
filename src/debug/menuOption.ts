@@ -2,6 +2,7 @@ export class MenuOption {
     name: string;
     enabled: boolean;
     color: string;
+    colorEnabled: boolean;
     lineWidth: number;
     font: string;
 
@@ -9,6 +10,7 @@ export class MenuOption {
         this.name = name;
         this.enabled = false;
         this.color = color;
+        this.colorEnabled = true;
         this.lineWidth = 1;
         this.font = '12px serif';
     }

@@ -63,9 +63,7 @@ export class BuilderMode {
     static updateCameraSpeed(newDim: number): void {
         const currentDim = State.gameState.currentGridDimensions.w;
         const dimDelta = newDim - currentDim;
-        console.log('dimDelta', dimDelta);
         State.builderState.cameraSpeed += (dimDelta * 0.03);
-        console.log('CameraSpeed', State.builderState.cameraSpeed);
     }
 
     static closeBuilderMode() {

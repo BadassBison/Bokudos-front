@@ -5,7 +5,8 @@ import { PositionData } from '../interfaces/positionData';
 import { PlayerState } from '../states/playerState';
 import { UpdateObject } from '../interfaces/updateObject';
 import { AnimationTypes } from '../constants/animationTypes';
-import { RegionApiHelpers } from '../http/regionApiHelpers';
+import { MenuOptions } from '../constants/menuOptions';
+import { Point } from '../interfaces/point';
 
 export class Player implements UpdateObject {
     state: PlayerState;
@@ -50,20 +51,31 @@ export class Player implements UpdateObject {
         if (this.state.positionData === null) {
             return;
         }
-        if (this.state.SPRITE_SIZER === 0) {
-            const image = this.state.animations.getAnimation(AnimationTypes.IDLE_RIGHT).getImages()[0];
-            if (image && image.height > 0) {
-                this.state.SPRITE_SIZER = image.height / this.state.positionData.height;
-            } else {
-                return;
-            }
-        }
+
         const {x, y} = RenderingUtilities.toScreenCoordinates({
             x: this.state.positionData.x,
             y: this.state.positionData.y
         });
+        const size = this.getSize();
+        const spritePoint = RenderingUtilities.toScreenCoordinates({
+            x: this.state.positionData.x - (size.w/2) + (this.state.positionData.width/2),
+            y: this.state.positionData.y
+        });
+
         const {w, h} = RenderingUtilities.toScreenDimensions(this.getSize());
-        State.gameState.canvas.ctx.drawImage(this.state.currentImage, x, y, w, h);
+        if (!State.debugState.debugMode || State.debugState.menuOptions[MenuOptions.PLAYER_SPRITES].enabled) {
+            if (this.state.SPRITE_SIZER === 0) {
+                const image = this.state.animations.getAnimation(AnimationTypes.IDLE_RIGHT).getImages()[0];
+                if (image && image.height > 0) {
+                    this.state.SPRITE_SIZER = image.height / this.state.positionData.height;
+                } else {
+                    return;
+                }
+            }
+            State.gameState.canvas.ctx.drawImage(this.state.currentImage, spritePoint.x, spritePoint.y, w, h);
+        }
+        this.drawOutline(spritePoint, {w, h});
+        this.drawHitbox({x, y});
     }
 
     getSize(): Dimensions {
@@ -71,5 +83,25 @@ export class Player implements UpdateObject {
             w: this.state.currentImage.width / this.state.SPRITE_SIZER,
             h: this.state.currentImage.height / this.state.SPRITE_SIZER
         };
+    }
+
+    drawOutline(point: Point, dimensions: Dimensions) {
+        if (State.debugState.debugMode && State.debugState.menuOptions[MenuOptions.PLAYER_OUTLINE].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.PLAYER_OUTLINE].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.PLAYER_OUTLINE].lineWidth;
+            State.gameState.canvas.ctx.strokeRect(point.x, point.y, dimensions.w, dimensions.h);
+        }
+    }
+
+    drawHitbox(point: Point) {
+        if (State.debugState.debugMode && State.debugState.menuOptions[MenuOptions.HITBOX].enabled) {
+            State.gameState.canvas.ctx.strokeStyle = State.debugState.menuOptions[MenuOptions.HITBOX].color;
+            State.gameState.canvas.ctx.lineWidth = State.debugState.menuOptions[MenuOptions.HITBOX].lineWidth;
+            const {w, h} = RenderingUtilities.toScreenDimensions({
+                w: this.state.positionData.width,
+                h: this.state.positionData.height
+            });
+            State.gameState.canvas.ctx.strokeRect(point.x, point.y, w, h);
+        }
     }
 }

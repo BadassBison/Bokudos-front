@@ -30,6 +30,10 @@ export class DebugState {
                 this.menuOptions[optionName] = option;
             }
         });
+        this.menuOptions[MenuOptions.PLAYER_SPRITES].lineWidth = null;
+        this.menuOptions[MenuOptions.PLAYER_SPRITES].colorEnabled = false;
+        this.menuOptions[MenuOptions.ENEMY_SPRITES].lineWidth = null;
+        this.menuOptions[MenuOptions.ENEMY_SPRITES].colorEnabled = false;
         this.menuOptions[MenuOptions.COORDINATES].lineWidth = null;
     }
 }
